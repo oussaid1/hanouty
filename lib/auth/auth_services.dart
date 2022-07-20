@@ -41,9 +41,10 @@ class FirebaseAuthService {
   }
 
   Future<User?> signIn({required LoginCredentials loginCredentials}) async {
+    // log('signIn ${loginCredentials.toMap()}');
     try {
       var userCredentials = await _firebaseAuth.signInWithEmailAndPassword(
-        email: loginCredentials.username!,
+        email: loginCredentials.email!,
         password: loginCredentials.password!,
       );
 

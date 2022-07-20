@@ -9,7 +9,6 @@ export 'package:flutter_slidable/flutter_slidable.dart';
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 export 'package:get_it/get_it.dart';
 export 'package:google_fonts/google_fonts.dart';
-export 'package:logger/logger.dart';
 export 'package:overlay_support/overlay_support.dart';
 export 'package:package_info_plus/package_info_plus.dart';
 export 'package:percent_indicator/percent_indicator.dart';

@@ -16,20 +16,11 @@ void main() async {
   //     storageDirectory: await getApplicationDocumentsDirectory());
   final initialization = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-    // options: const FirebaseOptions(
-    //   apiKey: 'AIzaSyANojHl-JzTxGGmM3wHGTzHSjllBOTQOxk',
-    //   appId: '1:116797597909:web:372e234e1a8c1d28e9da5c',
-    //   messagingSenderId: '116797597909',
-    //   projectId: 'hanouty-6a822',
-    //   authDomain: 'hanouty-6a822.firebaseapp.com',
-    //   storageBucket: 'hanouty-6a822.appspot.com',
-    //   measurementId: 'G-7DLL9CW9MT',
-    // ),
   );
   //final Future<FirebaseApp> initialization = Firebase.initializeApp();
-  // await FirebaseAppCheck.instance.activate(
-  //   webRecaptchaSiteKey: 'DF4CF65C-3AF1-42EE-B713-2A1BE550B524',
-  // );
+  await FirebaseAppCheck.instance.activate(
+    webRecaptchaSiteKey: '857DD3E9-DCE1-46B3-896F-56DE9E8EAB71',
+  );
   await EasyLocalization.ensureInitialized();
 
   /// register Database singleton

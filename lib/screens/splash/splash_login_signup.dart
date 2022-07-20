@@ -28,11 +28,11 @@ class AuthPage extends StatefulWidget {
 class AuthPageState extends State<AuthPage> {
   bool isSignIn = true;
   final loginFormKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passController = TextEditingController();
+  final emailController = TextEditingController(text: 'test@gmail.com');
+  final passController = TextEditingController(text: 'ssdd1122');
   final registerFormKey = GlobalKey<FormState>();
-  final usernameController = TextEditingController();
-  final confirmPassController = TextEditingController();
+  final usernameController = TextEditingController(text: 'test');
+  final confirmPassController = TextEditingController(text: 'ssdd1122');
 
   bool _obscurepass = true;
   bool _obscureconfirmpass = true;
@@ -256,7 +256,7 @@ class AuthPageState extends State<AuthPage> {
                 if (loginFormKey.currentState!.validate()) {
                   BlocProvider.of<LoginBloc>(context).add(LoginRequestedEvent(
                       loginCredentials: LoginCredentials(
-                          username: emailController.text,
+                          email: emailController.text,
                           password: passController.text)));
                   log('login button pressed event dispatched');
                   // auth.signIn(email: email, password: pass).then(

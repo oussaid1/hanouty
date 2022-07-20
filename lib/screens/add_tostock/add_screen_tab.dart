@@ -14,63 +14,59 @@ class AddScreenTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
       length: 4,
-      child: BlocBuilder<ProductBloc, ProductState>(
-        builder: (context, state) {
-          return Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              leading: Container(),
-              elevation: 0,
-              flexibleSpace: TabBar(
-                indicatorColor: Theme.of(context).tabBarTheme.labelColor,
-                isScrollable: false,
-                tabs: [
-                  Text(
-                    'Product'.tr(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: MThemeData.serviceColor),
-                  ),
-                  Text(
-                    'Service'.tr(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: MThemeData.productColor),
-                  ),
-                  Text(
-                    'Client'.tr(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: MThemeData.salesColor),
-                  ),
-                  Text(
-                    'Suplier'.tr(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: MThemeData.revenuColor),
-                  ),
-                ],
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          leading: Container(),
+          elevation: 0,
+          flexibleSpace: TabBar(
+            indicatorColor: Theme.of(context).tabBarTheme.labelColor,
+            isScrollable: false,
+            tabs: [
+              Text(
+                'Product'.tr(),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: MThemeData.serviceColor),
               ),
-            ),
-            body: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: TabBarView(
-                physics: BouncingScrollPhysics(),
-                children: [
-                  ProductList(),
-                  TechServiceList(),
-                  ShopClientsList(),
-                  SupliersList(),
-                ],
+              Text(
+                'Service'.tr(),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: MThemeData.productColor),
               ),
-            ),
-          );
-        },
+              Text(
+                'Client'.tr(),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: MThemeData.salesColor),
+              ),
+              Text(
+                'Suplier'.tr(),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: MThemeData.revenuColor),
+              ),
+            ],
+          ),
+        ),
+        body: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: TabBarView(
+            physics: BouncingScrollPhysics(),
+            children: [
+              ProductList(),
+              TechServiceList(),
+              ShopClientsList(),
+              SupliersList(),
+            ],
+          ),
+        ),
       ),
     );
   }

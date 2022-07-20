@@ -21,7 +21,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginRequestedEvent>(_onLogInRequested);
     on<LogOutRequestedEvent>(_onLogOutRequested);
     on<LoginLoadingEvent>(_onLoginLoading);
-    on<LogOutRequestedEvent>(_onLogOutRequested);
+    //on<LogOutRequestedEvent>(_onLogOutRequested);
   }
 
   void _onLogInRequested(

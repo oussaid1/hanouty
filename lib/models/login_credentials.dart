@@ -1,9 +1,9 @@
 // class for login credentials
 class LoginCredentials {
-  String? username;
+  String? email;
   String? password;
   String? get error {
-    if (username == null || username!.isEmpty) {
+    if (email == null || email!.isEmpty) {
       return 'Username is required';
     }
     if (password == null || password!.isEmpty) {
@@ -17,7 +17,7 @@ class LoginCredentials {
   }
 
   String? get validateUsername {
-    if (username == null || username!.isEmpty) {
+    if (email == null || email!.isEmpty) {
       return 'Username is required';
     }
     return null;
@@ -31,7 +31,7 @@ class LoginCredentials {
   }
 
   LoginCredentials({
-    this.username,
+    this.email,
     this.password,
   });
 
@@ -57,14 +57,14 @@ class LoginCredentials {
   // to map
   Map<String, dynamic> toMap() {
     return {
-      'username': username,
+      'username': email,
       'password': password,
     };
   } // to map
 
   // from map
   LoginCredentials.fromMap(Map<String, dynamic> map) {
-    username = map['username'];
+    email = map['username'];
 
     password = map['password'];
   }
