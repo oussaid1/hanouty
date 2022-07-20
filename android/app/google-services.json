@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "116797597909",
+    "project_id": "hanouty-6a822",
+    "storage_bucket": "hanouty-6a822.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:116797597909:android:c78503cd7d0b4a3de9da5c",
+        "android_client_info": {
+          "package_name": "com.devbourheeem.hanouty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "116797597909-n2jgvr9p3qmhhnk4p33dbui0k8mmge6s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBF88YUf0ORiJZb1UyzXhM4AQPHfWqL0lk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "116797597909-n2jgvr9p3qmhhnk4p33dbui0k8mmge6s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
