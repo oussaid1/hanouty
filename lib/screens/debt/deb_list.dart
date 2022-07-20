@@ -152,10 +152,6 @@ class DebtList extends ConsumerWidget {
                                             .colorScheme
                                             .secondary,
                                         elevation: 0,
-                                        disabledForegroundColor:
-                                            Theme.of(context)
-                                                .colorScheme
-                                                .primary,
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8),
                                         shape: const RoundedRectangleBorder(

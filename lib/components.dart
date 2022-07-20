@@ -1,3 +1,4 @@
+export 'package:badges/badges.dart';
 export 'package:cloud_firestore/cloud_firestore.dart';
 export 'package:easy_localization/easy_localization.dart';
 export 'package:firebase_auth/firebase_auth.dart';
@@ -17,4 +18,3 @@ export 'package:riverpod/riverpod.dart';
 export 'package:syncfusion_flutter_charts/charts.dart';
 export 'package:syncfusion_flutter_datepicker/datepicker.dart';
 export 'package:url_launcher/url_launcher.dart';
-export 'package:badges/badges.dart';
