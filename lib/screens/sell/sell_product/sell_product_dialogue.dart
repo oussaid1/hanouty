@@ -2,9 +2,11 @@ import 'dart:developer';
 
 import 'package:hanouty/widgets/number_incrementer.dart';
 import 'package:flutter/services.dart';
+import '../../../blocs/clientsbloc/clients_bloc.dart';
 import '../../../blocs/sellactionsbloc/sellactions_bloc.dart';
 import '../../../database/database_operations.dart';
 import '../../../local_components.dart';
+import '../../../utils/constents.dart';
 import '../../../widgets/date_pickers.dart/date_picker.dart';
 import '../../../widgets/spinners/client_spinner.dart';
 import '/../components.dart';
@@ -14,8 +16,10 @@ class SellProductDialoge extends StatefulWidget {
   const SellProductDialoge({
     Key? key,
     required this.product,
+    required this.clientNames,
   }) : super(key: key);
   final ProductModel product;
+  final List<String> clientNames;
 
   //final SaleModel? sale;
   @override
@@ -28,9 +32,9 @@ class AddProductState extends State<SellProductDialoge> {
   int quantity = 1;
   double priceSoldFor = 0;
   int reducedProdutQuantity = 0;
-  ShopClientModel client = ShopClientModel.client;
+  String client = 'client';
   DateTime date = DateTime.now();
-  bool isSelling = false;
+  bool canSell = false;
   final TextEditingController priceOutController = TextEditingController();
   void clear() {
     priceOutController.clear();
@@ -56,6 +60,7 @@ class AddProductState extends State<SellProductDialoge> {
 
   @override
   Widget build(BuildContext context) {
+    //var clientsBloc = context.watch<ShopClientBloc>().state;
     return SingleChildScrollView(
       child: Container(
         decoration: BoxDecoration(
@@ -74,17 +79,19 @@ class AddProductState extends State<SellProductDialoge> {
                   Center(
                       child: Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                              widget.product.quantity == 0
-                                  ? 'Product is out of stock'
-                                  : 'Product quantity: ${widget.product.quantity}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(
-                                    color: Theme.of(context).colorScheme.error,
-                                  )))),
-                  buildClientName([]),
+                          child: widget.product.quantity == 0
+                              ? Text('Product is out of stock',
+                                  style: Theme.of(context).textTheme.bodyText1)
+                              : Text(
+                                  'Product quantity: ${widget.product.quantity}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .copyWith(
+                                        color:
+                                            Theme.of(context).colorScheme.error,
+                                      )))),
+                  buildClientName(widget.clientNames),
                   const SizedBox(height: 8),
                   buildQuantity(context),
                   const SizedBox(height: 8),
@@ -115,18 +122,18 @@ class AddProductState extends State<SellProductDialoge> {
       children: [
         ElevatedButton(
           style: MThemeData.raisedButtonStyleSave,
-          onPressed: !isSelling
+          onPressed: !canSell
               ? null
               : () {
                   //check the form is valid
 
                   if (formKey.currentState!.validate()) {
                     setState(() {
-                      isSelling = false;
+                      canSell = false;
                     });
                     //save the product
                     SaleModel sale = SaleModel(
-                      shopClientId: client.id,
+                      shopClientId: client,
                       priceSoldFor: double.parse(priceOutController.text),
                       type: SaleType.product,
                       priceIn: widget.product.priceIn,
@@ -166,13 +173,8 @@ class AddProductState extends State<SellProductDialoge> {
   }
 
   buildDate() {
-    return Container(
-      margin: const EdgeInsets.only(left: 4, right: 4),
-      decoration: BoxDecoration(
-          border: Border.all(color: MThemeData.hintTextColor),
-          borderRadius: BorderRadius.circular(6)),
-      height: 50,
-      width: 220,
+    return SizedBox(
+      width: 400,
       child: SelectDate(
         initialDate: DateTime.now(),
         onDateSelected: (pickedDate) {
@@ -187,24 +189,17 @@ class AddProductState extends State<SellProductDialoge> {
   Widget buildQuantity(BuildContext context) {
     return SizedBox(
       width: 400,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'Quantity'.tr(),
-            style: Theme.of(context).textTheme.bodyText1!,
-          ),
-          NumberIncrementerWidget(
-            limitUp: widget.product.quantity,
-            initialValue: quantity,
-            onChanged: (value) {
-              setState(() {
-                quantity = value.toInt();
-              });
-            },
-          ),
-        ],
+      child: NumberIncrementerWidget(
+        limitUp: widget.product.quantity,
+        initialValue: quantity,
+        labelText: 'Quantity'.tr(),
+        fraction: 1,
+        limitDown: 1,
+        onChanged: (value) {
+          setState(() {
+            quantity = value.toInt();
+          });
+        },
       ),
     );
   }
@@ -243,18 +238,81 @@ class AddProductState extends State<SellProductDialoge> {
   }
 
   Widget buildClientName(
-    List<ShopClientModel> list,
+    List<String> list,
   ) {
+    log('buildClientName ${list.length}');
     return SizedBox(
-      child: ClientSpinnerWidget(
-        initialValue: client,
-        onChanged: (value) {
-          setState(() {
-            client = value;
-            isSelling = true;
+      width: 400,
+      child: Autocomplete<String>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if (textEditingValue.text == '') {
+            return const Iterable<String>.empty();
+          }
+          return list.where((String option) {
+            return option
+                .toString()
+                .contains(textEditingValue.text.toLowerCase());
           });
         },
-        list: list..add(client),
+        fieldViewBuilder: (BuildContext context,
+            TextEditingController textEditingController,
+            FocusNode focusNode,
+            VoidCallback onFieldSubmitted) {
+          return TextFormField(
+            controller: textEditingController,
+            onChanged: (String value) {
+              setState(() {
+                canSell = true;
+                client = value;
+              });
+            },
+            decoration: InputDecoration(
+              prefixIcon: Tooltip(
+                message: 'Add new suplier'.tr(),
+                child: IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    /// TODO: add new suplier Dialog
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => AddSuplierPage(),
+                    //   ),
+                    // );
+                  },
+                ),
+              ),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  textEditingController.clear();
+                },
+              ),
+              labelText: 'Client'.tr(),
+              border: OutlineInputBorder(
+                /// TODO: globalize this
+                borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+                borderSide: BorderSide(color: AppConstants.whiteOpacity),
+              ),
+              //border: InputBorder.none,
+              hintText: 'client'.tr(),
+              // label: const Text('suplier').tr(),
+              hintStyle: Theme.of(context).textTheme.subtitle2!,
+              filled: true,
+            ),
+            focusNode: focusNode,
+            onFieldSubmitted: (String value) {
+              onFieldSubmitted();
+              log('You just typed a new entry  $value');
+            },
+          );
+        },
+        onSelected: (String selection) {
+          setState(() {
+            client = selection;
+          });
+          log('Selected: $selection');
+        },
       ),
     );
   }

@@ -3,8 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SelectDate extends StatefulWidget {
+  final String? labelText;
+
   const SelectDate({
     Key? key,
+    this.labelText = 'Date',
     this.initialDate,
     this.firstDate,
     this.lastDate,
@@ -50,30 +53,26 @@ class _SelectDateState extends State<SelectDate> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: 140,
-        height: 50,
-        child: GestureDetector(
-          onTap: () => selectDate(context),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6.0),
-              boxShadow: const [],
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  CupertinoIcons.calendar,
-                  color: Colors.grey,
-                  size: 18,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8),
-                  child: Text((_pickedDateTime)!.ddmmyyyy()),
-                ),
-              ],
-            ),
-          ),
-        ));
+    return TextField(
+      controller: TextEditingController(
+        text: _pickedDateTime?.ddmmyyyy(),
+      ),
+      onTap: () {
+        selectDate(context);
+      },
+      decoration: InputDecoration(
+        hintText: 'Select Date',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(6),
+        ),
+        filled: true,
+        prefixIcon: const Icon(
+          Icons.calendar_today,
+          size: 18,
+        ),
+        label: Text(widget.labelText ?? 'Date',
+            style: Theme.of(context).textTheme.bodyMedium),
+      ),
+    );
   }
 }

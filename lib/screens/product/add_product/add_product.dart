@@ -293,6 +293,11 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
             VoidCallback onFieldSubmitted) {
           return TextFormField(
             controller: textEditingController,
+            onChanged: (text) {
+              setState(() {
+                productCat = text;
+              });
+            },
             decoration: InputDecoration(
               labelText: 'Category'.tr(),
               border: OutlineInputBorder(
@@ -341,7 +346,33 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
             VoidCallback onFieldSubmitted) {
           return TextFormField(
             controller: textEditingController,
+            onChanged: (String value) {
+              setState(() {
+                suplier = value;
+              });
+            },
             decoration: InputDecoration(
+              prefixIcon: Tooltip(
+                message: 'Add new suplier'.tr(),
+                child: IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () {
+                    /// TODO: add new suplier Dialog
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => AddSuplierPage(),
+                    //   ),
+                    // );
+                  },
+                ),
+              ),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: () {
+                  textEditingController.clear();
+                },
+              ),
               labelText: 'Suplier'.tr(),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(6.0),
@@ -349,6 +380,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
               ),
               //border: InputBorder.none,
               hintText: 'suplier'.tr(),
+              label: const Text('suplier').tr(),
               hintStyle: Theme.of(context).textTheme.subtitle2!,
               filled: true,
             ),
@@ -361,7 +393,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
         },
         onSelected: (String selection) {
           setState(() {
-            productCat = selection;
+            suplier = selection;
           });
           log('Selected: $selection');
         },
@@ -370,12 +402,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
   }
 
   _buildDate() {
-    return Container(
-      margin: const EdgeInsets.only(left: 4, right: 4),
-      decoration: BoxDecoration(
-          border: Border.all(color: const Color.fromARGB(92, 255, 255, 255)),
-          borderRadius: BorderRadius.circular(6)),
-      height: 50,
+    return SizedBox(
       width: 400,
       child: SelectDate(
         initialDate: widget.initialDateTime ?? DateTime.now(),
@@ -393,34 +420,15 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
   }
 
   _buildQuantity(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-          border: Border.all(color: const Color.fromARGB(115, 255, 255, 255)),
-          borderRadius: BorderRadius.circular(6)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 8.0,
-              top: 8,
-            ),
-            child: Text(
-              'Quantity'.tr(),
-              style: Theme.of(context).textTheme.subtitle2!,
-            ),
-          ),
-          NumberIncrementerWidget(
-            initialValue: quantity,
-            onChanged: (num number) {
-              setState(() {
-                quantity = number;
-              });
-            },
-          ),
-        ],
+    return SizedBox(
+      width: context.width,
+      child: NumberIncrementerWidget(
+        initialValue: quantity,
+        onChanged: (num number) {
+          setState(() {
+            quantity = number;
+          });
+        },
       ),
     );
   }

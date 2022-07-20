@@ -93,50 +93,70 @@ class AuthPageState extends State<AuthPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                MaterialButton(
-                    onPressed: () {
-                      setState(() {
-                        isSignIn = true;
-                      });
-                      _pageController.animateToPage(0,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.easeInOut);
-                    },
-                    child: Text(
-                      "Login",
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            fontSize: 20,
-                            color: !isSignIn
-                                ? MThemeData.hintColor
-                                : MThemeData.white,
-                          ),
-                    )),
-                const SizedBox(
-                  width: 40,
-                ),
-                MaterialButton(
-                  onPressed: () {
-                    setState(() {
-                      isSignIn = false;
-                    });
-                    _pageController.animateToPage(1,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.easeInOut);
-                  },
-                  child: Text(
-                    "Sign Up",
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          fontSize: 20,
-                          color: isSignIn
-                              ? MThemeData.hintColor
-                              : MThemeData.white,
-                        ),
+            child: BluredContainer(
+              width: 400,
+              height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 40,
+                      color: Colors.white.withOpacity(isSignIn ? 0.2 : 0),
+                      child: MaterialButton(
+                          elevation: 0,
+                          // color: Colors.white.withOpacity(isSignIn ? 1 : 0.5),
+                          // shape: RoundedRectangleBorder(
+                          //   borderRadius: BorderRadius.circular(20),
+                          // ),
+                          onPressed: () {
+                            setState(() {
+                              isSignIn = true;
+                            });
+                            _pageController.animateToPage(0,
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeInOut);
+                          },
+                          child: Text(
+                            "Login",
+                            style:
+                                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                      fontSize: 20,
+                                      color: !isSignIn
+                                          ? MThemeData.hintColor
+                                          : MThemeData.white,
+                                    ),
+                          )),
+                    ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: Container(
+                      height: 40,
+                      color: Colors.white.withOpacity(!isSignIn ? 0.2 : 0),
+                      child: MaterialButton(
+                        onPressed: () {
+                          setState(() {
+                            isSignIn = false;
+                          });
+                          _pageController.animateToPage(1,
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.easeInOut);
+                        },
+                        child: Text(
+                          "Sign Up",
+                          style:
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontSize: 20,
+                                    color: isSignIn
+                                        ? MThemeData.hintColor
+                                        : MThemeData.white,
+                                  ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Column(
@@ -263,7 +283,7 @@ class AuthPageState extends State<AuthPage> {
                       loginCredentials: LoginCredentials(
                           email: emailController.text.trim(),
                           password: passController.text.trim())));
-                  log('login button pressed event dispatched');
+                  //log('login button pressed event dispatched');
                   // auth.signIn(email: email, password: pass).then(
                   //       (value) => Navigator.pushReplacementNamed(context, '/'),
                   //     );

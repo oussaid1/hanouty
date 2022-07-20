@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,9 +39,10 @@ class SalesBloc extends Bloc<SalesEvent, SalesState> {
     // if (_productsSubscription != null) {
     // _productsSubscription!.cancel();
     // }
-    _salesSubscription = _databaseOperations
-        .salesStream()
-        .listen((sales) => add(LoadSalessEvent(sales)));
+    _salesSubscription = _databaseOperations.salesStream().listen((sales) {
+      log('sales: ${sales.length}');
+      add(LoadSalessEvent(sales));
+    });
   }
 
   /// on add product event

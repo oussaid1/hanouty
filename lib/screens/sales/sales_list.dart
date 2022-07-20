@@ -57,36 +57,6 @@ class SalesList extends ConsumerWidget {
         ),
         body: MultiBlocListener(
           listeners: [
-            // BlocListener<ProductBloc, ProductState>(
-            //   listener: (context, state) {
-            //     if (state is ProductAddedState) {
-            //       GlobalFunctions.showSuccessSnackBar(
-            //           context, 'Sale added successfully'.tr());
-            //     }
-            //     if (state is ProductAddedErrorState) {
-            //       GlobalFunctions.showErrorSnackBar(
-            //           context, 'Error adding Sale'.tr());
-            //     }
-
-            //     if (state is ProductUpdatedState) {
-            //       GlobalFunctions.showSuccessSnackBar(
-            //           context, 'Sale updated successfully'.tr());
-            //     }
-            //     if (state is ProductUpdatedErrorState) {
-            //       GlobalFunctions.showErrorSnackBar(
-            //           context, 'Error updating Sale'.tr());
-            //     }
-
-            //     if (state is ProductDeletedState) {
-            //       GlobalFunctions.showSuccessSnackBar(
-            //           context, 'Sale deleted successfully'.tr());
-            //     }
-            //     if (state is ProductDeletedErrorState) {
-            //       GlobalFunctions.showErrorSnackBar(
-            //           context, 'Error deleting Sale'.tr());
-            //     }
-            //   },
-            // ),
             BlocListener<SellActionsBloc, SellActionsState>(
               listener: (context, state) {
                 if (state is SellingSuccessfulState) {
@@ -102,81 +72,102 @@ class SalesList extends ConsumerWidget {
             ),
           ],
           child: BlocBuilder<ProductBloc, ProductState>(
-            builder: (context, state) {
-              if (state.status == ProductStatus.loaded) {
-                var productList = state.products;
+            builder: (context, productState) {
+              if (productState.status == ProductStatus.loaded) {
+                var productList = productState.products;
 
-                return SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  child: BlocBuilder<SalesBloc, SalesState>(
-                    builder: (context, state) {
-                      if (state.status == SalesStatus.loaded) {
-                        List<SaleModel> sales = state.sales;
-                        return Column(
-                          children: [
-                            SizedBox(
-                              height: 400,
-                              width: MediaQuery.of(context).size.width,
-                              child: Wrap(
-                                direction: Axis.horizontal,
-                                spacing: 20,
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 8.0, vertical: 8.0),
-                                    child: BluredContainer(
-                                      width: 420,
-                                      height: 320,
-                                      child: MySalesWidget(),
+                return Builder(builder: (context) {
+                  return SingleChildScrollView(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      child: BlocBuilder<SalesBloc, SalesState>(
+                        builder: (context, salesState) {
+                          if (salesState.status == SalesStatus.loaded) {
+                            List<SaleModel> sales = salesState.sales;
+                            return Column(
+                              children: [
+                                Wrap(
+                                  direction: Axis.horizontal,
+                                  spacing: 20,
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 8.0, vertical: 8.0),
+                                      child: BluredContainer(
+                                        width: 420,
+                                        height: 320,
+                                        child: MySalesWidget(),
+                                      ),
                                     ),
-                                  ),
-                                  buildSalesByCategory(context),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  SearchByWidget(
-                                    listOfCategories: ProductModel.fieldStrings,
-                                    withCategory: true,
-                                    onSearchTextChanged: (String text) {},
-                                    onChanged: (String category) {},
-                                    onBothChanged: (cat, text) {},
-                                  ),
-                                  Expanded(
-                                    child: ListView(
-                                      children: [
-                                        Text(
-                                            '* tap sell to sell a product'.tr(),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .subtitle2),
-                                        SalesDataTable(
-                                          sales: sales,
-                                          products: productList,
+                                    buildSalesByCategory(context),
+                                  ],
+                                ),
+                                const SizedBox(height: 15),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      SearchByWidget(
+                                        listOfCategories:
+                                            ProductModel.fieldStrings,
+                                        withCategory: true,
+                                        onSearchTextChanged: (String text) {},
+                                        onChanged: (String category) {},
+                                        onBothChanged: (cat, text) {},
+                                      ),
+                                      Flexible(
+                                        flex: 1,
+                                        child: ListView(
+                                          children: [
+                                            Text(
+                                                '* tap to unsell a product'
+                                                    .tr(),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .subtitle2),
+                                            SalesDataTable(
+                                              sales: sales,
+                                              products: productList,
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
+                                ),
+                              ],
+                            );
+                          } else {
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                      'Loading Sales ${salesState.status}'.tr(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline3!),
+                                  const CircularProgressIndicator(),
                                 ],
                               ),
-                            ),
-                          ],
-                        );
-                      } else {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    },
-                  ),
-                );
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  );
+                });
               } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Loading Products ${productState.status}'.tr(),
+                          style: Theme.of(context).textTheme.headline3!),
+                      const CircularProgressIndicator(),
+                    ],
+                  ),
                 );
               }
             },

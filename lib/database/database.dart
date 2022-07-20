@@ -230,7 +230,7 @@ class Database {
   }
 
   Stream<List<SaleModel>> salesStream() {
-    return users.doc(uid!.trim()).collection(DbTables.sales).snapshots().map(
+    return users.doc(uid).collection(DbTables.sales).snapshots().map(
         (QuerySnapshot query) => query.docs
             .map((element) => SaleModel.fromMap(element))
             .toList(growable: true));

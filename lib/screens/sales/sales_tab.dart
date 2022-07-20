@@ -13,6 +13,7 @@ class SalesTab extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
+          backgroundColor: Colors.transparent,
           leading: Container(),
           elevation: 0,
           flexibleSpace: TabBar(

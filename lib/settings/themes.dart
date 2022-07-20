@@ -135,7 +135,7 @@ class MThemeData {
     padding: const EdgeInsets.symmetric(horizontal: 8),
     shape: const RoundedRectangleBorder(
       //side: BorderSide(color: MThemeData.accentColorm),
-      borderRadius: BorderRadius.all(Radius.circular(6)),
+      borderRadius: BorderRadius.all(Radius.circular(50)),
     ),
   );
 

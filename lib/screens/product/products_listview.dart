@@ -1,13 +1,16 @@
 import 'dart:developer';
 
+import 'package:hanouty/blocs/salesbloc/sales_bloc.dart';
 import 'package:hanouty/widgets/charts/syncfusion_charts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:hanouty/blocs/sellactionsbloc/sellactions_bloc.dart';
 import 'package:hanouty/screens/sell/sell_product/sell_product_dialogue.dart';
 
+import '../../blocs/clientsbloc/clients_bloc.dart';
 import '../../blocs/productbloc/product_bloc.dart';
 import '../../components.dart';
+import '../../database/database_operations.dart';
 import '../../local_components.dart';
 import '../../utils/global_functions.dart';
 import '../../widgets/charts/inventory_widget.dart';
@@ -92,7 +95,7 @@ class ProductList extends ConsumerWidget {
           child: BlocBuilder<ProductBloc, ProductState>(
             builder: (context, state) {
               if (state.status == ProductStatus.loaded) {
-                log('loaded ${state.products.length}');
+                //log('loaded ${state.products.length}');
                 var productList = state.products;
                 FilteredProduct filteredProduct =
                     FilteredProduct(products: productList);
@@ -204,7 +207,8 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
     _data = ProductTableDataSource(
       context,
       widget.products,
-      onSellPressed: (ProductModel product) => sellProduct(context, product),
+      onSellPressed: (ProductModel product) =>
+          sellProduct(context, product, context.read<SalesBloc>().state.sales),
       onEditPressed: (ProductModel product) => editProduct(context, product),
       onDeletePressed: (ProductModel product) =>
           deleteProduct(context, product),
@@ -286,7 +290,9 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
 
   /// /////////////////////////////////////////////////////////////////////////////
   /// sell product dialog
-  void sellProduct(context, ProductModel product) {
+  void sellProduct(context, ProductModel product, List<SaleModel> sales) {
+    List<String> distinctSaleClients =
+        FilteredSales(sales: sales).distinctCilentNames;
     MDialogs.dialogSimple(
       context,
       title: Text(
@@ -300,8 +306,13 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
         //  gradient: MThemeData.gradient2),
         height: 500,
         width: 420,
-        child: SellProductDialoge(
-          product: product,
+        child: BlocProvider(
+          create: (context) => ShopClientBloc(
+              databaseOperations: GetIt.I.get<DatabaseOperations>()),
+          child: SellProductDialoge(
+            clientNames: distinctSaleClients,
+            product: product,
+          ),
         ),
       ),
     );
