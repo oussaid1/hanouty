@@ -22,7 +22,7 @@ class ExpensesState extends Equatable {
   final String? error;
 
   @override
-  List<Object> get props => [status, expenses, expense!, error!];
+  List<Object> get props => [status, expenses];
 }
 
 // /// Initial state

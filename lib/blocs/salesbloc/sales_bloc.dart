@@ -11,7 +11,7 @@ part 'sales_state.dart';
 class SalesBloc extends Bloc<SalesEvent, SalesState> {
   /// stream subscription to get the products from the database
   late final DatabaseOperations _databaseOperations;
-  StreamSubscription<List<SaleModel>>? _productsSubscription;
+  StreamSubscription<List<SaleModel>>? _salesSubscription;
   SalesBloc({required DatabaseOperations databaseOperations})
       : super(const SalesState(
           status: SalesStatus.initial,
@@ -25,20 +25,12 @@ class SalesBloc extends Bloc<SalesEvent, SalesState> {
 
     on<LoadSalessEvent>(_onLoadSaless);
 
-    on<AddSalesEvent>((event, emit) {
-      _databaseOperations.addSale(event.sale);
-      add(GetSalesEvent());
-    });
+    on<AddSalesEvent>(_onAddSales);
   }
 
   /// onloadproducts event
   void _onLoadSaless(LoadSalessEvent event, Emitter<SalesState> emit) async {
-    emit(SalesState(
-      status: SalesStatus.loading,
-      sales: event.sales,
-      lastsale: null,
-      error: null,
-    ));
+    emit(state.copyWith(status: SalesStatus.loaded, sales: event.sales));
   }
 
   /// on get products event
@@ -46,14 +38,31 @@ class SalesBloc extends Bloc<SalesEvent, SalesState> {
     // if (_productsSubscription != null) {
     // _productsSubscription!.cancel();
     // }
-    _productsSubscription = _databaseOperations
+    _salesSubscription = _databaseOperations
         .salesStream()
-        .listen((products) => add(LoadSalessEvent(products)));
+        .listen((sales) => add(LoadSalessEvent(sales)));
+  }
+
+  /// on add product event
+  Future<void> _onAddSales(
+      AddSalesEvent event, Emitter<SalesState> emit) async {
+    try {
+      _databaseOperations.addSale(event.sale);
+      emit(state.copyWith(
+        status: SalesStatus.added,
+        sales: state.sales,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: SalesStatus.error,
+        error: e.toString(),
+      ));
+    }
   }
 
   @override
   Future<void> close() {
-    _productsSubscription!.cancel();
+    _salesSubscription!.cancel();
     return super.close();
   }
 }

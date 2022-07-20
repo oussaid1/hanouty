@@ -35,12 +35,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   /// onloadproducts event
   void _onLoadProducts(
       LoadProductsEvent event, Emitter<ProductState> emit) async {
-    emit(ProductState(
-      status: ProductStatus.loading,
-      products: event.products,
-      lastproduct: null,
-      error: null,
-    ));
+    emit(
+        state.copyWith(status: ProductStatus.loaded, products: event.products));
   }
 
   /// on get products event
@@ -59,18 +55,14 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       AddProductEvent event, Emitter<ProductState> emit) async {
     try {
       _databaseOperations.addProduct(event.product);
-      emit(ProductState(
-        status: ProductStatus.loaded,
+      emit(state.copyWith(
+        status: ProductStatus.added,
         products: state.products,
-        lastproduct: event.product,
-        error: null,
       ));
       add(GetProductsEvent());
     } catch (e) {
-      emit(ProductState(
+      emit(state.copyWith(
         status: ProductStatus.error,
-        products: state.products,
-        lastproduct: event.product,
         error: e.toString(),
       ));
     }
@@ -81,18 +73,14 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       DeleteProductEvent event, Emitter<ProductState> emit) async {
     try {
       _databaseOperations.deleteProduct(event.product);
-      emit(ProductState(
+      emit(state.copyWith(
         status: ProductStatus.deleted,
         products: state.products,
-        lastproduct: event.product,
-        error: null,
       ));
       add(GetProductsEvent());
     } catch (e) {
-      emit(ProductState(
+      emit(state.copyWith(
         status: ProductStatus.error,
-        products: state.products,
-        lastproduct: event.product,
         error: e.toString(),
       ));
     }
@@ -103,18 +91,14 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       UpdateProductEvent event, Emitter<ProductState> emit) async {
     try {
       _databaseOperations.updateProduct(event.product);
-      emit(ProductState(
+      emit(state.copyWith(
         status: ProductStatus.updated,
         products: state.products,
-        lastproduct: event.product,
-        error: null,
       ));
       add(GetProductsEvent());
     } catch (e) {
-      emit(ProductState(
+      emit(state.copyWith(
         status: ProductStatus.error,
-        products: state.products,
-        lastproduct: event.product,
         error: e.toString(),
       ));
     }

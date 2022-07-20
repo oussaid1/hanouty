@@ -5,7 +5,8 @@ class NumberIncrementerWidget extends StatefulWidget {
   final bool signed;
   final num? initialValue;
   final void Function(num) onChanged;
-  final num? limit;
+  final num? limitUp;
+  final num? limitDown;
 
   const NumberIncrementerWidget({
     Key? key,
@@ -13,7 +14,8 @@ class NumberIncrementerWidget extends StatefulWidget {
     this.initialValue,
     this.fraction = 1,
     this.signed = false,
-    this.limit,
+    this.limitUp,
+    this.limitDown = 1,
   }) : super(key: key);
 
   @override
@@ -58,7 +60,7 @@ class _NumberIncrementerWidgetState extends State<NumberIncrementerWidget> {
                     number -= widget.fraction;
                     widget.onChanged(number);
                   });
-                } else if (number > 0) {
+                } else if (number > widget.limitDown!) {
                   setState(() {
                     number -= widget.fraction;
                     widget.onChanged(number);
@@ -75,9 +77,9 @@ class _NumberIncrementerWidgetState extends State<NumberIncrementerWidget> {
               icon: const Icon(Icons.arrow_drop_up),
               color: Theme.of(context).colorScheme.primaryContainer,
               onPressed: () {
-                if (widget.limit != null) {
+                if (widget.limitUp != null) {
                   setState(() {
-                    while (number < widget.limit!) {
+                    while (number < widget.limitUp!) {
                       number += widget.fraction;
                       widget.onChanged(number);
                     }

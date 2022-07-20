@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:hanouty/local_components.dart';
 
 import '../../../blocs/clientsbloc/clients_bloc.dart';
@@ -5,17 +7,26 @@ import '/../components.dart';
 import 'package:flutter/material.dart';
 
 class AddClient extends ConsumerStatefulWidget {
-  const AddClient({Key? key, this.client}) : super(key: key);
+  const AddClient({
+    Key? key,
+    this.client,
+    required this.pContext,
+  }) : super(key: key);
   final ShopClientModel? client;
+  final BuildContext pContext;
   @override
   AddClientState createState() => AddClientState();
 }
 
 class AddClientState extends ConsumerState<AddClient> {
+  bool _canSave = false;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController titleController =
+      TextEditingController(text: 'oussaid');
+  final TextEditingController phoneController =
+      TextEditingController(text: '0687888888');
+  final TextEditingController emailController =
+      TextEditingController(text: 'oussaid.abdellatif@gmail.com');
 
   void clear() {
     titleController.clear();
@@ -43,7 +54,7 @@ class AddClientState extends ConsumerState<AddClient> {
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
-
+    log('add stuff ${context.widget}');
     return SizedBox(
       width: context.width,
       height: context.height,
@@ -118,8 +129,9 @@ class AddClientState extends ConsumerState<AddClient> {
                       email: emailController.text.trim(),
                       stars: ref.read(clientRaringProvider.state).state,
                     );
-                    GetIt.I<ShopClientBloc>()
-                        .add(UpdateShopClientEvent(client));
+                    context
+                        .read<ShopClientBloc>()
+                        .add(AddShopClientEvent(client));
                     Navigator.pop(context);
                   }
                 },
@@ -145,12 +157,16 @@ class AddClientState extends ConsumerState<AddClient> {
                 ),
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
-                    // final client = ShopClientModel(
-                    //   clientName: titleController.text.trim(),
-                    //   phone: phoneController.text.trim(),
-                    //   email: emailController.text.trim(),
-                    //   stars: ref.read(clientRaringProvider.state).state,
-                    // );
+                    final client = ShopClientModel(
+                      clientName: titleController.text.trim(),
+                      phone: phoneController.text.trim(),
+                      email: emailController.text.trim(),
+                      stars: ref.read(clientRaringProvider.state).state,
+                    );
+                    widget.pContext
+                        .read<ShopClientBloc>()
+                        .add(AddShopClientEvent(client));
+                    Navigator.pop(context);
                     // ref.read(databaseProvider)!.addClient(client).then((value) {
                     //   if (value) {
                     //     ScaffoldMessenger.of(context)
@@ -186,6 +202,11 @@ class AddClientState extends ConsumerState<AddClient> {
           return "error".tr();
         }
         return null;
+      },
+      onChanged: (text) {
+        setState(() {
+          _canSave = true;
+        });
       },
       decoration: InputDecoration(
         border: OutlineInputBorder(

@@ -1,8 +1,8 @@
-import 'package:hanouty/blocs/filtercubit/filter_cubit.dart';
 import 'package:hanouty/local_components.dart';
 import 'package:flutter/material.dart';
 
 import '../../components.dart';
+import '../../cubits/cubit/filter_cubit.dart';
 
 class DateRangePicker extends ConsumerWidget {
   const DateRangePicker({Key? key}) : super(key: key);
@@ -53,8 +53,8 @@ class DateRangePicker extends ConsumerWidget {
                         onSubmit: (Object? range) {
                           var dateRange = range as PickerDateRange;
                           context.read<FilterCubit>().updateFilter(
-                              FilterType.custom,
-                              MDateRange(
+                              status: FilterType.custom,
+                              dateRange: MDateRange(
                                   start: dateRange.startDate!,
                                   end: dateRange.endDate!));
                           Navigator.pop(context);

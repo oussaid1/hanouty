@@ -23,10 +23,6 @@ class ProductList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    // List<TechService> techServicesList = ref.watch(techServicesProvider.state).state;
-    // var prdBloc =
-    //     ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>());
-    //  var sellActionsBloc = SellActionsBloc(GetIt.I<DatabaseOperations>());
     return Scaffold(
         backgroundColor: Colors.transparent,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -72,18 +68,10 @@ class ProductList extends ConsumerWidget {
                   GlobalFunctions.showSuccessSnackBar(
                       context, 'Product updated successfully'.tr());
                 }
-                if (state.status == ProductStatus.updating) {
-                  GlobalFunctions.showErrorSnackBar(
-                      context, 'Error updating product'.tr());
-                }
 
                 if (state.status == ProductStatus.deleted) {
                   GlobalFunctions.showSuccessSnackBar(
                       context, 'Product deleted successfully'.tr());
-                }
-                if (state.status == ProductStatus.deleting) {
-                  GlobalFunctions.showErrorSnackBar(
-                      context, 'Error deleting product'.tr());
                 }
               },
             ),
@@ -104,69 +92,76 @@ class ProductList extends ConsumerWidget {
           child: BlocBuilder<ProductBloc, ProductState>(
             builder: (context, state) {
               if (state.status == ProductStatus.loaded) {
+                log('loaded ${state.products.length}');
                 var productList = state.products;
-                FilteredProduct filteredProduct = FilteredProduct(
-                  products: productList,
-                );
+                FilteredProduct filteredProduct =
+                    FilteredProduct(products: productList);
                 ProductStockData productStockData =
                     ProductStockData(products: filteredProduct.products);
 
-                return SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  child: Column(
-                    children: [
-                      GlassContainer(
-                        child: Wrap(
-                          spacing: 20,
-                          children: [
-                            const MyInventoryWidgetNoBlurr(),
-                            PieChartCard(
-                              // title: 'Products in stock',
-                              data: productStockData.productCategorySumCounts,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            SearchByWidget(
-                              listOfCategories: ProductModel.fieldStrings,
-                              withCategory: true,
-                              onSearchTextChanged: (String text) {},
-                              onChanged: (String category) {},
-                              onBothChanged: (String category, String text) {
-                                log(category);
-                                log(text);
-                                GetIt.I<ProductTableDataSource>()
-                                    .filterByCategory(category, text);
-                              },
-                            ),
-                            Expanded(
-                              child: ListView(
-                                children: [
-                                  Text('* tap to sell',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2),
-                                  ProductsDataTable(
-                                    products: productList,
+                return Builder(builder: (context) {
+                  return SingleChildScrollView(
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      child: Column(
+                        children: [
+                          GlassContainer(
+                            child: Wrap(
+                              spacing: 20,
+                              children: [
+                                const MyInventoryWidgetNoBlurr(),
+                                BluredContainer(
+                                  width: 420,
+                                  height: 320,
+                                  child: PieChartCard(
+                                    // title: 'Products in stock',
+                                    data: productStockData
+                                        .productCategorySumCounts,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 20),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                SearchByWidget(
+                                  listOfCategories: ProductModel.fieldStrings,
+                                  withCategory: true,
+                                  onSearchTextChanged: (String text) {},
+                                  onChanged: (String category) {},
+                                  onBothChanged:
+                                      (String category, String text) {
+                                    log(category);
+                                    log(text);
+                                    GetIt.I<ProductTableDataSource>()
+                                        .filterByCategory(category, text);
+                                  },
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: ListView(
+                                    children: [
+                                      Text('* tap to sell',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2),
+                                      ProductsDataTable(
+                                        products: productList,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      // Expanded(
-                      //   child: ProductListView(
-                      //       productsList: filteredProduct.products),
-                      // ),
-                    ],
-                  ),
-                );
+                    ),
+                  );
+                });
               } else {
                 return const Center(
                   child: CircularProgressIndicator(),

@@ -450,7 +450,7 @@ class SaleModel {
     return SaleModel(
       id: map.id,
       soldItemId: map['soldItemId'],
-      dateIn: map['dateIn'].toDate() ?? map['dateSold'].toDate(),
+      dateIn: map['dateIn'].toDate() ?? DateTime.now(),
       dateSold: map['dateSold'].toDate(),
       quantitySold: map['quantitySold'],
       productSoldName: map['itemSoldTitle'] ?? '',

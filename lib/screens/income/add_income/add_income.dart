@@ -79,7 +79,7 @@ class AddIncomeState extends ConsumerState<AddIncome> {
                       amount: double.parse(amountController.text.trim()),
                     );
                     if (expenseformKey.currentState!.validate()) {
-                      GetIt.I<IncomesBloc>().add(UpdateIncomeEvent(income));
+                      GetIt.I<IncomeBloc>().add(UpdateIncomeEvent(income));
                       Navigator.pop(context);
                     }
                   }),
@@ -110,7 +110,7 @@ class AddIncomeState extends ConsumerState<AddIncome> {
                         date: ref.watch(pickedDateTime.state).state,
                         source: sourceController.text.trim(),
                       );
-                      GetIt.I<IncomesBloc>().add(UpdateIncomeEvent(income));
+                      GetIt.I<IncomeBloc>().add(UpdateIncomeEvent(income));
                     }
                   }),
               ElevatedButton(

@@ -38,7 +38,7 @@ class TechServiceState extends Equatable {
   }
 
   @override
-  List<Object> get props => [status, techservices, techservice!, error!];
+  List<Object> get props => [status, techservices];
 }
 // /// Initial state
 // class TechServicesInitial extends TechServiceState {}

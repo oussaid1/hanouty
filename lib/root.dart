@@ -44,7 +44,6 @@ class Root extends StatelessWidget {
           }
           if (state is AuthenticatedState) {
             GetIt.I<Database>().setUserUid(state.user.uid);
-
             //var database = GetIt.I<Database>();
             context.read<UserModelCubit>().loadUser();
             return HomeForAll(

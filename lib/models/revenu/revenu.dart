@@ -5,7 +5,7 @@ import '../income/income.dart';
 
 class Revenu {
   SalesData? salesData;
-  ExpensesData? expensesData;
+  ExpenseData? expensesData;
   DebtData? debtData;
   IncomeData? incomeData;
   Revenu({

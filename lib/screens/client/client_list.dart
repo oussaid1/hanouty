@@ -24,10 +24,12 @@ class ShopClientsList extends ConsumerWidget {
                 "Add Client",
                 style: Theme.of(context).textTheme.headline3!,
               ),
-              contentWidget: const SizedBox(
+              contentWidget: SizedBox(
                 height: 400,
                 width: 400,
-                child: AddClient(),
+                child: AddClient(
+                  pContext: context,
+                ),
               ),
             );
           },
@@ -78,6 +80,7 @@ class ShopClientsList extends ConsumerWidget {
                                             width: 400,
                                             child: AddClient(
                                               client: shopClient,
+                                              pContext: context,
                                             ),
                                           ),
                                         );

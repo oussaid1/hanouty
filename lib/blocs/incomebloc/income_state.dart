@@ -21,7 +21,7 @@ class IncomesState extends Equatable {
   final IncomeModel? income;
   final String? error;
   @override
-  List<Object> get props => [status, incomes, income!, error!];
+  List<Object> get props => [status, incomes];
 }
 
 // /// Initial state

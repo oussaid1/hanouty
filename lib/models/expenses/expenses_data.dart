@@ -1,8 +1,8 @@
 part of 'expenses.dart';
 
-class ExpensesData {
+class ExpenseData {
   List<ExpenseModel> expenses;
-  ExpensesData({required this.expenses});
+  ExpenseData({required this.expenses});
   List<ExpenseModel> get sortedtExpenses {
     return expenses.where((expense) => expense.isPaid).toList()
       ..sort((a, b) => b.date.compareTo(a.date));

@@ -38,5 +38,5 @@ class PaymentsState extends Equatable {
   }
 
   @override
-  List<Object> get props => [status, payments, payment!, error!];
+  List<Object> get props => [status, payments];
 }

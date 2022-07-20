@@ -33,12 +33,8 @@ class ShopClientBloc extends Bloc<ShopClientEvent, ShopClientState> {
   /// onloadproducts event
   void _onLoadShopClients(
       LoadShopClientsEvent event, Emitter<ShopClientState> emit) async {
-    emit(ShopClientState(
-      status: ShopClientsStatus.loaded,
-      clients: event.clients,
-      client: null,
-      error: null,
-    ));
+    emit(state.copyWith(
+        status: ShopClientsStatus.loaded, clients: event.clients));
   }
 
   /// on get products event
@@ -55,33 +51,26 @@ class ShopClientBloc extends Bloc<ShopClientEvent, ShopClientState> {
   /// on add Client event
   void _onAddShopClient(
       AddShopClientEvent event, Emitter<ShopClientState> emit) async {
-    _databaseOperations.addClient(event.client);
-    emit(ShopClientState(
-      status: ShopClientsStatus.added,
-      clients: state.clients,
-      client: event.client,
-      error: null,
-    ));
-    add(GetShopClientsEvent());
+    await _databaseOperations.addClient(event.client);
+    emit(state.copyWith(status: ShopClientsStatus.added, client: event.client));
+    //add(GetShopClientsEvent());
   }
 
   /// on update product event
   void _onUpdateShopClient(
       UpdateShopClientEvent event, Emitter<ShopClientState> emit) async {
-    _databaseOperations.updateClient(event.client);
-    add(GetShopClientsEvent());
+    await _databaseOperations.updateClient(event.client);
+    emit(state.copyWith(
+        status: ShopClientsStatus.updated, client: event.client));
+    // add(GetShopClientsEvent());
   }
 
   /// on delete product event
   void _onDeleteShopClient(
       DeleteShopClientEvent event, Emitter<ShopClientState> emit) async {
-    _databaseOperations.deleteClient(event.client);
-    emit(ShopClientState(
-      status: ShopClientsStatus.deleted,
-      clients: state.clients,
-      client: event.client,
-      error: null,
-    ));
+    await _databaseOperations.deleteClient(event.client);
+    emit(state.copyWith(
+        status: ShopClientsStatus.deleted, client: event.client));
   }
 
   /// on dispose event

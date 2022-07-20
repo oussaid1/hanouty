@@ -120,8 +120,13 @@ class MySalesWidget extends StatelessWidget {
             },
           );
         } else {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Center(
+            child: Column(
+              children: [
+                Text('Loading...${state.status}'),
+                CircularProgressIndicator(),
+              ],
+            ),
           );
         }
       },

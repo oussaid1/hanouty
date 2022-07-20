@@ -33,6 +33,7 @@ class AuthPageState extends State<AuthPage> {
   final registerFormKey = GlobalKey<FormState>();
   final usernameController = TextEditingController(text: 'test');
   final confirmPassController = TextEditingController(text: 'ssdd1122');
+  final emailfocusNode = FocusNode();
 
   bool _obscurepass = true;
   bool _obscureconfirmpass = true;
@@ -106,9 +107,8 @@ class AuthPageState extends State<AuthPage> {
                     },
                     child: Text(
                       "Login",
-                      style: Theme.of(context).textTheme.headline3!.copyWith(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w100,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            fontSize: 20,
                             color: !isSignIn
                                 ? MThemeData.hintColor
                                 : MThemeData.white,
@@ -128,9 +128,8 @@ class AuthPageState extends State<AuthPage> {
                   },
                   child: Text(
                     "Sign Up",
-                    style: Theme.of(context).textTheme.headline3!.copyWith(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w100,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontSize: 20,
                           color: isSignIn
                               ? MThemeData.hintColor
                               : MThemeData.white,
@@ -146,59 +145,65 @@ class AuthPageState extends State<AuthPage> {
             children: [
               BluredContainer(
                 height: isSignIn
-                    ? MediaQuery.of(context).size.height * 0.5
-                    : MediaQuery.of(context).size.height * 0.8,
+                    ? MediaQuery.of(context).size.height * 0.3
+                    : MediaQuery.of(context).size.height * 0.5,
                 //height: MediaQuery.of(context).size.height * 0.5,
-
                 width: 400,
                 child: PageView(
                   pageSnapping: true,
                   allowImplicitScrolling: false,
                   controller: _pageController,
                   children: [
-                    SingleChildScrollView(
-                      child: Form(
-                        key: loginFormKey,
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 50,
-                            ),
-                            buildEmail(context),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            buildPassword(context),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            buildSignInButton(context),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                          ],
+                    ListView(
+                      shrinkWrap: true,
+                      children: [
+                        Form(
+                          key: loginFormKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(
+                                height: 50,
+                              ),
+                              buildEmail(context),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              buildPassword(context),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              buildSignInButton(context),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                    SingleChildScrollView(
-                      child: Form(
-                        key: registerFormKey,
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 50),
-                            buildUserName(context),
-                            const SizedBox(height: 20),
-                            buildEmail(context),
-                            const SizedBox(height: 20),
-                            buildPassword(context),
-                            const SizedBox(height: 20),
-                            buildConfirmPassword(context),
-                            const SizedBox(height: 20),
-                            buildSignUpButton(context),
-                            const SizedBox(height: 40),
-                          ],
+                    ListView(
+                      shrinkWrap: true,
+                      children: [
+                        Form(
+                          key: registerFormKey,
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 50),
+                              buildUserName(context),
+                              const SizedBox(height: 20),
+                              buildEmail(context),
+                              const SizedBox(height: 20),
+                              buildPassword(context),
+                              const SizedBox(height: 20),
+                              buildConfirmPassword(context),
+                              const SizedBox(height: 20),
+                              buildSignUpButton(context),
+                              const SizedBox(height: 40),
+                            ],
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ],
                 ),
@@ -246,7 +251,7 @@ class AuthPageState extends State<AuthPage> {
 
   Widget buildSignInButton(BuildContext context) {
     return SizedBox(
-      width: 200,
+      width: 300,
       height: 40,
       child: ElevatedButton(
         style: MThemeData.raisedButtonStyleSave,
@@ -256,19 +261,16 @@ class AuthPageState extends State<AuthPage> {
                 if (loginFormKey.currentState!.validate()) {
                   BlocProvider.of<LoginBloc>(context).add(LoginRequestedEvent(
                       loginCredentials: LoginCredentials(
-                          email: emailController.text,
-                          password: passController.text)));
+                          email: emailController.text.trim(),
+                          password: passController.text.trim())));
                   log('login button pressed event dispatched');
                   // auth.signIn(email: email, password: pass).then(
                   //       (value) => Navigator.pushReplacementNamed(context, '/'),
                   //     );
                 }
               },
-        child: Text(
+        child: const Text(
           'Sign In',
-          style: Theme.of(context).textTheme.headline3!.copyWith(
-                color: MThemeData.black,
-              ),
         ),
       ),
     );
@@ -299,32 +301,12 @@ class AuthPageState extends State<AuthPage> {
                   );
 
                   log('sign up button pressed event dispatched');
-                  // auth
-                  //     .signUp(
-                  //         username: usernameController.text.trim(),
-                  //         email: emailController.text.trim(),
-                  //         password: passController.text.trim())
-                  //     .then((value) {
-                  //   if (value != null) {
-                  //     final newUser = UserModel(
-                  //         id: value.user!.uid,
-                  //         email: value.user!.email,
-                  //         name: usernameController.text.trim());
-                  //     db!.createUser(newUser).then((value) => Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(builder: (context) => const Root()),
-                  //         ));
-                  //   }
-                  // });
-
-                  // registerFormKey.currentState!.reset();
                 }
               },
-        child: Text(
+        child: const Text(
           'Sign Up',
-          style: Theme.of(context).textTheme.headline3!.copyWith(
-              // color: MThemeData.white,
-              ),
+          //style: Theme.of(context).textTheme.headline3!.copyWith(
+          // color: MThemeData.white,
         ),
       ),
     );
@@ -333,51 +315,38 @@ class AuthPageState extends State<AuthPage> {
   Widget buildUserName(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Text(
-                'Full Name',
-                style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-              ),
-            ],
+      child: TextFormField(
+        // style: Theme.of(context).textTheme.subtitle1!.copyWith(
+        //       color: Theme.of(context).colorScheme.onSurface,
+        //     ),
+        onChanged: (value) => setState(() {
+          _canRegister = value.isNotEmpty;
+        }),
+        controller: usernameController,
+        keyboardType: TextInputType.emailAddress,
+        textInputAction: TextInputAction.next,
+        validator: (text) {
+          if (text!.trim().isEmpty) {
+            return "enter a unique name".tr();
+          }
+          return null;
+        },
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: MThemeData.primaryColorm),
           ),
-          TextFormField(
-            // style: Theme.of(context).textTheme.subtitle1!.copyWith(
-            //       color: Theme.of(context).colorScheme.onSurface,
-            //     ),
-            onChanged: (value) => setState(() {
-              _canRegister = value.isNotEmpty;
-            }),
-            controller: usernameController,
-            keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.next,
-            validator: (text) {
-              if (text!.trim().isEmpty) {
-                return "enter a unique name".tr();
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-              // border: OutlineInputBorder(),
-              enabledBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: MThemeData.primaryColorm),
-              ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: MThemeData.primaryColorm),
-              ),
-              hintText: 'enter a unique name',
-              hintStyle: Theme.of(context).textTheme.subtitle2!,
-              //labelText: 'Email',
-              labelStyle: Theme.of(context).textTheme.subtitle1!.copyWith(
-                    color: MThemeData.hintColorm,
-                  ),
+          hintText: 'enter your username here',
+          hintStyle: Theme.of(context).textTheme.subtitle2!,
+          labelText: 'Username',
+          suffixIcon: IconButton(
+            icon: const Icon(
+              Icons.highlight_remove_sharp,
+              size: 18,
             ),
+            onPressed: () => usernameController.clear(),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -385,64 +354,36 @@ class AuthPageState extends State<AuthPage> {
   Widget buildEmail(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Text(
-                'Email',
-                style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-              ),
-            ],
+      child: TextFormField(
+        onChanged: (value) => setState(
+          () => _canLogin = value.isNotEmpty,
+        ),
+        controller: emailController,
+        keyboardType: TextInputType.emailAddress,
+        textInputAction: TextInputAction.next,
+        validator: (text) {
+          if (text!.trim().isEmpty) {
+            return "insert a valid email".tr();
+          }
+          return null;
+        },
+        //focusNode:  emailFocusNode ,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: MThemeData.primaryColorm),
           ),
-          TextFormField(
-            onChanged: (value) => setState(() {
-              // if (value.isEmpty) {
-              //   _canLogin = false;
-              // } else {
-              //   _canLogin = true;
-              // }
-
-              _canLogin = value.isNotEmpty;
-            }),
-            controller: emailController,
-            keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.next,
-            validator: (text) {
-              if (text!.trim().isEmpty) {
-                return "insert a valid email".tr();
-              }
-              return null;
-            },
-            // style: Theme.of(context).textTheme.subtitle1!.copyWith(
-            //       color: Theme.of(context).colorScheme.onSurface,
-            //     ),
-            decoration: InputDecoration(
-              // border: OutlineInputBorder(),
-              enabledBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: MThemeData.primaryColorm),
-              ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: MThemeData.primaryColorm),
-              ),
-              hintText: 'enter your email here',
-              hintStyle: Theme.of(context).textTheme.subtitle2!,
-              //labelText: 'Email',
-              suffix: IconButton(
-                icon: const Icon(
-                  Icons.clear,
-                  color: MThemeData.hintColorm,
-                ),
-                onPressed: () => emailController.clear(),
-              ),
-              labelStyle: Theme.of(context).textTheme.subtitle1!.copyWith(
-                    color: MThemeData.hintColorm,
-                  ),
+          hintText: 'enter your email here',
+          hintStyle: Theme.of(context).textTheme.subtitle2!,
+          labelText: 'Email',
+          suffixIcon: IconButton(
+            icon: const Icon(
+              Icons.highlight_remove_sharp,
+              size: 18,
             ),
+            onPressed: () => emailController.clear(),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -452,65 +393,48 @@ class AuthPageState extends State<AuthPage> {
   ) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Text(
-                'Password',
-                style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-              ),
-            ],
-          ),
-          TextFormField(
-            // style: Theme.of(context).textTheme.subtitle1!.copyWith(
-            //       color: Theme.of(context).colorScheme.onSurface,
-            //     ),
-            controller: passController,
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.next,
-            validator: (text) {
-              if (text!.trim().isEmpty) {
-                return "insert a valid password".tr();
-              }
-              return null;
-            },
-            obscureText: _obscurepass,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                icon: _obscurepass
-                    ? const Icon(Icons.visibility_off_sharp,
-                        size: 18, color: MThemeData.hint2Colorm)
-                    : const Icon(
-                        Icons.visibility_outlined,
-                        size: 18,
-                        color: MThemeData.hint2Colorm,
-                      ),
-                onPressed: () {
-                  setState(() {
-                    _obscurepass = !_obscurepass;
-                  });
-                },
-              ),
-
-              // border: OutlineInputBorder(),
-              enabledBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: MThemeData.primaryColorm),
-              ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: MThemeData.primaryColorm),
-              ),
-              hintText: 'enter your password here',
-              hintStyle: Theme.of(context).textTheme.subtitle2!,
-              //labelText: 'Email',
-              labelStyle: Theme.of(context).textTheme.subtitle1!.copyWith(
-                    color: MThemeData.hintColorm,
+      child: TextFormField(
+        controller: passController,
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.next,
+        validator: (text) {
+          if (text!.trim().isEmpty) {
+            return "insert a valid password".tr();
+          }
+          return null;
+        },
+        obscureText: _obscurepass,
+        decoration: InputDecoration(
+          suffixIcon: IconButton(
+            icon: !_obscurepass
+                ? const Icon(Icons.visibility_off_sharp,
+                    size: 18, color: MThemeData.hint2Colorm)
+                : const Icon(
+                    Icons.visibility_outlined,
+                    size: 18,
+                    color: MThemeData.hint2Colorm,
                   ),
-            ),
+            onPressed: () {
+              setState(() {
+                _obscurepass = !_obscurepass;
+              });
+            },
           ),
-        ],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: MThemeData.primaryColorm),
+          ),
+          hintText: 'enter your password here',
+          hintStyle: Theme.of(context).textTheme.subtitle2!,
+          labelText: 'PassWord',
+          // suffix: IconButton(
+          //   icon: const Icon(
+          //     Icons.highlight_remove_sharp,
+          //     size: 18,
+          //   ),
+          //   onPressed: () => passController.clear(),
+          // ),
+        ),
       ),
     );
   }
@@ -518,68 +442,54 @@ class AuthPageState extends State<AuthPage> {
   Widget buildConfirmPassword(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Text(
-                'Confirm Password',
-                style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-              ),
-            ],
-          ),
-          TextFormField(
-            // style: Theme.of(context).textTheme.subtitle1!.copyWith(
-            //       color: Theme.of(context).colorScheme.onSurface,
-            //     ),
-            controller: confirmPassController,
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.next,
-            validator: (text) {
-              if (text!.trim().isEmpty) {
-                return "insert a valid password".tr();
-              }
-              if (text != passController.text) {
-                return "passwords do not match".tr();
-              }
-              return null;
-            },
-            obscureText: !_obscureconfirmpass,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                icon: _obscureconfirmpass
-                    ? const Icon(Icons.visibility_off_sharp,
-                        size: 18, color: MThemeData.hint2Colorm)
-                    : const Icon(
-                        Icons.visibility_outlined,
-                        size: 18,
-                        color: MThemeData.hint2Colorm,
-                      ),
-                onPressed: () {
-                  setState(() {
-                    _obscureconfirmpass = !_obscureconfirmpass;
-                  });
-                },
-              ),
-
-              // border: OutlineInputBorder(),
-              enabledBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: MThemeData.primaryColorm),
-              ),
-              focusedBorder: const UnderlineInputBorder(
-                borderSide: BorderSide(color: MThemeData.primaryColorm),
-              ),
-              hintText: 'confirm your password here',
-              hintStyle: Theme.of(context).textTheme.subtitle2!,
-              //labelText: 'Email',
-              labelStyle: Theme.of(context).textTheme.subtitle1!.copyWith(
-                    color: MThemeData.hintColorm,
+      child: TextFormField(
+        // style: Theme.of(context).textTheme.subtitle1!.copyWith(
+        //       color: Theme.of(context).colorScheme.onSurface,
+        //     ),
+        controller: confirmPassController,
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.next,
+        validator: (text) {
+          if (text!.trim().isEmpty) {
+            return "insert a valid password".tr();
+          }
+          if (text != passController.text) {
+            return "passwords do not match".tr();
+          }
+          return null;
+        },
+        obscureText: !_obscureconfirmpass,
+        decoration: InputDecoration(
+          suffixIcon: IconButton(
+            icon: _obscureconfirmpass
+                ? const Icon(Icons.visibility_off_sharp,
+                    size: 18, color: MThemeData.hint2Colorm)
+                : const Icon(
+                    Icons.visibility_outlined,
+                    size: 18,
+                    color: MThemeData.hint2Colorm,
                   ),
-            ),
+            onPressed: () {
+              setState(() {
+                _obscureconfirmpass = !_obscureconfirmpass;
+              });
+            },
           ),
-        ],
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(color: MThemeData.primaryColorm),
+          ),
+          hintText: 'confirm your password here',
+          hintStyle: Theme.of(context).textTheme.subtitle2!,
+          labelText: 'Confirm Password',
+          // suffix: IconButton(
+          //   icon: const Icon(
+          //     Icons.highlight_remove_sharp,
+          //     size: 18,
+          //   ),
+          //   onPressed: () => confirmPassController.clear(),
+          // ),
+        ),
       ),
     );
   }

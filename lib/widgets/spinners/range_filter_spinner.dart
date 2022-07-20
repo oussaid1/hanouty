@@ -1,7 +1,7 @@
-import 'package:hanouty/blocs/filtercubit/filter_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
 
+import '../../cubits/cubit/filter_cubit.dart';
 import '../../local_components.dart';
 import '../../utils/constents.dart';
 
@@ -34,17 +34,46 @@ class RangeFilterSpinner extends StatelessWidget {
         children: [
           const Icon(Icons.filter_list),
           const SizedBox(width: 3),
-          Text(filter.status.toString().split('.').last),
+          Text(filter.status.name),
         ],
       ),
       onSelected: (value) {
-        context.read<FilterCubit>().updateFilter(value, null);
+        switch (value) {
+          case FilterType.all:
+            context.read<FilterCubit>().updateFilter(status: FilterType.all);
+            break;
+          case FilterType.custom:
+            context.read<FilterCubit>().updateFilter(
+                  status: FilterType.custom,
+                  dateRange: MDateRange(
+                    start: DateTime(2020, 1, 1),
+                    end: DateTime(2020, 1, 31),
+                  ),
+                );
+            break;
+          // case FilterType.today:
+          //   context.read(filterCubit).setFilter(FilterType.today);
+          //   break;
+          // case FilterType.week:
+          //   context.read(filterCubit).setFilter(FilterType.week);
+          //   break;
+          case FilterType.month:
+            context.read<FilterCubit>().updateFilter(
+                status: FilterType.month,
+                dateRange: MDateRange(
+                    start: DateTime.now().subtract(const Duration(days: 30)),
+                    end: DateTime.now()));
+            break;
+          // case FilterType.year:
+          //   context.read(filterCubit).setFilter(FilterType.year);
+          //   break;
+        }
       },
       itemBuilder: (context) => [
         PopupMenuItem<FilterType>(
           value: FilterType.all,
           child: Text(
-            FilterType.all.toString().split('.').last.tr(),
+            FilterType.all.name.tr(),
             textAlign: TextAlign.start,
             style: Theme.of(context).textTheme.subtitle1!,
           ),
@@ -52,7 +81,7 @@ class RangeFilterSpinner extends StatelessWidget {
         PopupMenuItem<FilterType>(
           value: FilterType.month,
           child: Text(
-            FilterType.month.toString().split('.').last.tr(),
+            FilterType.month.name.tr(),
             textAlign: TextAlign.start,
             style: Theme.of(context).textTheme.subtitle1!,
           ),
@@ -60,7 +89,7 @@ class RangeFilterSpinner extends StatelessWidget {
         PopupMenuItem<FilterType>(
           value: FilterType.custom,
           child: Text(
-            FilterType.custom.toString().split('.').last.tr(),
+            FilterType.custom.name.tr(),
             textAlign: TextAlign.start,
             style: Theme.of(context).textTheme.subtitle1!,
           ),

@@ -102,9 +102,11 @@ class MThemeData {
   );
 
   static final ButtonStyle raisedButtonStyleCancel = TextButton.styleFrom(
+    primary: primaryColorm,
     textStyle: _textTheme.button!
         .copyWith(color: const Color.fromARGB(255, 0, 82, 206)),
-    minimumSize: const Size(88, 36),
+    minimumSize: const Size(120, 40),
+
     elevation: 0,
     // disabledBackgroundColor: Colors.transparent,
     //  disabledForegroundColor: Colors.white.withOpacity(0.5),
@@ -118,14 +120,17 @@ class MThemeData {
     ),
   );
   static final ButtonStyle raisedButtonStyleSave = TextButton.styleFrom(
-    textStyle: _textTheme.button!
-        .copyWith(color: const Color.fromARGB(255, 0, 82, 206)),
-    minimumSize: const Size(88, 36),
+    // primary: primaryColorm,
+    textStyle: _textTheme.button!.copyWith(
+      color: primaryColorm,
+    ),
+    shadowColor: primaryColorm,
+    minimumSize: const Size(120, 40),
     elevation: 0,
     //disabledBackgroundColor: Colors.transparent,
     //disabledForegroundColor: Colors.white.withOpacity(0.5),
     // disabledMouseCursor: MouseCursor.defer,
-    backgroundColor: const Color.fromARGB(255, 3, 132, 187),
+    backgroundColor: Colors.white,
     // foregroundColor: MThemeData.white,
     padding: const EdgeInsets.symmetric(horizontal: 8),
     shape: const RoundedRectangleBorder(
@@ -148,11 +153,11 @@ class MThemeData {
     return ThemeData(
       dialogBackgroundColor: const Color(0xff61E3AF), // Colors.transparent,
       colorScheme: colorScheme,
-      backgroundColor: colorScheme.background,
+      backgroundColor: Colors.greenAccent, //colorScheme.background,
       typography: Typography(),
       buttonTheme: ButtonThemeData(
-        minWidth: 88,
-        height: 36,
+        minWidth: 120,
+        height: 40,
         colorScheme: colorScheme,
         textTheme: ButtonTextTheme.normal,
         shape: const RoundedRectangleBorder(
@@ -179,10 +184,10 @@ class MThemeData {
       scaffoldBackgroundColor: colorScheme.background,
       highlightColor: Colors.transparent,
       focusColor: focusColor,
-      cardColor: colorScheme.surface.withOpacity(0.08),
+      cardColor: colorScheme.background,
       cardTheme: CardTheme(
         elevation: 0,
-        //color: colorScheme.surface.withOpacity(0.08),
+        color: colorScheme.surface.withOpacity(0.08),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,

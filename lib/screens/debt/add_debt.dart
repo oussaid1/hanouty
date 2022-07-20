@@ -146,7 +146,7 @@ class AddProductState extends ConsumerState<AddDebt> {
                         timeStamp: widget.debt!.timeStamp,
                         type: ref.read(selectedSelectOrAddCat.state).state,
                       );
-                      GetIt.I<DebtsBloc>().add(UpdateDebtEvent(debt));
+                      GetIt.I<DebtBloc>().add(UpdateDebtEvent(debt));
                       Navigator.pop(context);
                     }
                   }),

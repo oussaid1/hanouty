@@ -8,11 +8,11 @@ import '../../database/database_operations.dart';
 part 'expenses_event.dart';
 part 'expenses_state.dart';
 
-class ExpensesBloc extends Bloc<ExpensesEvent, ExpensesState> {
+class ExpenseBloc extends Bloc<ExpensesEvent, ExpensesState> {
   /// stream subscription to get the products from the database
   late final DatabaseOperations _databaseOperations;
   StreamSubscription<List<ExpenseModel>>? _expenseSubscription;
-  ExpensesBloc({required DatabaseOperations databaseOperations})
+  ExpenseBloc({required DatabaseOperations databaseOperations})
       : super(
           const ExpensesState(
             status: ExpensesStatus.initial,

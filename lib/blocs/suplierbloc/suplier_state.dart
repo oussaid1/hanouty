@@ -38,7 +38,7 @@ class SuplierState extends Equatable {
   }
 
   @override
-  List<Object> get props => [status, supliers, suplier!, error!];
+  List<Object> get props => [status, supliers];
 }
 // /// Loading state
 // class SuplierssLoadingState extends SupliersState {}

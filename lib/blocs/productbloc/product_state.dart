@@ -3,11 +3,9 @@ part of 'product_bloc.dart';
 /// ProductState
 enum ProductStatus {
   initial,
-  loading,
   loaded,
-  updating,
+  added,
   updated,
-  deleting,
   deleted,
   error,
 }
@@ -40,7 +38,7 @@ class ProductState extends Equatable {
   }
 
   @override
-  List<Object> get props => [status, products, lastproduct!, error!];
+  List<Object> get props => [status, products];
 }
 
 // /// Initial state

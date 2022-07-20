@@ -6,7 +6,7 @@ class FilteredDebts {
   // List<ShopClientModel>? shopClients;
   FilteredDebts({
     required this.debts,
-    required this.filterType,
+    this.filterType = FilterType.all,
     // this.shopClients,
   });
 

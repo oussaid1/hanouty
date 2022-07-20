@@ -196,7 +196,7 @@ class AddProductState extends State<SellProductDialoge> {
             style: Theme.of(context).textTheme.bodyText1!,
           ),
           NumberIncrementerWidget(
-            limit: widget.product.quantity,
+            limitUp: widget.product.quantity,
             initialValue: quantity,
             onChanged: (value) {
               setState(() {

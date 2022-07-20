@@ -25,8 +25,26 @@ class ShopClientState extends Equatable {
   final ShopClientModel? client;
   final String? error;
 
+  /// copyWith method
+  ShopClientState copyWith({
+    ShopClientsStatus? status,
+    List<ShopClientModel>? clients,
+    ShopClientModel? client,
+    String? error,
+  }) {
+    return ShopClientState(
+      status: status ?? this.status,
+      clients: clients ?? this.clients,
+      client: client ?? this.client,
+      error: error ?? this.error,
+    );
+  }
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [
+        status,
+        clients,
+      ];
 }
 
 // /// Initial state

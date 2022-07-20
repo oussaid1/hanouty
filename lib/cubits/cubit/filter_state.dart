@@ -1,10 +1,13 @@
 part of 'filter_cubit.dart';
 
-// enum FilterType {
-//   all,
-//   month,
-//   custom,
+// abstract class FilterState extends Equatable {
+//   const FilterState();
+
+//   @override
+//   List<Object> get props => [];
 // }
+
+// class FilterInitial extends FilterState {}
 
 class FilterState extends Equatable {
   const FilterState(
@@ -43,5 +46,5 @@ class FilterState extends Equatable {
             ? MDateRange.fromJson(json['dateRange'])
             : null;
   @override
-  List<Object> get props => [];
+  List<Object> get props => [status];
 }

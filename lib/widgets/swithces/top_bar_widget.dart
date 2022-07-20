@@ -1,6 +1,6 @@
-import 'package:hanouty/blocs/filtercubit/filter_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
+import '../../cubits/cubit/filter_cubit.dart';
 import '../../local_components.dart';
 import '../../localization/language.dart';
 import '../../providers/localization_provider.dart';

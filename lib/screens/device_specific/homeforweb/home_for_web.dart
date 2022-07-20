@@ -1,4 +1,3 @@
-import 'package:hanouty/blocs/filtercubit/filter_cubit.dart';
 import 'package:flutter/material.dart';
 
 import '../../../blocs/clientsbloc/clients_bloc.dart';
@@ -12,6 +11,7 @@ import '../../../blocs/sellactionsbloc/sellactions_bloc.dart';
 import '../../../blocs/suplierbloc/suplier_bloc.dart';
 import '../../../blocs/techservicebloc/techservice_bloc.dart';
 import '../../../components.dart';
+import '../../../cubits/cubit/filter_cubit.dart';
 import '../../../database/database_operations.dart';
 import '../../../local_components.dart';
 import '../../../widgets/sidemenu/shared_menu_items.dart';
@@ -46,17 +46,17 @@ class HomeForAll extends ConsumerWidget {
           ),
           BlocProvider(
             create: (context) =>
-                DebtsBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                DebtBloc(databaseOperations: GetIt.I<DatabaseOperations>())
                   ..add(GetDebtEvent()),
           ),
           BlocProvider(
             create: (context) =>
-                ExpensesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                ExpenseBloc(databaseOperations: GetIt.I<DatabaseOperations>())
                   ..add(GetExpensesEvent()),
           ),
           BlocProvider(
             create: (context) =>
-                IncomesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                IncomeBloc(databaseOperations: GetIt.I<DatabaseOperations>())
                   ..add(GetIncomeEvent()),
           ),
           BlocProvider(

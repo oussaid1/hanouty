@@ -2,11 +2,9 @@ part of 'sales_bloc.dart';
 
 enum SalesStatus {
   initial,
-  loading,
   loaded,
-  updating,
+  added,
   updated,
-  deleting,
   deleted,
   error,
 }
@@ -60,7 +58,7 @@ class SalesState extends Equatable {
   /// toString() is used to print the state in the console.
 
   @override
-  List<Object> get props => [status, sales, lastsale!, error!];
+  List<Object> get props => [status, sales];
 }
 
 // /// Initial state

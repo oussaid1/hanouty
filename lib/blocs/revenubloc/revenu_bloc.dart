@@ -6,8 +6,6 @@ part 'revenu_state.dart';
 
 class RevenuBloc extends Bloc<RevenuEvent, RevenuState> {
   RevenuBloc() : super(RevenuInitial()) {
-    on<RevenuEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+    on<RevenuEvent>((event, emit) {});
   }
 }

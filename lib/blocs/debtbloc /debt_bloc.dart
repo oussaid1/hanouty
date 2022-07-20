@@ -8,11 +8,11 @@ import '../../models/debt/debt.dart';
 part 'debt_event.dart';
 part 'debt_state.dart';
 
-class DebtsBloc extends Bloc<DebtEvent, DebtsState> {
+class DebtBloc extends Bloc<DebtEvent, DebtsState> {
   /// stream subscription to get the pdebts from the database
   late final DatabaseOperations _databaseOperations;
   StreamSubscription<List<DebtModel>>? _pdebtsSubscription;
-  DebtsBloc({required DatabaseOperations databaseOperations})
+  DebtBloc({required DatabaseOperations databaseOperations})
       : super(
           const DebtsState(
             status: DebtStatus.initial,

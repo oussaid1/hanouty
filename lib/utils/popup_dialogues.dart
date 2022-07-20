@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 
 class MDialogs {
   static Future<void> dialogSimple(
-    BuildContext context, {
+    BuildContext mcontext, {
     List<Widget>? widgets,
     Widget? title,
     Widget? contentWidget,
   }) {
     return showDialog<void>(
-        context: context,
+        context: mcontext,
         useSafeArea: true,
         barrierDismissible: true,
         useRootNavigator: false,
-        builder: (BuildContext context) {
+        builder: (_) {
           return AlertDialog(
             title: title,
             actionsPadding: const EdgeInsets.only(left: 8, right: 8),
