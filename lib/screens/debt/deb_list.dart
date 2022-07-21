@@ -29,8 +29,6 @@ class DebtList extends ConsumerWidget {
                   children: [
                     SlidableAction(
                       onPressed: (context) {
-                        ref.read(pickedDateTime.state).state = DateTime.now();
-
                         MDialogs.dialogSimple(
                           context,
                           title: Text(
@@ -62,10 +60,6 @@ class DebtList extends ConsumerWidget {
                   dismissible: DismissiblePane(onDismissed: () {}),
                   children: [
                     SlidableAction(onPressed: (context) {
-                      ref.read(pickedDateTime.state).state = debt.timeStamp;
-                      ref.read(pickedDueDateTime.state).state = debt.deadLine;
-                      ref.read(selectedSelectOrAddCat.state).state = debt.type;
-
                       MDialogs.dialogSimple(
                         context,
                         title: Text(

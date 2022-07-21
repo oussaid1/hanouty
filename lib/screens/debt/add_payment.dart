@@ -246,30 +246,16 @@ class AddPaymentState extends ConsumerState<AddPayment> {
   }
 
   Widget buildDate() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 8.0,
-            top: 8,
-          ),
-          child: Text(
-            'Date'.tr(),
-            style: Theme.of(context).textTheme.subtitle2!,
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 4, right: 4),
-          decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).bottomAppBarColor),
-              borderRadius: BorderRadius.circular(6)),
-          height: 50,
-          width: 240,
-          child: const SelectDate(),
-        ),
-      ],
+    return SizedBox(
+      height: 50,
+      width: 240,
+      child: SelectDate(
+        onDateSelected: (date) {
+          setState(() {
+            date = date;
+          });
+        },
+      ),
     );
   }
 

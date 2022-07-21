@@ -30,7 +30,7 @@ class SellActionsBloc extends Bloc<SellingactionsEvent, SellActionsState> {
       emit(SellingSuccessfulState(event.productModel));
       log('Selling Requested Success');
     } catch (e) {
-      emit(SellingFailedState(e.toString(), event.saleModel.toProduct()));
+      emit(SellingFailedState(e.toString(), event.saleModel));
     }
   }
 
@@ -39,7 +39,7 @@ class SellActionsBloc extends Bloc<SellingactionsEvent, SellActionsState> {
       UnsellingRequested event, Emitter<SellActionsState> emit) async {
     try {
       await _databaseOperations.deleteSale(event.saleModel);
-      await _databaseOperations.updateProduct(event.saleModel.toProduct());
+      await _databaseOperations.updateProduct(event.saleModel);
       emit(UnsellingSuccessfulState(event.saleModel));
     } catch (e) {
       emit(UnsellingFailedState(e.toString(), event.saleModel));

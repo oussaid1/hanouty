@@ -1,6 +1,5 @@
 import 'package:hanouty/blocs/incomebloc/income_bloc.dart';
 import 'package:hanouty/models/income/income.dart';
-import 'package:hanouty/providers/var_provider.dart';
 import 'package:hanouty/settings/themes.dart';
 import 'package:hanouty/widgets/date_pickers.dart/date_picker.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +18,7 @@ class AddIncomeState extends ConsumerState<AddIncome> {
   final TextEditingController expenseNameController = TextEditingController();
   final TextEditingController sourceController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
+  DateTime date = DateTime.now();
 
   void clear() {
     expenseNameController.clear();
@@ -74,7 +74,7 @@ class AddIncomeState extends ConsumerState<AddIncome> {
                     final IncomeModel income = IncomeModel(
                       id: widget.income!.id,
                       source: widget.income!.source,
-                      date: ref.watch(pickedDateTime.state).state,
+                      date: date,
                       name: expenseNameController.text.trim(),
                       amount: double.parse(amountController.text.trim()),
                     );
@@ -107,7 +107,7 @@ class AddIncomeState extends ConsumerState<AddIncome> {
                       final income = IncomeModel(
                         name: expenseNameController.text.trim(),
                         amount: double.parse(amountController.text.trim()),
-                        date: ref.watch(pickedDateTime.state).state,
+                        date: date,
                         source: sourceController.text.trim(),
                       );
                       GetIt.I<IncomeBloc>().add(UpdateIncomeEvent(income));
@@ -172,7 +172,13 @@ class AddIncomeState extends ConsumerState<AddIncome> {
               borderRadius: BorderRadius.circular(6)),
           height: 50,
           width: 240,
-          child: const SelectDate(),
+          child: SelectDate(
+            onDateSelected: (DateTime date) {
+              setState(() {
+                this.date = date;
+              });
+            },
+          ),
         ),
       ],
     );

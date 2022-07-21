@@ -140,7 +140,7 @@ buildDataRow(BuildContext context,
         PriceNumberZone(
           withDollarSign: withDollarSign,
           right: const SizedBox.shrink(),
-          price: value1.toPrecision(),
+          price: value1.toPrecision(2),
           style: Theme.of(context)
               .textTheme
               .headline5!
@@ -151,7 +151,7 @@ buildDataRow(BuildContext context,
         PriceNumberZone(
           withDollarSign: withDollarSign,
           right: const SizedBox.shrink(),
-          price: value2.toPrecision(),
+          price: value2.toPrecision(2),
           style: Theme.of(context)
               .textTheme
               .headline5!

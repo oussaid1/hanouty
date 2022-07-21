@@ -11,7 +11,7 @@ class SelectDate extends StatefulWidget {
     this.initialDate,
     this.firstDate,
     this.lastDate,
-    this.onDateSelected,
+    required this.onDateSelected,
   }) : super(key: key);
   final DateTime? initialDate;
   final DateTime? firstDate;

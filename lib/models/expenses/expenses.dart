@@ -54,7 +54,7 @@ class ExpenseModel {
       'deadLine': deadLine,
       'amount': amount,
       'amountPaid': amountPaid,
-      'expenseCategory': expenseCategory.value,
+      'expenseCategory': expenseCategory.name,
     };
   }
 
@@ -66,7 +66,7 @@ class ExpenseModel {
       deadLine: map['deadLine'].toDate(),
       amount: map['amount'],
       amountPaid: map['amountPaid'],
-      expenseCategory: map['expenseCategory'].toString().toExpenseCategory(),
+      expenseCategory: map['expenseCategory'],
     );
   }
 

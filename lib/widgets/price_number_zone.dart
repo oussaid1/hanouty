@@ -26,7 +26,7 @@ class PriceNumberZone extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            '${price.toPrecision()} '.tr(),
+            '${price.toPrecision(2)} '.tr(),
             textAlign: textAlign,
             style: style ??
                 Theme.of(context)

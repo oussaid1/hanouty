@@ -20,7 +20,7 @@ class SalesData {
       list.add(item.dateSold.ddmmyyyy());
     }
     //loger.d('distinctDDMMYY :${list}');
-    list.sort((a, b) => (a.getDate!).compareTo(b.getDate!));
+    // list.sort((a, b) => (a.getDate!).compareTo(b.getDate!));
     return list.toSet().toList();
   }
 
@@ -31,7 +31,7 @@ class SalesData {
       list.add(item.dateSold.mmyyyy());
     }
     //loger.d('distinctMMYYY :${list}');
-    list.sort((a, b) => (a.getDate!).compareTo(b.getDate!));
+    // list.sort((a, b) => (a.getDate!).compareTo(b.getDate!));
     return list.toSet().toList();
   }
 
@@ -42,7 +42,7 @@ class SalesData {
       list.add(item.dateSold.yyyy());
     }
     //loger.d('distinctYYYY :${list}');
-    list.sort((a, b) => (a.getDate!).compareTo(b.getDate!));
+    // list.sort((a, b) => (a.getDate!).compareTo(b.getDate!));
     return list.toSet().toList().reversed.toList();
   }
 
@@ -115,24 +115,15 @@ class SalesData {
 
   // maps of the provided list of sales
   List<ChartData> getTopXSalesCountAndValue(int x) {
-    List<ChartData> it = [];
-    Map<String, dynamic> map2 = {};
-    Map<String, dynamic> mapCount = {};
-    for (var element in filteredSales) {
-      if (!map2.containsKey(element.productSoldName)) {
-        mapCount[element.productSoldName] = 1;
-        map2[element.productSoldName] = element.totalPriceSoldFor;
-      } else {
-        mapCount[element.productSoldName] += 1;
-        map2[element.productSoldName] += element.totalPriceSoldFor;
-      }
+    List<ChartData> list = [];
+    for (var item in topSales) {
+      list.add(ChartData(
+        label: item.productName,
+        value: item.quantitySold as double,
+      ));
     }
-    map2.forEach((key, element) {
-      //it.add(ChartData(label: key, value: element, count: mapCount[key]));
-    });
-    it.sort((a, b) => b.value!.compareTo(a.value!));
-
-    return it.length > x ? it.getRange(0, x).toList() : it;
+    list.sort((a, b) => b.value!.compareTo(a.value!));
+    return list.take(x).toList();
   }
 // only data drived from the provided list of sales
 

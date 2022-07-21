@@ -353,7 +353,7 @@ class _SalesDataTableState extends State<SalesDataTable> {
           label: const Text('Product Name'),
           tooltip: 'Product Name',
           onSort: (columnIndex, ascending) => sort(
-            (SaleModel d) => d.productSoldName,
+            (SaleModel d) => d.productName,
             columnIndex,
             ascending,
           ),
@@ -409,7 +409,7 @@ class _SalesDataTableState extends State<SalesDataTable> {
     MDialogs.dialogSimple(
       context,
       title: Text(
-        "Unsell: ${saleModel.productSoldName}",
+        "Unsell: ${saleModel.productName}",
         style: Theme.of(context).textTheme.headline3!,
       ),
       contentWidget: Row(
@@ -469,7 +469,7 @@ class _SalesDataTableState extends State<SalesDataTable> {
     MDialogs.dialogSimple(
       context,
       title: Text(
-        " ${saleModel.productSoldName}",
+        " ${saleModel.productName}",
         style: Theme.of(context).textTheme.headline3!,
       ),
       contentWidget: Row(

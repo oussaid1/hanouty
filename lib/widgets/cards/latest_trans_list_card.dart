@@ -90,7 +90,7 @@ class LatestTransactionsListCard extends ConsumerWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  sale.productSoldName,
+                                  sale.productName,
                                   overflow: TextOverflow.ellipsis,
                                   softWrap: true,
                                   style: Theme.of(context)

@@ -106,12 +106,9 @@ class UpdateSaleState extends ConsumerState<AddOrEditSaleWidget> {
                     shopClientId: widget.sale!.shopClientId,
                     priceSoldFor: double.parse(priceController.text),
                     type: widget.sale!.type,
-                    priceIn: widget.sale!.priceIn,
-                    priceOut: widget.sale!.priceOut,
                     quantitySold: widget.sale!.quantitySold,
                     dateSold: pickedDate,
-                    productSoldName: widget.sale!.productSoldName,
-                    soldItemId: widget.sale!.soldItemId,
+                    productId: widget.sale!.productId,
                   );
                   if (formKey.currentState!.validate()) {
                     GetIt.I.get<SalesBloc>().add(UpdateSalesEvent(sale));
@@ -134,12 +131,9 @@ class UpdateSaleState extends ConsumerState<AddOrEditSaleWidget> {
                     shopClientId: widget.sale!.shopClientId,
                     priceSoldFor: double.parse(priceController.text),
                     type: widget.sale!.type,
-                    priceIn: widget.sale!.priceIn,
-                    priceOut: widget.sale!.priceOut,
                     quantitySold: widget.sale!.quantitySold,
                     dateSold: pickedDate,
-                    productSoldName: widget.sale!.productSoldName,
-                    soldItemId: widget.sale!.soldItemId,
+                    productId: widget.sale!.productId,
                   );
                   if (formKey.currentState!.validate()) {
                     GetIt.I.get<SalesBloc>().add(UpdateSalesEvent(sale));
@@ -183,9 +177,7 @@ class UpdateSaleState extends ConsumerState<AddOrEditSaleWidget> {
       WidgetRef ref, TextEditingController textEditingController) {
     return TextFormField(
       controller: textEditingController,
-      onChanged: (value) {
-        ref.read(priceSoldForProvider.state).state = double.parse(value);
-      },
+      onChanged: (value) {},
       validator: (text) {
         if (text!.trim().isEmpty) {
           return "error".tr();

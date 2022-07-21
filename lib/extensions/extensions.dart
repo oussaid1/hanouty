@@ -1,13 +1,16 @@
+import 'dart:developer';
+
 import 'package:hanouty/models/Sale/sale.dart';
 import 'package:hanouty/models/expenses/expenses.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../components.dart';
+import '../models/product/product.dart';
 
 // Our design contains Neumorphism design and i made a extention for it
 // We can apply it on any  widget
-
+/// TODO: Test this extension
 extension Neumorphism on Widget {
   addNeumorphism({
     double borderRadius = 10.0,
@@ -111,39 +114,9 @@ extension DtExtension on DateTime {
   }
 }
 
-extension EnumExtension on SaleType {
-  String get value => describeEnum(this);
-}
-
-extension EnumExtension2 on ExpenseCategory {
-  String get value => describeEnum(this);
-}
-
-extension EnumParser on String {
-  ExpenseCategory toExpenseCategory() {
-    return ExpenseCategory.values.firstWhere(
-        (e) =>
-            e.toString().toLowerCase() == 'ExpenseCategory.$this'.toLowerCase(),
-        orElse: () => ExpenseCategory.other); //return null if not found
-  }
-}
-
-extension EnumParser2 on String {
-  DateTime? get getDate {
-    List<String> date = split('-');
-    if (date.length == 3) {
-      return DateTime.parse(this);
-    } else if (date.length == 2) {
-      return DateTime.parse('${date[0]}-${date[1]}-01');
-    } else if (date.length == 1) {
-      return DateTime.parse('${date[0]}-01-01');
-    }
-    return null;
-  }
-}
-
 extension Ex on double {
-  double toPrecision() => double.parse(toStringAsFixed(2));
+  double toPrecision(int digitsAfter) =>
+      double.parse(toStringAsFixed(digitsAfter));
 }
 
 /// extension on [List<String>] to turn all items to lower case
@@ -153,5 +126,29 @@ extension LowerCaseList on List<String> {
       this[i] = this[i].toLowerCase();
     }
     return this;
+  }
+}
+
+extension SaleListExtension on List<SaleModel> {
+  List<SaleModel> buildSalesList(List<ProductModel> productModels) {
+    List<SaleModel> sales = [];
+    for (SaleModel sale in this) {
+      for (ProductModel product in productModels) {
+        if (sale.productId == product.id) {
+          log('product found');
+          sales.add(SaleModel(
+              saleId: sale.saleId,
+              productId: sale.productId,
+              shopClientId: sale.shopClientId,
+              dateSold: sale.dateSold,
+              quantitySold: sale.quantitySold,
+              priceSoldFor: sale.priceSoldFor,
+              saleDescription: sale.saleDescription,
+              type: sale.type,
+              product: product));
+        }
+      }
+    }
+    return sales;
   }
 }

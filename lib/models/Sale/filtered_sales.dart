@@ -84,7 +84,7 @@ class FilteredSales {
   List<String> get distinctCilentNames {
     List<String> mlist = [];
     for (var element in sales) {
-      mlist.add(element.shopClientId!);
+      mlist.add(element.shopClientId);
     }
     return mlist.toSet().toList();
   }

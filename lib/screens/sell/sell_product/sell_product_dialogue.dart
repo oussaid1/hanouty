@@ -136,12 +136,9 @@ class AddProductState extends State<SellProductDialoge> {
                       shopClientId: client,
                       priceSoldFor: double.parse(priceOutController.text),
                       type: SaleType.product,
-                      priceIn: widget.product.priceIn,
-                      priceOut: widget.product.priceOut,
                       quantitySold: quantity,
                       dateSold: date,
-                      productSoldName: widget.product.productName,
-                      soldItemId: widget.product.id!,
+                      productId: widget.product.id!,
                     );
                     log('Sale: $sale');
                     sellActionsBloc.add(

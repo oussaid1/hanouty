@@ -4,67 +4,69 @@ import 'package:hanouty/local_components.dart';
 
 part 'techservices_data.dart';
 
-class TechServiceModel {
+class TechServiceModel extends ProductModel {
   String? id;
   String title;
-  String type;
-  String? description = 'legal only';
-  double priceIn = 0;
-  double priceOut = 0;
-
-  DateTime timeStamp = DateTime.now();
-  int count = 1;
-
+  SaleType type;
+  String? serviceDescription = 'legal only';
+  DateTime createdAt = DateTime.now();
   bool? available = true;
 
   TechServiceModel({
     this.id,
     required this.title,
     required this.type,
-    this.description,
-    required this.priceIn,
-    required this.priceOut,
+    required this.serviceDescription,
+    required this.createdAt,
     this.available,
-    required this.timeStamp,
-  });
-  TechServiceModel copyWith({
+    ProductModel? product,
+  }) : super(
+          id: product?.id,
+          barcode: product?.barcode ?? '',
+          productName: product?.productName ?? '',
+          description: product?.description ?? '',
+          category: product?.category ?? '',
+          dateIn: product?.dateIn ?? DateTime.now(),
+          quantity: product?.quantity ?? 0,
+          priceIn: product?.priceIn ?? 0,
+          priceOut: product?.priceOut ?? 0,
+          suplier: product?.suplier ?? '',
+        );
+
+  TechServiceModel copyServiceWith({
     String? id,
     String? title,
-    String? type,
-    String? description,
-    double? priceIn,
-    double? priceOut,
-    double? soldFor,
-    int? quantitySold,
-    int? count,
+    SaleType? type,
+    String? serviceDescription,
+    DateTime? createdAt,
     bool? available,
+
+    // ProductModel? product,
   }) {
     return TechServiceModel(
       id: id ?? this.id,
       title: title ?? this.title,
       type: type ?? this.type,
-      description: description ?? this.description,
-      priceIn: priceIn ?? this.priceIn,
-      priceOut: priceOut ?? this.priceOut,
+      serviceDescription: serviceDescription ?? this.serviceDescription,
+      createdAt: createdAt ?? this.createdAt,
       available: available ?? this.available,
-      timeStamp: timeStamp,
+      //product: product ?? this.product,
     );
   }
 
   /// fromSale
   /// converts a SaleModel to a TechService
-  static TechServiceModel fromSale(SaleModel sale) {
-    return TechServiceModel(
-      id: sale.id,
-      title: sale.productSoldName,
-      type: sale.type.toString(),
-      description: sale.description,
-      priceIn: sale.priceIn,
-      priceOut: sale.priceOut,
-      available: true,
-      timeStamp: sale.dateSold,
-    );
-  }
+  // static TechServiceModel fromSale(SaleModel sale) {
+  //   return TechServiceModel(
+  //     id: sale.id,
+  //     title: sale.productName,
+  //     type: sale.type!,
+  //     serviceDescription: sale.serviceDescription,
+  //     createdAt: sale.createdAt,
+  //     available: sale.available,
+  //     //product: product ?? this.product,
+  //   );
+  // }
 
   Map<String, dynamic> toMap() {
     return {
@@ -74,7 +76,7 @@ class TechServiceModel {
       'priceIn': priceIn,
       'priceOut': priceOut,
       'available': available,
-      'timeStamp': timeStamp,
+      'timeStamp': createdAt,
     };
   }
 
@@ -83,17 +85,9 @@ class TechServiceModel {
         id: map.id,
         title: map['title'],
         type: map['type'],
-        description: map['description'],
-        priceIn: map['priceIn'],
-        priceOut: map['priceOut'],
+        serviceDescription: map['description'],
         available: map['available'],
-        timeStamp: map['timeStamp'].toDate());
-  }
-
-  String toJson() => json.encode(toMap());
-
-  String get formattedDate {
-    return (timeStamp).ddmmyyyy();
+        createdAt: map['timeStamp'].toDate());
   }
 
   factory TechServiceModel.fromJson(String source) =>

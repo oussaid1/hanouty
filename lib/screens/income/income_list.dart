@@ -80,10 +80,6 @@ class IncomeListCard extends ConsumerWidget {
                 size: 30,
               ),
               onPressed: () {
-                // update the variables before opening the dialog
-                ref.watch(pickedDateTime.state).state = income.date;
-                //end
-                // open the dialog
                 MDialogs.dialogSimple(context,
                     contentWidget: SizedBox(
                       height: 600,

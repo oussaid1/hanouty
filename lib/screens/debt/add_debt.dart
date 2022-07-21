@@ -1,7 +1,6 @@
 import 'package:hanouty/local_components.dart';
 
 import 'package:hanouty/widgets/date_pickers.dart/date_picker.dart';
-import 'package:hanouty/widgets/date_pickers.dart/due_date_picker.dart';
 
 import 'package:hanouty/widgets/select_or_add/select_or_add_cat.dart';
 import 'package:hanouty/widgets/spinners/client_spinner.dart';
@@ -23,10 +22,9 @@ class AddProductState extends ConsumerState<AddDebt> {
   final TextEditingController productNameController = TextEditingController();
 
   final TextEditingController dueAmountController = TextEditingController();
-
+  DateTime deadline = DateTime.now();
   void clear() {
     productNameController.clear();
-
     dueAmountController.clear();
   }
 
@@ -34,7 +32,7 @@ class AddProductState extends ConsumerState<AddDebt> {
   void initState() {
     if (widget.debt != null) {
       productNameController.text = widget.debt!.productName!;
-
+      deadline = widget.debt!.deadLine;
       dueAmountController.text = widget.debt!.amount.toString();
     }
     super.initState();
@@ -142,7 +140,7 @@ class AddProductState extends ConsumerState<AddDebt> {
                         clientName: widget.debt!.clientName,
                         clientId: widget.debt!.clientId,
                         productName: productNameController.text,
-                        deadLine: ref.read(pickedDateTime.state).state,
+                        deadLine: deadline,
                         timeStamp: widget.debt!.timeStamp,
                         type: ref.read(selectedSelectOrAddCat.state).state,
                       );
@@ -194,58 +192,29 @@ class AddProductState extends ConsumerState<AddDebt> {
   }
 
   Widget buildDueDate() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 8.0,
-            top: 8,
-          ),
-          child: Text(
-            'Due-Date'.tr(),
-            style: Theme.of(context).textTheme.subtitle2!,
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 4, right: 4),
-          decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).bottomAppBarColor),
-              borderRadius: BorderRadius.circular(6)),
-          height: 50,
-          width: 240,
-          child: const SelectDueDate(),
-        ),
-      ],
+    return SizedBox(
+      height: 50,
+      width: 240,
+      child: SelectDate(
+        initialDate: deadline,
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2050),
+        onDateSelected: (value) {
+          deadline = value;
+        },
+      ),
     );
   }
 
   Widget buildDate() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 8.0,
-            top: 8,
-          ),
-          child: Text(
-            'Date'.tr(),
-            style: Theme.of(context).textTheme.subtitle2!,
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 4, right: 4),
-          decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).bottomAppBarColor),
-              borderRadius: BorderRadius.circular(6)),
-          height: 50,
-          width: 240,
-          child: const SelectDate(),
-        ),
-      ],
+    return SizedBox(
+      height: 50,
+      width: 240,
+      child: SelectDate(
+        onDateSelected: (value) {
+          deadline = value;
+        },
+      ),
     );
   }
 

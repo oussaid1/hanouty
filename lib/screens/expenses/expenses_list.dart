@@ -97,10 +97,6 @@ class ExpenseListCard extends ConsumerWidget {
             ),
             onPressed: () {
               // update the variables before opening the dialog
-              ref.read(pickedDateTime.state).state = expense.date;
-              ref.read(pickedDueDateTime.state).state = expense.deadLine;
-              ref.watch(selectedItemProvider.state).state =
-                  expense.expenseCategory.value;
 
               //end
               // open the dialog
@@ -210,7 +206,7 @@ class ExpenseListCard extends ConsumerWidget {
                   style: Theme.of(context).textTheme.subtitle2!,
                   children: [
                     TextSpan(
-                      text: ' ${expense.expenseCategory.value}',
+                      text: ' ${expense.expenseCategory.name}',
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             color: MThemeData.expensesColor,
                           ),

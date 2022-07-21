@@ -1,7 +1,6 @@
 import 'package:hanouty/local_components.dart';
 
 import 'package:hanouty/widgets/date_pickers.dart/date_picker.dart';
-import 'package:hanouty/widgets/date_pickers.dart/due_date_picker.dart';
 import 'package:hanouty/widgets/spinners/spinner_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
@@ -20,6 +19,7 @@ class AddExpenseState extends ConsumerState<AddExpense> {
   final TextEditingController expenseNameController = TextEditingController();
   final TextEditingController amuontPaidController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
+  DateTime date = DateTime.now();
 
   void clear() {
     expenseNameController.clear();
@@ -40,7 +40,7 @@ class AddExpenseState extends ConsumerState<AddExpense> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> categoriesList = ref.read(expenseCategoryListProvder);
+    final List<String> categoriesList = [];
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -206,29 +206,17 @@ class AddExpenseState extends ConsumerState<AddExpense> {
   }
 
   Widget buildDueDate() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 8.0,
-            top: 8,
-          ),
-          child: Text(
-            'Due-Date'.tr(),
-            style: Theme.of(context).textTheme.subtitle2!,
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 4, right: 4),
-          decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).bottomAppBarColor),
-              borderRadius: BorderRadius.circular(6)),
-          height: 50,
-          width: 240,
-          child: const SelectDueDate(),
-        ),
-      ],
+    return SizedBox(
+      height: 50,
+      width: 240,
+      child: SelectDate(
+        initialDate: date,
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2050),
+        onDateSelected: (value) {
+          date = value;
+        },
+      ),
     );
   }
 
@@ -253,7 +241,11 @@ class AddExpenseState extends ConsumerState<AddExpense> {
               borderRadius: BorderRadius.circular(6)),
           height: 50,
           width: 240,
-          child: const SelectDate(),
+          child: SelectDate(
+            onDateSelected: (date) {
+              date = date;
+            },
+          ),
         ),
       ],
     );
