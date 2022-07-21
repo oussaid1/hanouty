@@ -7,14 +7,14 @@ import 'package:hanouty/models/revenu/revenu.dart';
 import 'package:flutter/material.dart';
 import '../../blocs/debtbloc /debt_bloc.dart';
 import '../../blocs/expensesbloc/expenses_bloc.dart';
+import '../../blocs/fullsalesbloc/fullsales_bloc.dart';
 import '../../blocs/incomebloc/income_bloc.dart';
 import '../../blocs/paymentsbloc/payments_bloc.dart';
 import '../../blocs/productbloc/product_bloc.dart';
 import '../../blocs/salesbloc/sales_bloc.dart';
 import '../../components.dart';
 import '../../cubits/cubit/filter_cubit.dart';
-import '../../models/models.dart';
-import '../../utils/popup_dialogues.dart';
+
 import '../../widgets/cards/latest_trans_list_card.dart';
 import '../../widgets/cards/scares_productss_instock.dart';
 import '../../widgets/charts/inventory_widget.dart';
@@ -34,6 +34,7 @@ class DashBoardPage extends StatelessWidget {
     var debtBloc = context.watch<DebtBloc>().state;
     var paymentsBloc = context.watch<PaymentsBloc>().state;
     var salesBloc = context.watch<SalesBloc>().state;
+    var fullSalesBloc = context.watch<FullSalesBloc>().state;
     var incomeBloc = context.watch<IncomeBloc>().state;
     var expenseBloc = context.watch<ExpenseBloc>().state;
     var clientsBloc = context.watch<ShopClientBloc>().state;
@@ -51,7 +52,7 @@ class DashBoardPage extends StatelessWidget {
       allDebts: filteredDebts.debts,
       payments: paymentsBloc.payments,
     );
-
+    log('fullSalesBloc.state.fullSales: ${fullSalesBloc.fullSales.length}');
     log('filterType: $filterType');
     log('productBloc: ${productBloc.products.length}');
     log('clientsBloc: ${clientsBloc.clients.length}');

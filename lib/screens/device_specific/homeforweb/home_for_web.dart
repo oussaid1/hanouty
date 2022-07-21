@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../blocs/clientsbloc/clients_bloc.dart';
 import '../../../blocs/debtbloc /debt_bloc.dart';
 import '../../../blocs/expensesbloc/expenses_bloc.dart';
+import '../../../blocs/fullsalesbloc/fullsales_bloc.dart';
 import '../../../blocs/incomebloc/income_bloc.dart';
 import '../../../blocs/paymentsbloc/payments_bloc.dart';
 import '../../../blocs/productbloc/product_bloc.dart';
@@ -43,6 +44,11 @@ class HomeForAll extends ConsumerWidget {
             create: (context) =>
                 SalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
                   ..add(GetSalesEvent()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                FullSalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                  ..add(GetFullSalesEvent()),
           ),
           BlocProvider(
             create: (context) =>

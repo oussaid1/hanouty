@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:hanouty/blocs/fullsalesbloc/fullsales_bloc.dart';
 import 'package:hanouty/widgets/price_number_zone.dart';
 import 'package:flutter/material.dart';
 
@@ -71,89 +72,67 @@ class SalesList extends ConsumerWidget {
               },
             ),
           ],
-          child: BlocBuilder<ProductBloc, ProductState>(
-            builder: (context, productState) {
-              if (productState.status == ProductStatus.loaded) {
-                var productList = productState.products;
+          child: BlocBuilder<FullSalesBloc, FullSalesState>(
+            builder: (context, fullSalesState) {
+              if (fullSalesState.status == FullSalesStatus.loaded) {
+                var productList = fullSalesState.products;
+                var dbSalesList = fullSalesState.dbSales;
+                var sales = fullSalesState.fullSales;
 
                 return Builder(builder: (context) {
                   return SingleChildScrollView(
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
-                      child: BlocBuilder<SalesBloc, SalesState>(
-                        builder: (context, salesState) {
-                          if (salesState.status == SalesStatus.loaded) {
-                            List<SaleModel> sales = salesState.sales;
-                            return Column(
-                              children: [
-                                Wrap(
-                                  direction: Axis.horizontal,
-                                  spacing: 20,
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 8.0, vertical: 8.0),
-                                      child: BluredContainer(
-                                        width: 420,
-                                        height: 320,
-                                        child: MySalesWidget(),
-                                      ),
-                                    ),
-                                    buildSalesByCategory(context),
-                                  ],
+                      child: Column(
+                        children: [
+                          Wrap(
+                            direction: Axis.horizontal,
+                            spacing: 20,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 8.0),
+                                child: BluredContainer(
+                                  width: 420,
+                                  height: 320,
+                                  child: MySalesWidget(),
                                 ),
-                                const SizedBox(height: 15),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
+                              ),
+                              buildSalesByCategory(context),
+                            ],
+                          ),
+                          const SizedBox(height: 15),
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SearchByWidget(
+                                  listOfCategories: ProductModel.fieldStrings,
+                                  withCategory: true,
+                                  onSearchTextChanged: (String text) {},
+                                  onChanged: (String category) {},
+                                  onBothChanged: (cat, text) {},
+                                ),
+                                Flexible(
+                                  flex: 1,
+                                  child: ListView(
                                     children: [
-                                      SearchByWidget(
-                                        listOfCategories:
-                                            ProductModel.fieldStrings,
-                                        withCategory: true,
-                                        onSearchTextChanged: (String text) {},
-                                        onChanged: (String category) {},
-                                        onBothChanged: (cat, text) {},
-                                      ),
-                                      Flexible(
-                                        flex: 1,
-                                        child: ListView(
-                                          children: [
-                                            Text(
-                                                '* tap to unsell a product'
-                                                    .tr(),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .subtitle2),
-                                            SalesDataTable(
-                                              sales: sales,
-                                              products: productList,
-                                            ),
-                                          ],
-                                        ),
+                                      Text('* tap to unsell a product'.tr(),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle2),
+                                      SalesDataTable(
+                                        sales: sales,
+                                        products: productList,
                                       ),
                                     ],
                                   ),
                                 ),
                               ],
-                            );
-                          } else {
-                            return Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                      'Loading Sales ${salesState.status}'.tr(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline3!),
-                                  const CircularProgressIndicator(),
-                                ],
-                              ),
-                            );
-                          }
-                        },
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   );
@@ -163,7 +142,7 @@ class SalesList extends ConsumerWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('Loading Products ${productState.status}'.tr(),
+                      Text('Loading Products ${fullSalesState.status}'.tr(),
                           style: Theme.of(context).textTheme.headline3!),
                       const CircularProgressIndicator(),
                     ],

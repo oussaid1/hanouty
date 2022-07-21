@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
+import '../../blocs/fullsalesbloc/fullsales_bloc.dart';
 import '../../blocs/productbloc/product_bloc.dart';
 import '../../blocs/salesbloc/sales_bloc.dart';
 import '../../local_components.dart';
@@ -80,12 +81,12 @@ class MySalesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SalesBloc, SalesState>(
+    return BlocBuilder<FullSalesBloc, FullSalesState>(
       builder: (context, state) {
         if (state.status == SalesStatus.loaded) {
           // log('SalesLoadedState ${state.sales.length}');
           FilteredSales filteredSales = FilteredSales(
-              sales: state.sales,
+              sales: state.dbSales,
               filterType: FilterType.all,
               selectedDateRange: null);
 
@@ -124,7 +125,7 @@ class MySalesWidget extends StatelessWidget {
             child: Column(
               children: [
                 Text('Loading...${state.status}'),
-                CircularProgressIndicator(),
+                const CircularProgressIndicator(),
               ],
             ),
           );
