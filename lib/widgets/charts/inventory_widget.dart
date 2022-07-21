@@ -34,7 +34,9 @@ class MyStock extends StatelessWidget {
     return BlocBuilder<ProductBloc, ProductState>(
       builder: (context, state) {
         if (state.status == ProductStatus.loaded) {
-          var productStock = ProductStockData(products: state.products);
+          var filteredProducts = FilteredProduct(products: state.products);
+          var productStock = ProductStockData(
+              products: filteredProducts.productsfilteredByCat);
           return MyInventoryTable(
             data: {
               'iconData': FontAwesomeIcons.store,
@@ -51,7 +53,7 @@ class MyStock extends StatelessWidget {
               'row2Value2': 0,
               'row3Title': 'Total Quantity',
               'row3Value1': productStock.totalProductQuantityInStock,
-              'row3Value2': productStock.totalPriceInInStock,
+              'row3Value2': 0,
             },
           );
         } else {
@@ -83,10 +85,10 @@ class MySalesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FullSalesBloc, FullSalesState>(
       builder: (context, state) {
-        if (state.status == SalesStatus.loaded) {
+        if (state.status == FullSalesStatus.loaded) {
           // log('SalesLoadedState ${state.sales.length}');
           FilteredSales filteredSales = FilteredSales(
-              sales: state.dbSales,
+              sales: state.fullSales,
               filterType: FilterType.all,
               selectedDateRange: null);
 

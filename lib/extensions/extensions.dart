@@ -134,7 +134,7 @@ extension SaleListExtension on List<SaleModel> {
     List<SaleModel> sales = [];
     for (SaleModel sale in this) {
       for (ProductModel product in productModels) {
-        if (sale.productId == product.id) {
+        if (sale.productId == product.pId) {
           log('product found');
           sales.add(SaleModel(
               saleId: sale.saleId,

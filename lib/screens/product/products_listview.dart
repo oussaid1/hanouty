@@ -1,20 +1,17 @@
-import 'dart:developer';
-
-import 'package:hanouty/blocs/salesbloc/sales_bloc.dart';
-import 'package:hanouty/widgets/charts/syncfusion_charts.dart';
 import 'package:flutter/material.dart';
-
-import 'package:hanouty/blocs/sellactionsbloc/sellactions_bloc.dart';
-import 'package:hanouty/screens/sell/sell_product/sell_product_dialogue.dart';
 
 import '../../blocs/clientsbloc/clients_bloc.dart';
 import '../../blocs/productbloc/product_bloc.dart';
+import '../../blocs/salesbloc/sales_bloc.dart';
+import '../../blocs/sellactionsbloc/sellactions_bloc.dart';
 import '../../components.dart';
 import '../../database/database_operations.dart';
 import '../../local_components.dart';
 import '../../utils/global_functions.dart';
 import '../../widgets/charts/inventory_widget.dart';
+import '../../widgets/charts/syncfusion_charts.dart';
 import '../../widgets/search_widget.dart';
+import '../sell/sell_product/sell_product_dialogue.dart';
 import 'add_product/add_product.dart';
 
 class ProductList extends ConsumerWidget {
@@ -127,37 +124,10 @@ class ProductList extends ConsumerWidget {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                SearchByWidget(
-                                  listOfCategories: ProductModel.fieldStrings,
-                                  withCategory: true,
-                                  onSearchTextChanged: (String text) {},
-                                  onChanged: (String category) {},
-                                  onBothChanged:
-                                      (String category, String text) {
-                                    log(category);
-                                    log(text);
-                                    GetIt.I<ProductTableDataSource>()
-                                        .filterByCategory(category, text);
-                                  },
-                                ),
-                                Flexible(
-                                  flex: 1,
-                                  child: ListView(
-                                    children: [
-                                      Text('* tap to sell',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .subtitle2),
-                                      ProductsDataTable(
-                                        products: productList,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
+                          const Expanded(
+                            child: Flexible(
+                              flex: 1,
+                              child: ProductsDataTable(),
                             ),
                           ),
                         ],
@@ -177,10 +147,10 @@ class ProductList extends ConsumerWidget {
 }
 
 class ProductsDataTable extends StatefulWidget {
-  final List<ProductModel> products;
+  //final List<ProductModel> products;
   const ProductsDataTable({
     Key? key,
-    required this.products,
+    //required this.products,
   }) : super(key: key);
 
   @override
@@ -188,14 +158,14 @@ class ProductsDataTable extends StatefulWidget {
 }
 
 class _ProductsDataTableState extends State<ProductsDataTable> {
-  late final ProductTableDataSource _data;
+  ProductTableDataSource? _data;
 
   int _sortColumnIndex = 0;
   bool _sortAscending = true;
 
   void sort<T>(Comparable<T> Function(ProductModel d) getField, int columnIndex,
       bool ascending) {
-    _data.sort<T>(getField, ascending);
+    _data!.sort<T>(getField, ascending);
     setState(() {
       _sortColumnIndex = columnIndex;
       _sortAscending = ascending;
@@ -204,87 +174,105 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
 
   @override
   void initState() {
-    _data = ProductTableDataSource(
-      context,
-      widget.products,
-      onSellPressed: (ProductModel product) =>
-          sellProduct(context, product, context.read<SalesBloc>().state.sales),
-      onEditPressed: (ProductModel product) => editProduct(context, product),
-      onDeletePressed: (ProductModel product) =>
-          deleteProduct(context, product),
-    );
-    GetIt.I.registerSingleton(_data);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return PaginatedDataTable(
-      sortColumnIndex: _sortColumnIndex,
-      sortAscending: _sortAscending,
-      showCheckboxColumn: false,
-      columnSpacing: 10,
-      checkboxHorizontalMargin: 0,
-      horizontalMargin: 4,
-      rowsPerPage: 10,
-      columns: [
-        const DataColumn(
-          label: Text('ID'),
-          tooltip: 'ID',
-        ),
-        const DataColumn(
-          label: Text('Sell'),
-          tooltip: 'Sell',
-        ),
-        // DataColumn(
-        //   label: Text('Barcode'),
-        //   tooltip: 'Barcode',
-        // ),
-        DataColumn(
-            label: const Text('Product Name'),
-            tooltip: 'Product Name',
-            onSort: (int columnIndex, bool ascending) {
-              sort<String>(
-                  (ProductModel d) => d.productName, columnIndex, ascending);
-            }),
-        const DataColumn(
-          label: Text('Quantity'),
-          tooltip: 'Quantity',
-        ),
-        const DataColumn(
-          label: Text('Price In'),
-          tooltip: 'Price In',
-        ),
-        const DataColumn(
-          label: Text('Price Out'),
-          tooltip: 'Price Out',
-        ),
-        const DataColumn(
-          label: Text('Suplier'),
-          tooltip: 'Suplier',
-        ),
-        const DataColumn(
-          label: Text('Date In'),
-          tooltip: 'Date In',
-        ),
-        const DataColumn(
-          label: Text('Category'),
-          tooltip: 'Category',
-        ),
-        const DataColumn(
-          label: Text('Description'),
-          tooltip: 'Description',
-        ),
-        const DataColumn(
-          label: Text('Edit'),
-          tooltip: 'Edit',
-        ),
-        const DataColumn(
-          label: Text('Delete'),
-          tooltip: 'Delete',
-        ),
-      ],
-      source: _data,
+    return BlocBuilder<ProductBloc, ProductState>(
+      builder: (context, state) {
+        _data = ProductTableDataSource(
+          context,
+          state.products,
+          onSellPressed: (ProductModel product) => sellProduct(
+              context, product, context.read<SalesBloc>().state.sales),
+          onEditPressed: (ProductModel product) =>
+              editProduct(context, product),
+          onDeletePressed: (ProductModel product) =>
+              deleteProduct(context, product),
+        );
+        return Column(
+          children: [
+            Text('* tap to sell', style: Theme.of(context).textTheme.subtitle2),
+            SearchByWidget(
+              listOfCategories: ProductModel.fieldStrings,
+              withCategory: true,
+              onSearchTextChanged: (String text) {},
+              onChanged: (String category) {},
+              onBothChanged: (String category, String text) {
+                _data!.filterByCategory(category, text);
+              },
+            ),
+            PaginatedDataTable(
+              sortColumnIndex: _sortColumnIndex,
+              sortAscending: _sortAscending,
+              showCheckboxColumn: false,
+              columnSpacing: 10,
+              checkboxHorizontalMargin: 0,
+              horizontalMargin: 4,
+              rowsPerPage: 10,
+              columns: [
+                const DataColumn(
+                  label: Text('ID'),
+                  tooltip: 'ID',
+                ),
+                const DataColumn(
+                  label: Text('Sell'),
+                  tooltip: 'Sell',
+                ),
+                // DataColumn(
+                //   label: Text('Barcode'),
+                //   tooltip: 'Barcode',
+                // ),
+                DataColumn(
+                    label: const Text('Product Name'),
+                    tooltip: 'Product Name',
+                    onSort: (int columnIndex, bool ascending) {
+                      sort<String>((ProductModel d) => d.productName,
+                          columnIndex, ascending);
+                    }),
+                const DataColumn(
+                  label: Text('Quantity'),
+                  tooltip: 'Quantity',
+                ),
+                const DataColumn(
+                  label: Text('Price In'),
+                  tooltip: 'Price In',
+                ),
+                const DataColumn(
+                  label: Text('Price Out'),
+                  tooltip: 'Price Out',
+                ),
+                const DataColumn(
+                  label: Text('Suplier'),
+                  tooltip: 'Suplier',
+                ),
+                const DataColumn(
+                  label: Text('Date In'),
+                  tooltip: 'Date In',
+                ),
+                const DataColumn(
+                  label: Text('Category'),
+                  tooltip: 'Category',
+                ),
+                const DataColumn(
+                  label: Text('Description'),
+                  tooltip: 'Description',
+                ),
+                const DataColumn(
+                  label: Text('Edit'),
+                  tooltip: 'Edit',
+                ),
+                const DataColumn(
+                  label: Text('Delete'),
+                  tooltip: 'Delete',
+                ),
+              ],
+              source: _data!,
+            ),
+          ],
+        );
+      },
     );
   }
 

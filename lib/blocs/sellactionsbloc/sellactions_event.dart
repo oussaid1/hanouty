@@ -42,10 +42,8 @@ class SellingRequested extends SellingactionsEvent {
 /// unselling requested event
 class UnsellingRequested extends SellingactionsEvent {
   final SaleModel saleModel;
-  final ProductModel productModel;
 
-  const UnsellingRequested(
-      {required this.productModel, required this.saleModel});
+  const UnsellingRequested({required this.saleModel});
 
   @override
   List<Object> get props => [saleModel];

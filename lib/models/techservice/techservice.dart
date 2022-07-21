@@ -5,7 +5,7 @@ import 'package:hanouty/local_components.dart';
 part 'techservices_data.dart';
 
 class TechServiceModel extends ProductModel {
-  String? id;
+  String? pId;
   String title;
   SaleType type;
   String? serviceDescription = 'legal only';
@@ -13,7 +13,7 @@ class TechServiceModel extends ProductModel {
   bool? available = true;
 
   TechServiceModel({
-    this.id,
+    this.pId,
     required this.title,
     required this.type,
     required this.serviceDescription,
@@ -21,7 +21,7 @@ class TechServiceModel extends ProductModel {
     this.available,
     ProductModel? product,
   }) : super(
-          id: product?.id,
+          pId: product?.pId,
           barcode: product?.barcode ?? '',
           productName: product?.productName ?? '',
           description: product?.description ?? '',
@@ -44,7 +44,7 @@ class TechServiceModel extends ProductModel {
     // ProductModel? product,
   }) {
     return TechServiceModel(
-      id: id ?? this.id,
+      pId: id ?? this.pId,
       title: title ?? this.title,
       type: type ?? this.type,
       serviceDescription: serviceDescription ?? this.serviceDescription,
@@ -82,7 +82,7 @@ class TechServiceModel extends ProductModel {
 
   factory TechServiceModel.fromMap(DocumentSnapshot map) {
     return TechServiceModel(
-        id: map.id,
+        pId: map.id,
         title: map['title'],
         type: map['type'],
         serviceDescription: map['description'],
@@ -95,7 +95,7 @@ class TechServiceModel extends ProductModel {
 
   @override
   String toString() {
-    return 'Services(id: $id, title: $title, type: $type,priceIn: $priceIn, priceOut: $priceOut, count: $count, available: $available)';
+    return 'Services(id: $pId, title: $title, type: $type,priceIn: $priceIn, priceOut: $priceOut, count: $count, available: $available)';
   }
 
   @override
@@ -103,7 +103,7 @@ class TechServiceModel extends ProductModel {
     if (identical(this, other)) return true;
 
     return other is TechServiceModel &&
-        other.id == id &&
+        other.pId == pId &&
         other.title == title &&
         other.type == type &&
         other.priceIn == priceIn &&
@@ -114,7 +114,7 @@ class TechServiceModel extends ProductModel {
 
   @override
   int get hashCode {
-    return id.hashCode ^
+    return pId.hashCode ^
         title.hashCode ^
         type.hashCode ^
         priceIn.hashCode ^

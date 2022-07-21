@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hanouty/local_components.dart';
@@ -47,6 +48,7 @@ class FullSalesBloc extends Bloc<FullSalesEvent, FullSalesState> {
     // }
     _productsSubscription =
         _databaseOperations.productsStream().listen((products) {
+      log('products stream : $products');
       _salesSubscription = _databaseOperations.salesStream().listen((sales) {
         add(LoadFullSalessEvent(sales, products));
       });

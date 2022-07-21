@@ -145,7 +145,7 @@ class ProductTableDataSource extends DataTableSource {
     switch (category) {
       case "ID":
         productRows = products
-            .where((row) => row.id.toString().toLowerCase().contains(text))
+            .where((row) => row.pId.toString().toLowerCase().contains(text))
             .toList();
         notifyListeners();
         break;
@@ -220,7 +220,7 @@ class ProductTableDataSource extends DataTableSource {
 }
 
 class ProductModel {
-  String? id;
+  String? pId;
   String? barcode;
   String productName;
   String? description;
@@ -271,7 +271,7 @@ class ProductModel {
 
   /// check if the product is valid
   bool get isValid {
-    if (id!.isNotEmpty &&
+    if (pId!.isNotEmpty &&
         barcode == barcode &&
         productName.isNotEmpty &&
         quantity.isFinite &&
@@ -295,7 +295,7 @@ class ProductModel {
   ];
 
   ProductModel({
-    this.id,
+    this.pId,
     this.barcode,
     required this.productName,
     this.description,
@@ -322,7 +322,7 @@ class ProductModel {
     String? availability,
   }) {
     return ProductModel(
-      id: id ?? this.id,
+      pId: id ?? this.pId,
       barcode: barcode ?? this.barcode,
       productName: name ?? productName,
       description: description ?? this.description,
@@ -339,7 +339,8 @@ class ProductModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'barcode': barcode,
+      if (pId != null) 'id': pId,
+      'barcode': barcode ?? '',
       'name': productName,
       'description': description,
       'category': category,
@@ -354,8 +355,7 @@ class ProductModel {
   factory ProductModel.fromMap(DocumentSnapshot map) {
     // Timestamp f = map['dateIn'];
     return ProductModel(
-      id: map.id,
-
+      pId: map.id,
       barcode: map['barcode'],
       productName: map['name'],
       description: map['description'],
@@ -375,7 +375,7 @@ class ProductModel {
 
   @override
   String toString() {
-    return 'Product(id: $id, barcode: $barcode, name: $productName, description: $description,category: $category, dateIn: $dateIn, quantity: $quantity, priceIn: $priceIn, priceOut: $priceOut, suplier: $suplier, availability: $availability)';
+    return 'Product(id: $pId, barcode: $barcode, name: $productName, description: $description,category: $category, dateIn: $dateIn, quantity: $quantity, priceIn: $priceIn, priceOut: $priceOut, suplier: $suplier, availability: $availability)';
   }
 
   @override
@@ -383,7 +383,7 @@ class ProductModel {
     if (identical(this, other)) return true;
 
     return other is ProductModel &&
-        other.id == id &&
+        other.pId == pId &&
         other.barcode == barcode &&
         other.productName == productName &&
         other.description == description &&
@@ -397,7 +397,7 @@ class ProductModel {
 
   @override
   int get hashCode {
-    return id.hashCode ^
+    return pId.hashCode ^
         barcode.hashCode ^
         productName.hashCode ^
         description.hashCode ^

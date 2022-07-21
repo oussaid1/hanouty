@@ -3,9 +3,11 @@ part of 'product.dart';
 class FilteredProduct {
   List<ProductModel> products = [];
   final FilterType filterType;
+  final MDateRange? dateRange;
   FilteredProduct({
     required this.products,
     this.filterType = FilterType.all,
+    this.dateRange,
   }); //: productsfilteredByCat = products;
   List<ProductModel> productsfilteredByCat = [];
 
@@ -16,6 +18,20 @@ class FilteredProduct {
       mlist.add(element.productName);
     }
     return mlist.toSet().toList();
+  }
+
+  /// get products filtered by filter type
+  List<ProductModel> get productsByFilterType {
+    switch (filterType) {
+      case FilterType.all:
+        return products;
+      case FilterType.month:
+        return productsfilteredByCat;
+      case FilterType.custom:
+        return productsByDateRange(dateRange: dateRange!);
+      default:
+        return products;
+    }
   }
 
   /// filter products by category
@@ -187,10 +203,11 @@ class FilteredProduct {
     return mlist;
   }
 
-  List<ProductModel> productsByDateRange(DateTime start, DateTime end) {
+  List<ProductModel> productsByDateRange({required MDateRange dateRange}) {
     List<ProductModel> mlist = [];
     for (var element in products) {
-      if (element.dateIn.isAfter(start) && element.dateIn.isBefore(end)) {
+      if (element.dateIn.isAfter(dateRange.start) &&
+          element.dateIn.isBefore(dateRange.end)) {
         mlist.add(element);
       }
     }

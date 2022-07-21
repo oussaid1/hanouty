@@ -100,14 +100,15 @@ class Database {
   }
 
   Future<bool> addSale(SaleModel sale) {
-    log('addSale ${sale.toMap()}');
-    log('addSale ${uid!.trim()}');
     return users
-        .doc(uid!)
+        .doc(uid)
         .collection(DbTables.sales)
         .add(sale.toMap())
         .then((value) => true)
-        .catchError((error) => false);
+        .catchError((error) {
+      log('addSale error: $error');
+      return false;
+    });
   }
 
   Future<bool> addDebt(DebtModel debt) {
@@ -270,13 +271,22 @@ class Database {
   ////////////////////////////
   ////////////////////////////////
   Future<bool> updateProduct(ProductModel product) {
-    log('updateProduct uid: $uid');
-    log('updateProduct product: ${product.quantity}');
     return users
         .doc(uid!)
         .collection(DbTables.products)
-        .doc(product.id)
+        .doc(product.pId)
         .set(product.toMap(), SetOptions(merge: true))
+        .then((value) => true)
+        .catchError((error) => false);
+  }
+
+  /// update Product Quantity in firestore
+  Future<bool> updateProductQuantity(ProductModel product, int quantity) {
+    return users
+        .doc(uid!)
+        .collection(DbTables.products)
+        .doc(product.pId)
+        .set({'quantity': quantity}, SetOptions(merge: true))
         .then((value) => true)
         .catchError((error) => false);
   }
@@ -287,7 +297,7 @@ class Database {
     return users
         .doc(uid!.trim())
         .collection(DbTables.sales)
-        .doc(sale.id)
+        .doc(sale.saleId)
         .update(sale.toMap())
         .then((value) => true)
         .catchError((error) => false);
@@ -299,7 +309,7 @@ class Database {
     return users
         .doc(uid!.trim())
         .collection(DbTables.techServices)
-        .doc(techService.id)
+        .doc(techService.pId)
         .update(techService.toMap())
         .then((value) => true)
         .catchError((error) => false);
@@ -387,7 +397,7 @@ class Database {
     return users
         .doc(uid!.trim())
         .collection(DbTables.products)
-        .doc(product.id)
+        .doc(product.pId)
         .delete()
         .then((value) => true)
         .catchError((error) => false);
@@ -399,7 +409,7 @@ class Database {
     return users
         .doc(uid!.trim())
         .collection(DbTables.techServices)
-        .doc(techService.id)
+        .doc(techService.pId)
         .delete()
         .then((value) => true)
         .catchError((error) => false);
@@ -458,7 +468,7 @@ class Database {
     return users
         .doc(uid!.trim())
         .collection(DbTables.sales)
-        .doc(sale.id)
+        .doc(sale.saleId)
         .delete()
         .then((value) => true)
         .catchError((error) => false);

@@ -133,14 +133,16 @@ class AddProductState extends State<SellProductDialoge> {
                     });
                     //save the product
                     SaleModel sale = SaleModel(
+                      product: widget.product,
+                      saleDescription: 'dummy Sale',
                       shopClientId: client,
                       priceSoldFor: double.parse(priceOutController.text),
                       type: SaleType.product,
                       quantitySold: quantity,
                       dateSold: date,
-                      productId: widget.product.id!,
+                      productId: widget.product.pId!,
                     );
-                    log('Sale: $sale');
+
                     sellActionsBloc.add(
                       SellingRequested(
                         productModel: widget.product,

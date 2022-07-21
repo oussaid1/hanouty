@@ -23,12 +23,16 @@ class SellActionsBloc extends Bloc<SellingactionsEvent, SellActionsState> {
       SellingRequested event, Emitter<SellActionsState> emit) async {
     log('Selling Requested');
     try {
-      await _databaseOperations.addSale(event.saleModel);
-      await _databaseOperations.updateProduct(event.productModel.copyWith(
-        quantity: event.reducedQuantity,
-      ));
+      var success = await _databaseOperations.addSale(event.saleModel);
+      log('Selling Requested Success: $success');
+      if (success) {
+        await _databaseOperations.updateProduct(event.productModel.copyWith(
+          quantity: event.reducedQuantity,
+        ));
+      }
+
       emit(SellingSuccessfulState(event.productModel));
-      log('Selling Requested Success');
+      //log('Selling Requested Success');
     } catch (e) {
       emit(SellingFailedState(e.toString(), event.saleModel));
     }

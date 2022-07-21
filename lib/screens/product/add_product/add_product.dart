@@ -48,6 +48,9 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
   String suplier = 'Other';
   DateTime _pickedDateTime = DateTime.now();
   num quantity = 1;
+  bool canSave = false;
+
+  /// this method clears all the controllers
   void clear() {
     barcodeController.clear();
     productNameController.clear();
@@ -178,26 +181,33 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
             children: [
               ElevatedButton(
                 style: MThemeData.raisedButtonStyleSave,
+                onPressed: !canSave
+                    ? null
+                    : () {
+                        final product = ProductModel(
+                          barcode: barcodeController.text.trim(),
+                          dateIn: _pickedDateTime,
+                          description: descrController.text.trim(),
+                          category: productCat,
+                          productName: productNameController.text.trim(),
+                          priceIn:
+                              double.tryParse(priceInController.text.trim())!,
+                          priceOut:
+                              double.tryParse(priceOutController.text.trim())!,
+                          quantity: quantity.toInt(),
+                          suplier: suplier,
+                        );
+
+                        if (formKey.currentState!.validate()) {
+                          setState(() {
+                            canSave = false;
+                          });
+                          prdBloc.add(AddProductEvent(product));
+                        }
+                      },
                 child: Text(
                   'Save'.tr(),
                 ),
-                onPressed: () {
-                  final product = ProductModel(
-                    barcode: barcodeController.text.trim(),
-                    dateIn: _pickedDateTime,
-                    description: descrController.text.trim(),
-                    category: productCat,
-                    productName: productNameController.text.trim(),
-                    priceIn: double.tryParse(priceInController.text.trim())!,
-                    priceOut: double.tryParse(priceOutController.text.trim())!,
-                    quantity: quantity.toInt(),
-                    suplier: suplier,
-                  );
-
-                  if (formKey.currentState!.validate()) {
-                    prdBloc.add(AddProductEvent(product));
-                  }
-                },
               ),
               ElevatedButton(
                 style: MThemeData.raisedButtonStyleCancel,
@@ -220,7 +230,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
                 ),
                 onPressed: () {
                   final product = ProductModel(
-                    id: widget.product!.id,
+                    pId: widget.product!.pId,
                     barcode: barcodeController.text.trim(),
                     dateIn: _pickedDateTime,
                     description: descrController.text.trim(),
@@ -233,6 +243,9 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
                   );
 
                   if (formKey.currentState!.validate()) {
+                    setState(() {
+                      canSave = false;
+                    });
                     prdBloc.add(
                       UpdateProductEvent(product),
                     );
@@ -380,7 +393,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
               ),
               //border: InputBorder.none,
               hintText: 'suplier'.tr(),
-              label: const Text('suplier').tr(),
+              // label: const Text('suplier').tr(),
               hintStyle: Theme.of(context).textTheme.subtitle2!,
               filled: true,
             ),
@@ -500,6 +513,11 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
           return "error".tr();
         }
         return null;
+      },
+      onChanged: (String value) {
+        setState(() {
+          canSave = value.isNotEmpty;
+        });
       },
       decoration: InputDecoration(
         labelText: 'Product-Name'.tr(),

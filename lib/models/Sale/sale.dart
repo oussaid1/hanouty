@@ -16,30 +16,18 @@ enum SaleType { product, service, all }
 class SaleTableDataSource extends DataTableSource {
   SaleTableDataSource(
     this.context,
-    this.sales,
-    this.products, {
+    this.sales, {
     this.onEditPressed,
     this.onDeletePressed,
     this.onUnSellPressed,
   }) : saleRows = sales;
   //final void Function()? onPressed;
-  final void Function(SaleModel, ProductModel)? onUnSellPressed;
+  final void Function(SaleModel)? onUnSellPressed;
   void Function(SaleModel)? onDeletePressed;
   void Function(SaleModel)? onEditPressed;
   final BuildContext context;
   List<SaleModel> saleRows = [];
   List<SaleModel> sales = [];
-  List<ProductModel> products = [];
-
-  /// get one product by id
-  ProductModel? getProductById(String id) {
-    try {
-      return products.firstWhere((element) => element.id == id);
-    } catch (e) {
-      return null;
-    }
-  }
-  //final void Function(ProductModel) onProductselcted;
 
   final int _selectedCount = 0;
 
@@ -52,6 +40,7 @@ class SaleTableDataSource extends DataTableSource {
     if (index >= saleRows.length) return const DataRow(cells: []);
     final row = saleRows[index];
     return DataRow.byIndex(
+      //color: MaterialStateProperty.resolveAs  ,
       index: index,
       selected: row.selected,
       // onSelectChanged: (value) {
@@ -91,14 +80,14 @@ class SaleTableDataSource extends DataTableSource {
             color: Color.fromARGB(255, 209, 156, 106),
           ),
           onTap: () {
-            onUnSellPressed?.call(row, getProductById(row.productId)!);
+            onUnSellPressed?.call(row);
           },
         ),
         DataCell(Text(row.productName.toString())),
         DataCell(Text(row.quantitySold.toString())),
         DataCell(Text(row.priceIn.toString())),
         DataCell(Text(row.priceOut.toString())),
-        DataCell(Text(getProductById(row.productId)?.suplier ?? '')),
+        DataCell(Text((row.suplier ?? ''))),
         DataCell(Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -110,7 +99,7 @@ class SaleTableDataSource extends DataTableSource {
           ],
         )),
         DataCell(Text(row.dateSold.ddmmyyyy())),
-        DataCell(Text(getProductById(row.productId)?.category ?? '')),
+        DataCell(Text(row.category ?? '')),
         DataCell(Text(row.description.toString())),
         DataCell(
             const Icon(
@@ -164,7 +153,7 @@ class SaleTableDataSource extends DataTableSource {
     switch (category) {
       case "ID":
         saleRows = sales
-            .where((row) => row.id.toString().toLowerCase().contains(text))
+            .where((row) => row.pId.toString().toLowerCase().contains(text))
             .toList();
         notifyListeners();
         break;
@@ -256,7 +245,7 @@ class SaleModel extends ProductModel {
     this.saleDescription,
     ProductModel? product,
   }) : super(
-          id: product?.id,
+          pId: product?.pId,
           barcode: product?.barcode ?? '',
           productName: product?.productName ?? '',
           description: product?.description ?? '',
@@ -268,6 +257,72 @@ class SaleModel extends ProductModel {
           suplier: product?.suplier ?? '',
         );
   ////////////////////////////////////////////////
+  ///Methods /////////
+
+  /// copywith for the sale model only
+  SaleModel copySaleWith({
+    String? saleId,
+    String? productId,
+    String? shopClientId,
+    int? quantitySold,
+    DateTime? dateSold,
+    double? priceSoldFor,
+    String? saleDescription,
+    SaleType? type,
+  }) {
+    return SaleModel(
+      saleId: saleId ?? this.saleId,
+      productId: productId ?? this.productId,
+      shopClientId: shopClientId ?? this.shopClientId,
+      dateSold: dateSold ?? this.dateSold,
+      quantitySold: quantitySold ?? this.quantitySold,
+      priceSoldFor: priceSoldFor ?? this.priceSoldFor,
+      type: type,
+      saleDescription: saleDescription ?? this.saleDescription,
+    );
+  }
+
+  @override
+  Map<String, dynamic> toMap() {
+    return {
+      //if (saleId != null) 'saleId': saleId,
+      'productId': productId,
+      'shopClientId': shopClientId,
+      'dateSold': dateSold,
+      'quantitySold': quantitySold,
+      'priceSoldFor': priceSoldFor,
+      'type': type.toString(),
+      'saleDescription': saleDescription,
+    };
+  }
+
+  factory SaleModel.fromMap(DocumentSnapshot map) {
+    final type = map['type'].toString().split('.').first == 'product'
+        ? SaleType.product
+        : SaleType.service;
+    // print(map['type']);
+    return SaleModel(
+      saleId: map.id,
+      productId: map['productId'] ?? '',
+      shopClientId: map['shopClientId'] ?? '',
+      dateSold: map['dateSold'].toDate() ?? DateTime.now(),
+      quantitySold: map['quantitySold'] ?? 0,
+      priceSoldFor: map['priceSoldFor'] ?? 0,
+      saleDescription: map['saleDescription'] ?? '',
+      type: type,
+    );
+  }
+  ////////////////////////////////////////////////
+  /// get reduced quantity /////////
+  int get reducedQuantity {
+    return quantity - quantitySold;
+  }
+
+  /// build total quantity  /////////
+  int get totalQuantity {
+    return quantity + quantitySold;
+  }
+
   double get totalPriceSoldFor {
     return (priceSoldFor * quantitySold);
   }
@@ -327,119 +382,6 @@ class SaleModel extends ProductModel {
     'count',
   ];
 
-  /// Columns for the DataTable.
-  static const columns = [
-    DataColumn(
-      label: Text('ID'),
-      tooltip: 'ID',
-    ),
-    DataColumn(
-      label: Text('Unsell'),
-      tooltip: 'Unsell',
-    ),
-    // DataColumn(
-    //   label: Text('Barcode'),
-    //   tooltip: 'Barcode',
-    // ),
-    DataColumn(
-      label: Text('Product Name'),
-      tooltip: 'Product Name',
-    ),
-    DataColumn(
-      label: Text('Quantity'),
-      tooltip: 'Quantity',
-    ),
-    DataColumn(
-      label: Text('Price In'),
-      tooltip: 'Price In',
-    ),
-    DataColumn(
-      label: Text('Price Out'),
-      tooltip: 'Price Out',
-    ),
-    DataColumn(
-      label: Text('Suplier'),
-      tooltip: 'Suplier',
-    ),
-    DataColumn(
-      label: Text('Price Sold For'),
-      tooltip: 'Price Sold For',
-    ),
-    DataColumn(
-      label: Text('Date In'),
-      tooltip: 'Date In',
-    ),
-    DataColumn(
-      label: Text('Category'),
-      tooltip: 'Category',
-    ),
-    DataColumn(
-      label: Text('Description'),
-      tooltip: 'Description',
-    ),
-    DataColumn(
-      label: Text('Edit'),
-      tooltip: 'Edit',
-    ),
-    DataColumn(
-      label: Text('Delete'),
-      tooltip: 'Delete',
-    ),
-  ];
-
-  /// copywith for the model
-  SaleModel copySaleWith({
-    String? saleId,
-    String? productId,
-    String? shopClientId,
-    int? quantitySold,
-    DateTime? dateSold,
-    double? priceSoldFor,
-    String? saleDescription,
-    SaleType? type,
-  }) {
-    return SaleModel(
-      saleId: saleId ?? this.saleId,
-      productId: productId ?? this.productId,
-      shopClientId: shopClientId ?? this.shopClientId,
-      dateSold: dateSold ?? this.dateSold,
-      quantitySold: quantitySold ?? this.quantitySold,
-      priceSoldFor: priceSoldFor ?? this.priceSoldFor,
-      type: type,
-      saleDescription: saleDescription ?? this.saleDescription,
-    );
-  }
-
-  @override
-  Map<String, dynamic> toMap() {
-    return {
-      'saleId': saleId,
-      'productId': productId,
-      'shopClientId': shopClientId,
-      'dateSold': dateSold,
-      'quantitySold': quantitySold,
-      'priceSoldFor': priceSoldFor,
-      'type': type,
-      'saleDescription': saleDescription,
-    };
-  }
-
-  factory SaleModel.fromMap(DocumentSnapshot map) {
-    final type =
-        map['type'].toString().trim() == SaleType.product.toString().trim()
-            ? SaleType.product
-            : SaleType.service;
-    // print(map['type']);
-    return SaleModel(
-      saleId: map.id,
-      productId: map['soldItemId'],
-      shopClientId: map['shopClientId'],
-      dateSold: map['dateSold'].toDate(),
-      quantitySold: map['quantitySold'],
-      priceSoldFor: map['priceSoldFor'] ?? 0,
-      type: type,
-    );
-  }
   @override
   String toJson() => json.encode(toMap());
 
@@ -467,7 +409,7 @@ class SaleModel extends ProductModel {
 
   @override
   int get hashCode {
-    return id.hashCode ^
+    return pId.hashCode ^
         productId.hashCode ^
         shopClientId.hashCode ^
         dateSold.hashCode ^
@@ -482,353 +424,3 @@ class SaleModel extends ProductModel {
         description.hashCode;
   }
 }
-
-// class SaleModel {
-//   String? id;
-//   String soldItemId;
-//   DateTime dateSold;
-//   DateTime? dateIn;
-//   int quantitySold;
-//   String productSoldName;
-//   String? shopClientId;
-//   double priceSoldFor;
-//   double priceIn;
-//   double priceOut;
-//   SaleType? type;
-//   String? barcode = '';
-//   String? suplier = '';
-//   String? category = '';
-//   String? description;
-//   int count = 1;
-
-//   bool selected = false;
-//   double get totalPriceSoldFor {
-//     return (priceSoldFor * quantitySold);
-//   }
-
-// // get the auality of sale acoording to price sod for in comparison with price in
-//   int get saleQuality {
-//     if (totalPriceSoldFor < priceIn) {
-//       return -1;
-//     } else if (totalPriceSoldFor > priceIn) {
-//       return 1;
-//     }
-//     return 0;
-//   }
-
-//   // get the color of the sale quality
-//   Color get saleQualityColor {
-//     if (saleQuality == -1) {
-//       return Colors.red;
-//     } else if (saleQuality == 1) {
-//       return const Color.fromARGB(255, 42, 114, 78);
-//     }
-//     return Colors.orange;
-//   }
-
-//   double get totalPriceIn {
-//     var total = 0.0;
-//     total += (priceIn * quantitySold);
-//     return total;
-//   }
-
-//   double get profitMargin {
-//     var net = 0.0;
-//     net += (totalPriceSoldFor - totalPriceIn);
-//     return net;
-//   }
-
-//   double get totalPriceOut {
-//     var total = 0.0;
-//     total += (priceOut * quantitySold);
-//     return total;
-//   }
-
-//   /// get fields as list of strings
-//   static const List<String> fieldStrings = [
-//     'soldItemId',
-//     'dateSold',
-//     'quantitySold',
-//     'itemSoldTitle',
-//     'shopClientId',
-//     'priceSoldFor',
-//     'priceIn',
-//     'priceOut',
-//     'type',
-//     'barcode',
-//     'description',
-//     'count',
-//   ];
-
-//   /// Columns for the DataTable.
-//   static const columns = [
-//     DataColumn(
-//       label: Text('ID'),
-//       tooltip: 'ID',
-//     ),
-//     DataColumn(
-//       label: Text('Unsell'),
-//       tooltip: 'Unsell',
-//     ),
-//     // DataColumn(
-//     //   label: Text('Barcode'),
-//     //   tooltip: 'Barcode',
-//     // ),
-//     DataColumn(
-//       label: Text('Product Name'),
-//       tooltip: 'Product Name',
-//     ),
-//     DataColumn(
-//       label: Text('Quantity'),
-//       tooltip: 'Quantity',
-//     ),
-//     DataColumn(
-//       label: Text('Price In'),
-//       tooltip: 'Price In',
-//     ),
-//     DataColumn(
-//       label: Text('Price Out'),
-//       tooltip: 'Price Out',
-//     ),
-//     DataColumn(
-//       label: Text('Suplier'),
-//       tooltip: 'Suplier',
-//     ),
-//     DataColumn(
-//       label: Text('Price Sold For'),
-//       tooltip: 'Price Sold For',
-//     ),
-//     DataColumn(
-//       label: Text('Date In'),
-//       tooltip: 'Date In',
-//     ),
-//     DataColumn(
-//       label: Text('Category'),
-//       tooltip: 'Category',
-//     ),
-//     DataColumn(
-//       label: Text('Description'),
-//       tooltip: 'Description',
-//     ),
-//     DataColumn(
-//       label: Text('Edit'),
-//       tooltip: 'Edit',
-//     ),
-//     DataColumn(
-//       label: Text('Delete'),
-//       tooltip: 'Delete',
-//     ),
-//   ];
-
-//   SaleModel({
-//     this.id,
-//     required this.soldItemId,
-//     required this.dateSold,
-//     this.dateIn,
-//     required this.quantitySold,
-//     required this.productSoldName,
-//     this.shopClientId,
-//     required this.priceSoldFor,
-//     required this.priceIn,
-//     required this.priceOut,
-//     required this.type,
-//     this.barcode,
-//     this.suplier,
-//     this.category,
-//     this.description,
-//   });
-
-//   SaleModel copyWith({
-//     String? id,
-//     String? soldItemId,
-//     DateTime? dateSold,
-//     int? quantitySold,
-//     String? itemSoldTitle,
-//     String? shopClientId,
-//     double? priceSoldFor,
-//     double? priceIn,
-//     double? priceOut,
-//     SaleType? type,
-//     String? description,
-//     String? barcode,
-//     String? itemSoldCategory,
-//     String? suplier,
-//     String? category,
-//   }) {
-//     return SaleModel(
-//       id: id ?? this.id,
-//       soldItemId: soldItemId ?? this.soldItemId,
-//       dateSold: dateSold ?? this.dateSold,
-//       quantitySold: quantitySold ?? this.quantitySold,
-//       productSoldName: itemSoldTitle ?? productSoldName,
-//       shopClientId: shopClientId ?? this.shopClientId,
-//       priceSoldFor: priceSoldFor ?? this.priceSoldFor,
-//       priceIn: priceIn ?? this.priceIn,
-//       priceOut: priceOut ?? this.priceOut,
-//       type: this.type,
-//       barcode: barcode ?? this.barcode,
-//       suplier: suplier ?? this.suplier,
-//       category: category ?? this.category,
-//       description: description ?? this.description,
-//     );
-//   }
-
-//   Map<String, dynamic> toMap() {
-//     return {
-//       'soldItemId': soldItemId,
-//       'dateSold': dateSold,
-//       'quantitySold': quantitySold,
-//       'itemSoldTitle': productSoldName,
-//       'shopClientId': shopClientId,
-//       'priceSoldFor': priceSoldFor,
-//       'priceIn': priceIn,
-//       'priceOut': priceOut,
-//       'type': type.toString(),
-//       'barcode': barcode,
-//       'description': description,
-//       'category': category,
-//       'suplier': suplier,
-//     };
-//   }
-
-//   factory SaleModel.fromMap(DocumentSnapshot map) {
-//     final type =
-//         map['type'].toString().trim() == SaleType.product.toString().trim()
-//             ? SaleType.product
-//             : SaleType.service;
-//     // print(map['type']);
-//     return SaleModel(
-//       id: map.id,
-//       soldItemId: map['soldItemId'],
-//       dateIn: map['dateIn'].toDate() ?? DateTime.now(),
-//       dateSold: map['dateSold'].toDate(),
-//       quantitySold: map['quantitySold'],
-//       productSoldName: map['itemSoldTitle'] ?? '',
-//       shopClientId: map['shopClientId'] ?? '',
-//       priceSoldFor: map['priceSoldFor'] ?? 0,
-//       priceOut: map['priceOut'] ?? 0,
-//       priceIn: map['priceIn'] ?? 0,
-//       type: type,
-//       barcode: map['barcode'] ?? '',
-//       suplier: map['suplier'] ?? '',
-//       category: map['category'] ?? '',
-//       description: map['description'] ?? '',
-//     );
-//   }
-
-//   String toJson() => json.encode(toMap());
-
-//   factory SaleModel.fromJson(String source) =>
-//       SaleModel.fromMap(json.decode(source));
-
-//   @override
-//   String toString() {
-//     return 'SaleModel(id: $id, soldItemId: $soldItemId, dateSold: $dateSold, quantitySold: $quantitySold, productSoldName: $productSoldName, shopClientId: $shopClientId, priceSoldFor: $priceSoldFor, priceIn: $priceIn, priceOut: $priceOut, type: $type, barcode: $barcode, suplier: $suplier, category: $category, description: $description)';
-//   }
-
-//   @override
-//   bool operator ==(Object other) {
-//     if (identical(this, other)) return true;
-
-//     return other is SaleModel &&
-//         runtimeType == other.runtimeType &&
-//         id == other.id &&
-//         soldItemId == other.soldItemId &&
-//         dateSold == other.dateSold &&
-//         quantitySold == other.quantitySold &&
-//         productSoldName == other.productSoldName &&
-//         shopClientId == other.shopClientId &&
-//         priceSoldFor == other.priceSoldFor &&
-//         priceIn == other.priceIn &&
-//         priceOut == other.priceOut &&
-//         type == other.type &&
-//         barcode == other.barcode &&
-//         suplier == other.suplier &&
-//         category == other.category &&
-//         description == other.description;
-//   }
-
-//   @override
-//   int get hashCode {
-//     return id.hashCode ^
-//         soldItemId.hashCode ^
-//         dateSold.hashCode ^
-//         quantitySold.hashCode ^
-//         productSoldName.hashCode ^
-//         shopClientId.hashCode ^
-//         priceSoldFor.hashCode ^
-//         priceIn.hashCode ^
-//         priceOut.hashCode ^
-//         type.hashCode ^
-//         barcode.hashCode ^
-//         suplier.hashCode ^
-//         category.hashCode ^
-//         description.hashCode;
-//   }
-
-//   TechServiceModel toTechService({TechServiceModel? techService}) {
-//     return techService == null
-//         ? TechServiceModel(
-//             id: id,
-//             type: type!.value,
-//             priceIn: priceIn,
-//             priceOut: priceOut,
-//             description: '',
-//             timeStamp: dateSold,
-//             title: productSoldName,
-//           )
-//         : TechServiceModel(
-//             id: techService.id,
-//             type: techService.type,
-//             priceIn: techService.priceIn,
-//             priceOut: techService.priceOut,
-//             description: techService.description,
-//             timeStamp: techService.timeStamp,
-//             title: techService.title,
-//           );
-//   }
-
-//   ProductModel toProduct({ProductModel? product}) {
-//     return product == null
-//         ? ProductModel(
-//             id: id,
-//             category: type!.value,
-//             barcode: barcode,
-//             dateIn: dateSold,
-//             description: '',
-//             productName: productSoldName,
-//             suplier: '',
-//             priceIn: priceIn,
-//             priceOut: priceOut,
-//             quantity: quantitySold,
-//           )
-//         : ProductModel(
-//             id: product.id,
-//             category: product.category,
-//             barcode: product.barcode,
-//             dateIn: product.dateIn,
-//             description: product.description,
-//             productName: product.productName,
-//             suplier: product.suplier,
-//             priceIn: product.priceIn,
-//             priceOut: product.priceOut,
-//             quantity: product.quantity,
-//           );
-//   }
-
-//   ProductModel toProductToUnsell(
-//       {required SaleModel sale, required ProductModel product}) {
-//     return ProductModel(
-//       id: product.id,
-//       category: product.category,
-//       barcode: product.barcode,
-//       dateIn: product.dateIn,
-//       description: product.description,
-//       productName: product.productName,
-//       suplier: product.suplier,
-//       priceIn: product.priceIn,
-//       priceOut: product.priceOut,
-//       quantity: product.quantity + sale.quantitySold,
-//     );
-//   }
-// }
