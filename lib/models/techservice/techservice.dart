@@ -5,38 +5,44 @@ import 'package:hanouty/local_components.dart';
 part 'techservices_data.dart';
 
 class TechServiceModel extends ProductModel {
-  String? pId;
+  String? seviceId;
   String title;
-  SaleType type;
   String? serviceDescription = 'legal only';
   DateTime createdAt = DateTime.now();
   bool? available = true;
 
   TechServiceModel({
-    this.pId,
+    this.seviceId,
     required this.title,
-    required this.type,
     required this.serviceDescription,
     required this.createdAt,
     this.available,
-    ProductModel? product,
+    String? id,
+    String? name,
+    String? description,
+    String? category,
+    DateTime? dateIn,
+    DateTime? dateOut,
+    int? quantity,
+    double? priceIn,
+    double? priceOut,
+    String? suplier,
+    String? availability,
   }) : super(
-          pId: product?.pId,
-          barcode: product?.barcode ?? '',
-          productName: product?.productName ?? '',
-          description: product?.description ?? '',
-          category: product?.category ?? '',
-          dateIn: product?.dateIn ?? DateTime.now(),
-          quantity: product?.quantity ?? 0,
-          priceIn: product?.priceIn ?? 0,
-          priceOut: product?.priceOut ?? 0,
-          suplier: product?.suplier ?? '',
+          pId: id,
+          productName: name ?? '',
+          description: description ?? '',
+          category: category ?? '',
+          dateIn: dateIn ?? DateTime.now(),
+          quantity: quantity ?? 0,
+          priceIn: priceIn ?? 0,
+          priceOut: priceOut ?? 0,
+          suplier: suplier ?? '',
         );
 
   TechServiceModel copyServiceWith({
-    String? id,
+    String? seviceId,
     String? title,
-    SaleType? type,
     String? serviceDescription,
     DateTime? createdAt,
     bool? available,
@@ -44,9 +50,8 @@ class TechServiceModel extends ProductModel {
     // ProductModel? product,
   }) {
     return TechServiceModel(
-      pId: id ?? this.pId,
+      seviceId: seviceId ?? this.seviceId,
       title: title ?? this.title,
-      type: type ?? this.type,
       serviceDescription: serviceDescription ?? this.serviceDescription,
       createdAt: createdAt ?? this.createdAt,
       available: available ?? this.available,
@@ -54,24 +59,11 @@ class TechServiceModel extends ProductModel {
     );
   }
 
-  /// fromSale
-  /// converts a SaleModel to a TechService
-  // static TechServiceModel fromSale(SaleModel sale) {
-  //   return TechServiceModel(
-  //     id: sale.id,
-  //     title: sale.productName,
-  //     type: sale.type!,
-  //     serviceDescription: sale.serviceDescription,
-  //     createdAt: sale.createdAt,
-  //     available: sale.available,
-  //     //product: product ?? this.product,
-  //   );
-  // }
-
+  @override
   Map<String, dynamic> toMap() {
     return {
+      if (seviceId != null) 'serviceId': seviceId,
       'title': title,
-      'type': type,
       'description': description,
       'priceIn': priceIn,
       'priceOut': priceOut,
@@ -82,9 +74,8 @@ class TechServiceModel extends ProductModel {
 
   factory TechServiceModel.fromMap(DocumentSnapshot map) {
     return TechServiceModel(
-        pId: map.id,
+        seviceId: map.id,
         title: map['title'],
-        type: map['type'],
         serviceDescription: map['description'],
         available: map['available'],
         createdAt: map['timeStamp'].toDate());
@@ -95,7 +86,7 @@ class TechServiceModel extends ProductModel {
 
   @override
   String toString() {
-    return 'Services(id: $pId, title: $title, type: $type,priceIn: $priceIn, priceOut: $priceOut, count: $count, available: $available)';
+    return 'Services(id: $pId, title: $title,priceIn: $priceIn, priceOut: $priceOut, count: $count, available: $available)';
   }
 
   @override
@@ -105,7 +96,6 @@ class TechServiceModel extends ProductModel {
     return other is TechServiceModel &&
         other.pId == pId &&
         other.title == title &&
-        other.type == type &&
         other.priceIn == priceIn &&
         other.priceOut == priceOut &&
         other.count == count &&
@@ -116,7 +106,6 @@ class TechServiceModel extends ProductModel {
   int get hashCode {
     return pId.hashCode ^
         title.hashCode ^
-        type.hashCode ^
         priceIn.hashCode ^
         priceOut.hashCode ^
         count.hashCode ^

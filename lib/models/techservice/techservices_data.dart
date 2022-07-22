@@ -37,8 +37,8 @@ class TechServicesData {
   List<String> get distinctCategories {
     List<String> mcategories = [];
     for (var element in techServices) {
-      if (!mcategories.contains(element.type)) {
-        mcategories.add(element.type.toString());
+      if (!mcategories.contains(element.category)) {
+        mcategories.add(element.category.toString());
       }
     }
     return mcategories;

@@ -165,7 +165,7 @@ class TechServiceListCard extends ConsumerWidget {
               children: [
                 _buildAvailable(techService.available ?? false),
                 Text(
-                  techService.type.toString(),
+                  techService.category.toString(),
                   style: Theme.of(context).textTheme.subtitle2!,
                 ),
               ],
