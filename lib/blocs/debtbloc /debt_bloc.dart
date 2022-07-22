@@ -8,13 +8,13 @@ import '../../models/debt/debt.dart';
 part 'debt_event.dart';
 part 'debt_state.dart';
 
-class DebtBloc extends Bloc<DebtEvent, DebtsState> {
+class DebtBloc extends Bloc<DebtEvent, DebtState> {
   /// stream subscription to get the pdebts from the database
   late final DatabaseOperations _databaseOperations;
   StreamSubscription<List<DebtModel>>? _pdebtsSubscription;
   DebtBloc({required DatabaseOperations databaseOperations})
       : super(
-          const DebtsState(
+          const DebtState(
             status: DebtStatus.initial,
             debts: [],
             debt: null,
@@ -33,8 +33,8 @@ class DebtBloc extends Bloc<DebtEvent, DebtsState> {
   }
 
   /// onloadpdebts event
-  void _onLoadDebtss(LoadDebtsEvent event, Emitter<DebtsState> emit) async {
-    emit(DebtsState(
+  void _onLoadDebtss(LoadDebtsEvent event, Emitter<DebtState> emit) async {
+    emit(DebtState(
       status: DebtStatus.loaded,
       debts: event.debts,
       debt: null,
@@ -43,7 +43,7 @@ class DebtBloc extends Bloc<DebtEvent, DebtsState> {
   }
 
   /// on get pdebts event
-  Future<void> _onGetDebtss(DebtEvent event, Emitter<DebtsState> emit) async {
+  Future<void> _onGetDebtss(DebtEvent event, Emitter<DebtState> emit) async {
     // if (_pdebtsSubscription != null) {
     // _pdebtsSubscription!.cancel();
     // }
@@ -53,9 +53,9 @@ class DebtBloc extends Bloc<DebtEvent, DebtsState> {
   }
 
   /// on add debt event
-  void _onAddDebt(AddDebtEvent event, Emitter<DebtsState> emit) async {
+  void _onAddDebt(AddDebtEvent event, Emitter<DebtState> emit) async {
     _databaseOperations.addDebt(event.debt);
-    emit(DebtsState(
+    emit(DebtState(
       status: DebtStatus.added,
       debts: state.debts,
       debt: event.debt,
@@ -65,9 +65,9 @@ class DebtBloc extends Bloc<DebtEvent, DebtsState> {
   }
 
   /// on delete debt event
-  void _onDeleteDebt(DeleteDebtEvent event, Emitter<DebtsState> emit) async {
+  void _onDeleteDebt(DeleteDebtEvent event, Emitter<DebtState> emit) async {
     _databaseOperations.deleteDebt(event.debt);
-    emit(DebtsState(
+    emit(DebtState(
       status: DebtStatus.deleted,
       debts: state.debts,
       debt: event.debt,
@@ -77,9 +77,9 @@ class DebtBloc extends Bloc<DebtEvent, DebtsState> {
   }
 
   /// on update debt event
-  void _onUpdateDebt(UpdateDebtEvent event, Emitter<DebtsState> emit) async {
+  void _onUpdateDebt(UpdateDebtEvent event, Emitter<DebtState> emit) async {
     _databaseOperations.updateDebt(event.debt);
-    emit(DebtsState(
+    emit(DebtState(
       status: DebtStatus.updated,
       debts: state.debts,
       debt: event.debt,

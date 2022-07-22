@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hanouty/blocs/filteredsalesbloc/filteredsales_bloc.dart';
 
 import '../../../blocs/clientsbloc/clients_bloc.dart';
 import '../../../blocs/debtbloc /debt_bloc.dart';
@@ -12,7 +13,6 @@ import '../../../blocs/sellactionsbloc/sellactions_bloc.dart';
 import '../../../blocs/suplierbloc/suplier_bloc.dart';
 import '../../../blocs/techservicebloc/techservice_bloc.dart';
 import '../../../components.dart';
-import '../../../cubits/cubit/filter_cubit.dart';
 import '../../../database/database_operations.dart';
 import '../../../local_components.dart';
 import '../../../widgets/sidemenu/shared_menu_items.dart';
@@ -86,7 +86,9 @@ class HomeForAll extends ConsumerWidget {
                   ..add(GetPaymentsEvent()),
           ),
           BlocProvider(
-            create: (context) => FilterCubit(),
+            create: (context) => FilteredSalesBloc(FullSalesBloc(
+                databaseOperations: GetIt.I<DatabaseOperations>()))
+              ..add(GetFilteredSaleDataEvent(DateFilter.all)),
           ),
         ],
         child: Scaffold(

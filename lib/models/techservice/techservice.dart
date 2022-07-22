@@ -14,8 +14,8 @@ class TechServiceModel extends ProductModel {
   TechServiceModel({
     this.seviceId,
     required this.title,
-    required this.serviceDescription,
     required this.createdAt,
+    this.serviceDescription,
     this.available,
     String? id,
     String? name,

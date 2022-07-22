@@ -1,135 +1,82 @@
 part of 'sale.dart';
 
 class SalesData {
-  List<SaleModel> filteredSales;
+  //sortedSales sortedSales;
+  List<SaleModel> sales;
   SalesData({
-    required this.filteredSales,
+    //required this.sortedSales,
+    required this.sales,
   });
+////////////////////////////////////////////
+  /// all sales where type is product
+  List<SaleModel> get productSalesList =>
+      sales.where((element) => element.type == SaleType.product).toList();
+
+  /// all sales where type is service
+  List<SaleModel> get serviceSalesList =>
+      sales.where((element) => element.type == SaleType.service).toList();
+//////////////////////////////////////
+  // get filtered sales
+  // @returns List<SaleModel>
+  List<SaleModel> get sortedSales {
+    return sales.toList()..sort((a, b) => b.dateSold.compareTo(a.dateSold));
+  }
+
+  ProductSalesData get productSalesData =>
+      ProductSalesData(sales: productSalesList);
+  TechServiceSalesData get serviceSalesData =>
+      TechServiceSalesData(sales: serviceSalesList);
   //var loger = Logger();
 // get top 10 sales by quantity
   List<SaleModel> get topSales {
-    List<SaleModel> topSales = filteredSales;
-    topSales.sort((a, b) => b.quantitySold.compareTo(a.quantitySold));
+    sortedSales.sort((a, b) => b.quantitySold.compareTo(a.quantitySold));
     return topSales.take(10).toList();
   }
+//////////////////////////////////////////////////////////////////////////////////////
+  ///Distincts from the list of sales /////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////
 
-// get distinct dates from the provided list
-  List<String> get distinctDDMMYY {
-    List<String> list = [];
-    for (var item in filteredSales) {
-      list.add(item.dateSold.ddmmyyyy());
+/////////////////////////////////////////////////////////////////////////
+  List<String> get distinctCilentNames {
+    List<String> mlist = [];
+    for (var element in sales) {
+      mlist.add(element.shopClientId);
     }
-    //loger.d('distinctDDMMYY :${list}');
-    // list.sort((a, b) => (a.getDate!).compareTo(b.getDate!));
-    return list.toSet().toList();
+    return mlist.toSet().toList();
   }
 
-// get distinct dates MMYYY from the provided list
-  List<String> get distinctMMYYY {
-    List<String> list = [];
-    for (var item in filteredSales) {
-      list.add(item.dateSold.mmyyyy());
+  /// distinct categories
+  List<String> get distinctCategories {
+    List<String> mlist = [];
+    for (var element in sales) {
+      mlist.add(element.category!);
     }
-    //loger.d('distinctMMYYY :${list}');
-    // list.sort((a, b) => (a.getDate!).compareTo(b.getDate!));
-    return list.toSet().toList();
+    return mlist.toSet().toList();
   }
 
-// get distinct dates YYYY from the provided list
-  List<String> get distinctYYYY {
-    List<String> list = [];
-    for (var item in filteredSales) {
-      list.add(item.dateSold.yyyy());
-    }
-    //loger.d('distinctYYYY :${list}');
-    // list.sort((a, b) => (a.getDate!).compareTo(b.getDate!));
-    return list.toSet().toList().reversed.toList();
-  }
-
-// get a map of tag : list of sales by dd/mm/yyyy
-  Map<String, List<SaleModel>> get salesByDDMMYYYY {
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+  /// a map of sles by category
+  List<TaggedSales> get salesByCategory {
     Map<String, List<SaleModel>> map = {};
-    for (var item in distinctDDMMYY) {
-      map.putIfAbsent(item, () => []);
-      map[item]!.addAll(
-          filteredSales.where((sale) => sale.dateSold.ddmmyyyy() == item));
+    for (var category in distinctCategories) {
+      map.putIfAbsent(category, () => []);
+      map[category]!.addAll(sortedSales
+          .where((element) => element.category! == category)
+          .toList());
     }
-    return map;
+    //loger.d('salesByCategory :${map}');
+    var lst = map.entries
+        .map((entry) => TaggedSales(tag: entry.key, sales: entry.value))
+        .toList();
+    //lst.sort((a, b) => b.length.compareTo(a.length));
+    return lst;
   }
 
-// get TaggedSales by dd/mm/yyyy
-  List<TaggedSales> get taggedSalesByDDMMYYYY {
-    List<TaggedSales> list = [];
-    for (var item in salesByDDMMYYYY.entries) {
-      list.add(TaggedSales(tag: item.key, sales: item.value));
-    }
-    list.sort((a, b) => b.tag.compareTo(a.tag));
-    return list;
-  }
-
-// get a map of tag : list of sales by mm/yyyy
-  Map<String, List<SaleModel>> get salesByMMYYYY {
-    Map<String, List<SaleModel>> map = {};
-    for (var item in distinctMMYYY) {
-      map.putIfAbsent(item, () => []);
-      map[item]!.addAll(
-          filteredSales.where((sale) => sale.dateSold.mmyyyy() == item));
-    }
-    //loger.d('salesByMMYYYY :${map}');
-    return map;
-  }
-
-// get TaggedSales by mm/yyyy
-  List<TaggedSales> get taggedSalesByMMYYYY {
-    List<TaggedSales> list = [];
-    for (var item in salesByMMYYYY.entries) {
-      list.add(TaggedSales(tag: item.key, sales: item.value));
-    }
-    //loger.d('taggedSalesByMMYYYY :${list}');
-    list.sort((a, b) => b.tag.compareTo(a.tag));
-    return list;
-  }
-
-  // get a map of tag : list of sales by yyyy
-  Map<String, List<SaleModel>> get salesByYYYY {
-    Map<String, List<SaleModel>> map = {};
-    for (var item in distinctYYYY) {
-      map.putIfAbsent(item, () => []);
-      map[item]!
-          .addAll(filteredSales.where((sale) => sale.dateSold.yyyy() == item));
-    }
-    //loger.d('salesByYYYY :${map}');
-    return map;
-  }
-
-// get TaggedSales by yyyy
-  List<TaggedSales> get taggedSalesByYYYY {
-    List<TaggedSales> list = [];
-    for (var item in salesByYYYY.entries) {
-      list.add(TaggedSales(tag: item.key, sales: item.value));
-    }
-    // list.sort((a, b) => b.chartData.value!.compareTo(a.chartData.value!));
-    list.sort((a, b) => b.tag.compareTo(a.tag));
-    return list;
-  }
-
-  // maps of the provided list of sales
-  List<ChartData> getTopXSalesCountAndValue(int x) {
-    List<ChartData> list = [];
-    for (var item in topSales) {
-      list.add(ChartData(
-        label: item.productName,
-        value: item.quantitySold as double,
-      ));
-    }
-    list.sort((a, b) => b.value!.compareTo(a.value!));
-    return list.take(x).toList();
-  }
-// only data drived from the provided list of sales
-
+  /// total quantity sold
   int get totalQuantitySold {
     int count = 0;
-    for (var element in filteredSales) {
+    for (var element in sortedSales) {
       count += (element.quantitySold);
     }
     return count;
@@ -138,7 +85,7 @@ class SalesData {
   /// total sales value for the provided list of sales
   double get totalSoldAmount {
     double total = 0;
-    for (var element in filteredSales) {
+    for (var element in sortedSales) {
       total += (element.priceSoldFor);
     }
     return total;
@@ -146,7 +93,7 @@ class SalesData {
 
   double get totalSoldPriceOut {
     double count = 0;
-    for (var element in filteredSales) {
+    for (var element in sortedSales) {
       count += (element.totalPriceOut);
     }
     return count;
@@ -155,7 +102,7 @@ class SalesData {
 // total pricein in all sales provided
   double get totalSoldPriceIn {
     double count = 0;
-    for (var element in filteredSales) {
+    for (var element in sortedSales) {
       count += (element.totalPriceIn);
     }
     return count;
@@ -169,7 +116,7 @@ class SalesData {
 // netProfits that is the difference between the total sold price and the total sold price out
   double get totalNetProfit {
     var count = 0.0;
-    for (var element in filteredSales) {
+    for (var element in sortedSales) {
       count += (element.profitMargin);
     }
     return count;
@@ -187,5 +134,110 @@ class SalesData {
       }
     }
     return unit;
+  }
+
+  /// get a list of sales sorted by date in
+  List<ProductModel> get sortedsales {
+    return sales.toList()..sort((a, b) => a.dateIn.compareTo(b.dateIn));
+  }
+
+  /// get a map of sum of sales prices for each day
+  /// key is date in, value is sum of prices in
+  Map<DateTime, double> get pricesByDay {
+    Map<DateTime, double> pricesByDay = {};
+    for (ProductModel product in sortedsales) {
+      pricesByDay[product.dateIn] ??= 0.0;
+      pricesByDay[product.dateIn] =
+          pricesByDay[product.dateIn]! + product.priceIn;
+    }
+    return pricesByDay;
+  }
+
+  /// get a map of sum of sales prices for each month
+  /// key is month in, value is sum of prices in
+  Map<DateTime, double> get pricesByMonth {
+    Map<DateTime, double> pricesByMonth = {};
+    for (ProductModel product in sortedsales) {
+      pricesByMonth[DateTime(00, product.dateIn.month, product.dateIn.year)] ??=
+          0.0;
+      pricesByMonth[DateTime(00, product.dateIn.month, product.dateIn.year)] =
+          pricesByMonth[
+                  DateTime(00, product.dateIn.month, product.dateIn.year)]! +
+              product.priceIn;
+    }
+    return pricesByMonth;
+  }
+
+  /// get a map of sum of sales prices for each year
+  /// key is year in, value is sum of prices in
+  Map<DateTime, double> get pricesByYear {
+    Map<DateTime, double> pricesByYear = {};
+    for (ProductModel product in sortedsales) {
+      pricesByYear[DateTime(product.dateIn.year, 00, 00)] ??= 0.0;
+      pricesByYear[DateTime(product.dateIn.year, 00, 00)] =
+          pricesByYear[DateTime(product.dateIn.year, 00, 00)]! +
+              product.priceIn;
+    }
+    return pricesByYear;
+  }
+
+  /// get a list of ChartData for each day
+  List<ChartData> get chartDataDDMMYY {
+    return pricesByDay.entries.map((entry) {
+      return ChartData(
+          label: entry.key.toString(), value: entry.value, date: entry.key);
+    }).toList();
+  }
+
+  /// get a list of ChartData for each month
+  List<ChartData> get chartDataMMYY {
+    return pricesByMonth.entries.map((entry) {
+      return ChartData(
+          label: entry.key.toString(), value: entry.value, date: entry.key);
+    }).toList();
+  }
+
+  /// get a list of ChartData for each year
+  /// key is year in, value is sum of prices in
+  List<ChartData> get chartDataYY {
+    return pricesByYear.entries.map((entry) {
+      return ChartData(
+          label: entry.key.toString(), value: entry.value, date: entry.key);
+    }).toList();
+  }
+
+  /// get a list of ChartData for each year
+  /// key is year in, value is sum of prices in
+  List<ChartData> get chartDataYYMMDD {
+    return pricesByYear.entries.map((entry) {
+      return ChartData(
+          label: entry.key.toString(), value: entry.value, date: entry.key);
+    }).toList();
+  }
+
+  /// get a map of sum of sales prices for category
+  /// key is category, value is sum of prices in
+  Map<String, double> get pricesByCategory {
+    Map<String, double> pricesByCategory = {};
+    for (ProductModel product in sortedsales) {
+      pricesByCategory[product.category!] ??= 0.0;
+      pricesByCategory[product.category!] =
+          pricesByCategory[product.category]! + product.priceIn;
+    }
+    return pricesByCategory;
+  }
+
+  // /// get a list of ChartData from a map parameter
+  // List<ChartData> chartData(map) {
+  //   return map.map((entry) {
+  //     return ChartData(entry.key, entry.value, DateTime.now());
+  //   }).toList();
+  // }
+
+  /// get a list of ChartData from categoryies
+  List<ChartData> get chartDataByCategory {
+    return pricesByCategory.entries.map((entry) {
+      return ChartData(label: entry.key.toString(), value: entry.value);
+    }).toList();
   }
 }

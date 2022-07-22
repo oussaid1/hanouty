@@ -2,11 +2,11 @@ part of 'product.dart';
 
 class FilteredProduct {
   List<ProductModel> products = [];
-  final FilterType filterType;
+  final DateFilter filterType;
   final MDateRange? dateRange;
   FilteredProduct({
     required this.products,
-    this.filterType = FilterType.all,
+    this.filterType = DateFilter.all,
     this.dateRange,
   }); //: productsfilteredByCat = products;
   List<ProductModel> productsfilteredByCat = [];
@@ -23,11 +23,11 @@ class FilteredProduct {
   /// get products filtered by filter type
   List<ProductModel> get productsByFilterType {
     switch (filterType) {
-      case FilterType.all:
+      case DateFilter.all:
         return products;
-      case FilterType.month:
+      case DateFilter.month:
         return productsfilteredByCat;
-      case FilterType.custom:
+      case DateFilter.custom:
         return productsByDateRange(dateRange: dateRange!);
       default:
         return products;

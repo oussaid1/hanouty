@@ -6,7 +6,6 @@ import 'package:get_it/get_it.dart';
 import 'blocs/authbloc/auth_bloc.dart';
 import 'cubits/usermodel_cubit/user_model_cubit.dart';
 import 'database/database.dart';
-import 'screens/sales/sales_tab.dart';
 import 'utils/global_functions.dart';
 import 'routes/routes.dart';
 import 'screens/splash/splash_login_signup.dart';
@@ -51,7 +50,7 @@ class Root extends StatelessWidget {
               title: 'Dashboard',
               centreWidget: BlocProvider(
                 create: (context) => UserModelCubit(),
-                child: const SalesTab(),
+                child: const DashBoardPage(),
               ),
             );
           }

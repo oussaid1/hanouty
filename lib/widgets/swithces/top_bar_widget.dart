@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
-import '../../cubits/cubit/filter_cubit.dart';
 import '../../local_components.dart';
 import '../../localization/language.dart';
 import '../../providers/localization_provider.dart';
@@ -19,49 +18,12 @@ class TopBarWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     //final appThemeState = ref.watch(appThemeStateNotifier);
     //var selectedRangeFilter = ref.watch(rangeFilterProvider.state);
-    final filterType = context.watch<FilterCubit>().state;
+    // final filterType = context.watch<FilterCubit>().state;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        filterType.status.name == "custom"
-            ? const DateRangePicker()
-            : const SizedBox.shrink(),
-        const RangeFilterSpinner(),
-        // ElevatedButton(
-        //   style: ElevatedButton.styleFrom(
-        //     elevation: 0,
-        //     shape: RoundedRectangleBorder(
-        //       borderRadius: BorderRadius.circular(20),
-        //     ),
-        //   ),
-        //   child: Text(
-        //     "13 to 13",
-        //     style: Theme.of(context).textTheme.subtitle1!.copyWith(
-        //           color: MThemeData.white,
-        //         ),
-        //   ),
-        //   onPressed: () {
-        //     selectedRangeFilter.state = RangeFilter.custom;
-        //   },
-        // ),
-        // const SizedBox(width: 10),
-        // ElevatedButton(
-        //   style: ElevatedButton.styleFrom(
-        //     elevation: 0,
-        //     shape: RoundedRectangleBorder(
-        //       borderRadius: BorderRadius.circular(20),
-        //     ),
-        //   ),
-        //   child: Text(
-        //     "All",
-        //     style: Theme.of(context).textTheme.subtitle1!.copyWith(
-        //           color: MThemeData.white,
-        //         ),
-        //   ),
-        //   onPressed: () {
-        //     selectedRangeFilter.state = RangeFilter.all;
-        //   },
-        // ),
+        const DateRangePicker(), const RangeFilterSpinner(),
+
         buildLocalSwitch(context, ref),
         myAppBarIcon(context, ref),
         // IconButton(
@@ -69,7 +31,7 @@ class TopBarWidget extends ConsumerWidget {
         //   onPressed: () {},
         // ),
         // buildThemeSwitch(context, appThemeState),
-        const SizedBox(width: 10),
+        if (Responsive.isDesktop(context)) const SizedBox(width: 10),
       ],
     );
   }

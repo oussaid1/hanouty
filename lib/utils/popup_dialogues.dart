@@ -15,6 +15,7 @@ class MDialogs {
         useRootNavigator: false,
         builder: (_) {
           return AlertDialog(
+            contentPadding: const EdgeInsets.all(0),
             title: title,
             actionsPadding: const EdgeInsets.only(left: 8, right: 8),
             actions: widgets,

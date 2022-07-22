@@ -76,7 +76,7 @@ class DebtData {
   double get totalPaidDebtAmount {
     double total = 0;
     for (var item in allDebts) {
-      total += item.paid;
+      total += item.paidAmount;
     }
     total += totalPayments;
     return total;
@@ -160,7 +160,7 @@ class ClientDebt {
   double get totalPaid {
     double total = 0;
     for (var item in allDebts) {
-      total += item.paid;
+      total += item.paidAmount;
     }
     return total;
   }
@@ -169,7 +169,7 @@ class ClientDebt {
   double get totalPaidDebtAmount {
     double total = 0;
     for (var item in allDebts) {
-      total += item.paid;
+      total += item.paidAmount;
     }
     total += totalPayments;
     return total;

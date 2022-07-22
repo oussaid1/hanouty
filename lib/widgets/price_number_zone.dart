@@ -1,17 +1,17 @@
-import 'package:hanouty/components.dart';
-import 'package:hanouty/local_components.dart';
 import 'package:flutter/material.dart';
+
+import '../components.dart';
 
 class PriceNumberZone extends StatelessWidget {
   final TextAlign textAlign;
   final bool withDollarSign;
-  final double price;
-  final TextStyle? style;
+  final num price;
+  final TextStyle? priceStyle;
   final Widget? right;
   const PriceNumberZone({
     Key? key,
     required this.price,
-    required this.style,
+    this.priceStyle,
     required this.withDollarSign,
     this.textAlign = TextAlign.end,
     this.right,
@@ -26,12 +26,12 @@ class PriceNumberZone extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            '${price.toPrecision(2)} '.tr(),
+            '$price',
             textAlign: textAlign,
-            style: style ??
+            style: priceStyle ??
                 Theme.of(context)
                     .textTheme
-                    .headline5!
+                    .bodyMedium!
                     .copyWith(color: Theme.of(context).colorScheme.onPrimary),
           ),
           withDollarSign

@@ -1,36 +1,53 @@
+import 'package:hanouty/blocs/techservicebloc/techservice_bloc.dart';
 import 'package:hanouty/local_components.dart';
-
-import 'package:hanouty/widgets/select_or_add/select_or_add_cat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import '../../../utils/constents.dart';
 import '/../components.dart';
 import 'package:flutter/material.dart';
 
-class AddService extends ConsumerStatefulWidget {
+class AddService extends StatefulWidget {
   const AddService({Key? key, this.techService}) : super(key: key);
   final TechServiceModel? techService;
   @override
   AddServiceState createState() => AddServiceState();
 }
 
-class AddServiceState extends ConsumerState<AddService> {
+class AddServiceState extends State<AddService> {
   final GlobalKey<FormState> mformKey = GlobalKey<FormState>();
   final TextEditingController titleController = TextEditingController();
-  // final TextEditingController categoryController = TextEditingController();
   final TextEditingController priceInController = TextEditingController();
   final TextEditingController priceOutController = TextEditingController();
   final TextEditingController descrController = TextEditingController();
-  // String serviceCat = '';
+  String serviceCat = 'Service';
+  DateTime createdAt = DateTime.now();
+  bool _available = true;
+  String description = 'legal only';
+  bool _canSave = false;
+  bool _isUpdate = false;
+
+  /// clear all text fields
   void clear() {
     titleController.clear();
     priceInController.clear();
     priceOutController.clear();
   }
 
+  /// dispose all controllers
+  void disposeControllers() {
+    titleController.dispose();
+    priceInController.dispose();
+    priceOutController.dispose();
+    descrController.dispose();
+  }
+
   @override
   void initState() {
     if (widget.techService != null) {
+      _isUpdate = true;
       titleController.text = widget.techService!.title.toString();
+      serviceCat = widget.techService!.category.toString();
+      createdAt = widget.techService!.createdAt;
       priceInController.text = widget.techService!.priceIn.toString();
       priceOutController.text = widget.techService!.priceOut.toString();
     }
@@ -40,107 +57,84 @@ class AddServiceState extends ConsumerState<AddService> {
   @override
   void dispose() {
     clear();
+    disposeControllers();
+    _isUpdate = false;
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 300,
-      height: 800,
-      child: Column(
-        children: const [
-          //InStockWidget(dBTechServices: dBTechServices),
-          // buildFlexible(context, ref, techServiceList),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(height: 50),
+        _buildFlexible(context, []),
+      ],
     );
   }
 
-  Flexible buildFlexible(
-      BuildContext context, WidgetRef ref, List<String> techServiceList) {
-    return Flexible(
-      fit: FlexFit.tight,
-      flex: 2,
-      child: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(8),
-          width: Responsive.isDesktop(context) ? 600 : context.width - 10,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            //color: Theme.of(context).colorScheme.onBackground,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(
-                height: 50,
-              ),
-              SelectOrAddNewDropDown(
-                list: techServiceList,
-                hintText: "Service-Type".tr(),
-                onSaved: (value) {},
-              ),
-              Form(
-                key: mformKey,
-                child: Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    buildTechServiceName(ref),
-                    const SizedBox(height: 20),
-                    buildPriceIn(ref),
-                    const SizedBox(height: 20),
-                    buildPriceOut(ref),
-                    const SizedBox(height: 20),
-                    buildAvailability(ref, context),
-                    const SizedBox(height: 20),
-                    buildDescription(),
-                    const SizedBox(height: 40),
-                    buildSaveButton(ref, context),
-                    const SizedBox(
-                      height: 100,
-                    ) //but
-                  ],
-                ),
-              ),
-            ],
-          ),
+  _buildFlexible(BuildContext context, List<String> techServiceList) {
+    return Form(
+      key: mformKey,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildCategory(context, []),
+            const SizedBox(height: 20),
+            _buildTechServiceName(),
+            const SizedBox(height: 20),
+            _buildPriceIn(),
+            const SizedBox(height: 20),
+            _buildPriceOut(),
+            const SizedBox(height: 20),
+            _buildAvailability(context),
+            const SizedBox(height: 20),
+            _buildDescription(),
+            const SizedBox(height: 40),
+            _buildSaveButton(context),
+            const SizedBox(
+              height: 100,
+            ) //but
+          ],
         ),
       ),
     );
   }
 
-  Row buildSaveButton(WidgetRef ref, BuildContext context) {
+  Row _buildSaveButton(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         ElevatedButton(
           style: MThemeData.raisedButtonStyleSave,
-          child: Text(
-            'Save'.tr(),
-          ),
-          onPressed: () {
-            // if (mformKey.currentState?.validate() ?? false) {
-            //   final techService = TechServiceModel(
-            //     description: descrController.text.trim(),
-            //     timeStamp: DateTime.now(),
-            //     available: ref.read(techServAvailProvider.state).state,
-            //     type: ref.watch(selectedSelectOrAddCat.state).state!,
-            //     title: titleController.text.trim(),
-            //     priceIn: double.tryParse(priceInController.text.trim())!,
-            //     priceOut: double.tryParse(priceOutController.text.trim())!,
-            //   );
-
-            //   ref
-            //       .read(databaseProvider)!
-            //       .addTechService(techService)
-            //       .then((value) => MDialogs.snackBar("success".tr()))
-            //       .then((value) => clear());
-            // } else {
-            //   MDialogs.snackBar("error".tr());
-            // }
-          },
+          onPressed: !_canSave
+              ? null
+              : () {
+                  if (mformKey.currentState!.validate()) {
+                    setState(() {
+                      _canSave = false;
+                    });
+                    final techService = TechServiceModel(
+                      seviceId: _isUpdate ? widget.techService!.seviceId : null,
+                      description: descrController.text.trim(),
+                      createdAt: DateTime.now(),
+                      available: _available,
+                      category: serviceCat,
+                      title: titleController.text.trim(),
+                      priceIn: double.tryParse(priceInController.text.trim())!,
+                      priceOut:
+                          double.tryParse(priceOutController.text.trim())!,
+                      serviceDescription: description,
+                    );
+                    GetIt.I<TechServiceBloc>().add(_isUpdate
+                        ? UpdateTechServiceEvent(techService)
+                        : AddTechServiceEvent(techService));
+                    // Navigator.pop(context);
+                  }
+                },
+          child: Text(_isUpdate ? 'Save' : 'Update').tr(),
         ),
         ElevatedButton(
           style: MThemeData.raisedButtonStyleCancel,
@@ -155,7 +149,58 @@ class AddServiceState extends ConsumerState<AddService> {
     );
   }
 
-  Widget buildDescription() {
+  _buildCategory(BuildContext context, List<String> list) {
+    return SizedBox(
+      width: context.width,
+      child: Autocomplete<String>(
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if (textEditingValue.text == '') {
+            return const Iterable<String>.empty();
+          }
+          return Category.categoriesStrings.where((String option) {
+            return option
+                .toString()
+                .contains(textEditingValue.text.toLowerCase());
+          });
+        },
+        fieldViewBuilder: (BuildContext context,
+            TextEditingController textEditingController,
+            FocusNode focusNode,
+            VoidCallback onFieldSubmitted) {
+          return TextFormField(
+            controller: textEditingController,
+            onChanged: (text) {
+              setState(() {
+                serviceCat = text.trim();
+              });
+            },
+            decoration: InputDecoration(
+              labelText: 'Category'.tr(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(6.0),
+                borderSide: BorderSide(color: AppConstants.whiteOpacity),
+              ),
+              //border: InputBorder.none,
+              hintText: 'category_hint'.tr(),
+              hintStyle: Theme.of(context).textTheme.subtitle2!,
+              filled: true,
+            ),
+            focusNode: focusNode,
+            onFieldSubmitted: (String value) {
+              onFieldSubmitted();
+            },
+          );
+        },
+        onSelected: (String selection) {
+          setState(() {
+            serviceCat = selection;
+          });
+        },
+      ),
+    );
+  }
+
+  Widget _buildDescription() {
     return Container(
       margin: const EdgeInsets.only(left: 4, right: 4),
       width: 240,
@@ -179,7 +224,7 @@ class AddServiceState extends ConsumerState<AddService> {
     );
   }
 
-  TextFormField buildPriceOut(WidgetRef ref) {
+  TextFormField _buildPriceOut() {
     return TextFormField(
         controller: priceOutController,
         validator: (text) {
@@ -207,7 +252,7 @@ class AddServiceState extends ConsumerState<AddService> {
         ));
   }
 
-  TextFormField buildPriceIn(WidgetRef ref) {
+  TextFormField _buildPriceIn() {
     return TextFormField(
         controller: priceInController,
         validator: (text) {
@@ -235,7 +280,7 @@ class AddServiceState extends ConsumerState<AddService> {
         ));
   }
 
-  TextFormField buildTechServiceName(WidgetRef ref) {
+  TextFormField _buildTechServiceName() {
     return TextFormField(
       controller: titleController,
       validator: (text) {
@@ -243,6 +288,11 @@ class AddServiceState extends ConsumerState<AddService> {
           return "error".tr();
         }
         return null;
+      },
+      onChanged: (text) {
+        setState(() {
+          _canSave = text.trim().isNotEmpty;
+        });
       },
       decoration: InputDecoration(
         border: OutlineInputBorder(
@@ -259,24 +309,7 @@ class AddServiceState extends ConsumerState<AddService> {
     );
   }
 
-  Autocomplete<String> builAutocomleteCat(kOptions) {
-    return Autocomplete<String>(
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text == '') {
-          return const Iterable<String>.empty();
-        }
-        return kOptions.where((String option) {
-          return option.contains(textEditingValue.text);
-        });
-      },
-      onSelected: (String selection) {
-        // ref.read(techServiceTypeProvider.state).state = selection;
-        // print('You just selected $selection');
-      },
-    );
-  }
-
-  Row buildAvailability(WidgetRef ref, BuildContext context) {
+  Row _buildAvailability(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -295,7 +328,9 @@ class AddServiceState extends ConsumerState<AddService> {
             activeColor: MThemeData.accentColor,
             value: false,
             onChanged: (value) {
-              // ref.read(techServAvailProvider.state).state = value;
+              setState(() {
+                _available = value;
+              });
             }),
       ],
     );

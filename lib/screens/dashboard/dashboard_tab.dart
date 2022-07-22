@@ -1,10 +1,9 @@
 import 'dart:developer';
 
-import 'package:hanouty/blocs/clientsbloc/clients_bloc.dart';
-import 'package:hanouty/local_components.dart';
-import 'package:hanouty/models/product/product.dart';
-import 'package:hanouty/models/revenu/revenu.dart';
 import 'package:flutter/material.dart';
+import 'package:hanouty/blocs/filteredsalesbloc/filteredsales_bloc.dart';
+
+import '../../blocs/clientsbloc/clients_bloc.dart';
 import '../../blocs/debtbloc /debt_bloc.dart';
 import '../../blocs/expensesbloc/expenses_bloc.dart';
 import '../../blocs/fullsalesbloc/fullsales_bloc.dart';
@@ -13,8 +12,14 @@ import '../../blocs/paymentsbloc/payments_bloc.dart';
 import '../../blocs/productbloc/product_bloc.dart';
 import '../../blocs/salesbloc/sales_bloc.dart';
 import '../../components.dart';
-import '../../cubits/cubit/filter_cubit.dart';
-
+import '../../models/Sale/sale.dart';
+import '../../models/debt/debt.dart';
+import '../../models/expenses/expenses.dart';
+import '../../models/income/income.dart';
+import '../../models/product/product.dart';
+import '../../models/revenu/revenu.dart';
+import '../../utils/glasswidgets.dart';
+import '../../utils/popup_dialogues.dart';
 import '../../widgets/cards/latest_trans_list_card.dart';
 import '../../widgets/cards/scares_productss_instock.dart';
 import '../../widgets/charts/inventory_widget.dart';
@@ -29,7 +34,7 @@ class DashBoardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var filterType = context.watch<FilterCubit>().state.status;
+    //var filterType = context.watch<FilteredSalesBloc>().state;
     var productBloc = context.watch<ProductBloc>().state;
     var debtBloc = context.watch<DebtBloc>().state;
     var paymentsBloc = context.watch<PaymentsBloc>().state;
@@ -45,18 +50,18 @@ class DashBoardPage extends StatelessWidget {
     var filteredExpense = FilteredExpenses(expenses: expenseBloc.expenses);
     //// Data for the charts
     var productsData = ProductStockData(products: filteredProducts.products);
-    var salesData = SalesData(filteredSales: filteredSales.sales);
+    var salesData = SalesData(sales: fullSalesBloc.fullSales);
     var incomeData = IncomeData(filteredIncome: filteredIncome.incomes);
     var expenseData = ExpenseData(expenses: filteredExpense.expenses);
     var debtData = DebtData(
       allDebts: filteredDebts.debts,
       payments: paymentsBloc.payments,
     );
-    log('fullSalesBloc.state.fullSales: ${fullSalesBloc.fullSales.length}');
-    log('filterType: $filterType');
-    log('productBloc: ${productBloc.products.length}');
-    log('clientsBloc: ${clientsBloc.clients.length}');
-    log('clientsBloc: ${productBloc.status}');
+    // log('fullSalesBloc.state.fullSales: ${fullSalesBloc.fullSales.length}');
+    // log('filterType: $filterType');
+    // log('productBloc: ${productBloc.products.length}');
+    // log('clientsBloc: ${clientsBloc.clients.length}');
+    // log('clientsBloc: ${productBloc.status}');
     return Scaffold(
       backgroundColor: Colors.transparent,
       floatingActionButton: const Padding(
@@ -110,27 +115,24 @@ class DashBoardPage extends StatelessWidget {
                   const SizedBox(width: 2),
                   Wrap(
                     direction: Axis.vertical,
-                    children: const [
-                      ScaresProductslistCard(),
-                      SizedBox(height: 20),
+                    children: [
+                      const ScaresProductslistCard(),
+                      const SizedBox(height: 20),
                       LatestTransactionsListCard(
-                        salesList: [],
+                        salesList: filteredSales.sales,
                       ),
                     ],
                   ),
                 ],
               ),
-              Wrap(
-                spacing: 20,
-                direction: Axis.vertical,
-                alignment: WrapAlignment.spaceBetween,
-                children: [
-                  const ScaresProductslistCard(),
-                  LatestTransactionsListCard(
-                    salesList: filteredSales.sales,
-                  ),
-                ],
-              ),
+              // Wrap(
+              //   spacing: 20,
+              //   direction: Axis.vertical,
+              //   alignment: WrapAlignment.spaceBetween,
+              //   children: const [
+              //     ScaresProductslistCard(),
+              //   ],
+              // ),
             ],
           ),
         ),
@@ -152,7 +154,6 @@ class AddStuffWidget extends StatelessWidget {
         FloatingActionButton.extended(
           icon: const Icon(Icons.add),
           onPressed: () {
-            log('add stuff ${context.widget}');
             MDialogs.dialogSimple(
               context,
               title: Text(
@@ -182,11 +183,7 @@ class AddStuffWidget extends StatelessWidget {
                 "Add Service",
                 style: Theme.of(context).textTheme.headline3!,
               ),
-              contentWidget: const SizedBox(
-                height: 400,
-                width: 400,
-                child: AddService(),
-              ),
+              contentWidget: const AddService(),
             );
           },
           label: const Text("Add Service").tr(),
@@ -195,19 +192,14 @@ class AddStuffWidget extends StatelessWidget {
         FloatingActionButton.extended(
           icon: const Icon(Icons.add),
           onPressed: () {
-            log('add stuff ${context.widget}');
             MDialogs.dialogSimple(
               context,
               title: Text(
                 "Add Client",
                 style: Theme.of(context).textTheme.headline3!,
               ),
-              contentWidget: SizedBox(
-                height: 400,
-                width: 400,
-                child: AddClient(
-                  pContext: context,
-                ),
+              contentWidget: AddClient(
+                pContext: context,
               ),
             );
           },

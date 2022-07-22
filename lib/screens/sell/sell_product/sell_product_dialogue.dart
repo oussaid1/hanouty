@@ -236,9 +236,7 @@ class AddProductState extends State<SellProductDialoge> {
     );
   }
 
-  Widget buildClientName(
-    List<String> list,
-  ) {
+  buildClientName(List<String> list) {
     log('buildClientName ${list.length}');
     return SizedBox(
       width: 400,
@@ -300,10 +298,6 @@ class AddProductState extends State<SellProductDialoge> {
               filled: true,
             ),
             focusNode: focusNode,
-            onFieldSubmitted: (String value) {
-              onFieldSubmitted();
-              log('You just typed a new entry  $value');
-            },
           );
         },
         onSelected: (String selection) {

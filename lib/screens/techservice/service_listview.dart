@@ -1,11 +1,10 @@
-import 'package:hanouty/components.dart';
 import 'package:hanouty/models/catrgory/category.dart';
 import 'package:hanouty/models/techservice/techservice.dart';
 import 'package:hanouty/widgets/list_cards/techservice_card.dart';
 import 'package:hanouty/widgets/search_widget.dart';
 import 'package:flutter/material.dart';
 
-class TechServiceListView extends ConsumerStatefulWidget {
+class TechServiceListView extends StatefulWidget {
   const TechServiceListView({Key? key, required this.techServiceList})
       : super(key: key);
   final List<TechServiceModel> techServiceList;
@@ -13,7 +12,7 @@ class TechServiceListView extends ConsumerStatefulWidget {
   TechServiceListViewState createState() => TechServiceListViewState();
 }
 
-class TechServiceListViewState extends ConsumerState<TechServiceListView> {
+class TechServiceListViewState extends State<TechServiceListView> {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(

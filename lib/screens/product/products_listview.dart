@@ -125,10 +125,7 @@ class ProductList extends ConsumerWidget {
                           ),
                           const SizedBox(height: 20),
                           const Expanded(
-                            child: Flexible(
-                              flex: 1,
-                              child: ProductsDataTable(),
-                            ),
+                            child: ProductsDataTable(),
                           ),
                         ],
                       ),
@@ -191,86 +188,89 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
           onDeletePressed: (ProductModel product) =>
               deleteProduct(context, product),
         );
-        return Column(
-          children: [
-            Text('* tap to sell', style: Theme.of(context).textTheme.subtitle2),
-            SearchByWidget(
-              listOfCategories: ProductModel.fieldStrings,
-              withCategory: true,
-              onSearchTextChanged: (String text) {},
-              onChanged: (String category) {},
-              onBothChanged: (String category, String text) {
-                _data!.filterByCategory(category, text);
-              },
-            ),
-            PaginatedDataTable(
-              sortColumnIndex: _sortColumnIndex,
-              sortAscending: _sortAscending,
-              showCheckboxColumn: false,
-              columnSpacing: 10,
-              checkboxHorizontalMargin: 0,
-              horizontalMargin: 4,
-              rowsPerPage: 10,
-              columns: [
-                const DataColumn(
-                  label: Text('ID'),
-                  tooltip: 'ID',
-                ),
-                const DataColumn(
-                  label: Text('Sell'),
-                  tooltip: 'Sell',
-                ),
-                // DataColumn(
-                //   label: Text('Barcode'),
-                //   tooltip: 'Barcode',
-                // ),
-                DataColumn(
-                    label: const Text('Product Name'),
-                    tooltip: 'Product Name',
-                    onSort: (int columnIndex, bool ascending) {
-                      sort<String>((ProductModel d) => d.productName,
-                          columnIndex, ascending);
-                    }),
-                const DataColumn(
-                  label: Text('Quantity'),
-                  tooltip: 'Quantity',
-                ),
-                const DataColumn(
-                  label: Text('Price In'),
-                  tooltip: 'Price In',
-                ),
-                const DataColumn(
-                  label: Text('Price Out'),
-                  tooltip: 'Price Out',
-                ),
-                const DataColumn(
-                  label: Text('Suplier'),
-                  tooltip: 'Suplier',
-                ),
-                const DataColumn(
-                  label: Text('Date In'),
-                  tooltip: 'Date In',
-                ),
-                const DataColumn(
-                  label: Text('Category'),
-                  tooltip: 'Category',
-                ),
-                const DataColumn(
-                  label: Text('Description'),
-                  tooltip: 'Description',
-                ),
-                const DataColumn(
-                  label: Text('Edit'),
-                  tooltip: 'Edit',
-                ),
-                const DataColumn(
-                  label: Text('Delete'),
-                  tooltip: 'Delete',
-                ),
-              ],
-              source: _data!,
-            ),
-          ],
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              Text('* tap to sell',
+                  style: Theme.of(context).textTheme.subtitle2),
+              SearchByWidget(
+                listOfCategories: ProductModel.fieldStrings,
+                withCategory: true,
+                onSearchTextChanged: (String text) {},
+                onChanged: (String category) {},
+                onBothChanged: (String category, String text) {
+                  _data!.filterByCategory(category, text);
+                },
+              ),
+              PaginatedDataTable(
+                sortColumnIndex: _sortColumnIndex,
+                sortAscending: _sortAscending,
+                showCheckboxColumn: false,
+                columnSpacing: 10,
+                checkboxHorizontalMargin: 0,
+                horizontalMargin: 4,
+                rowsPerPage: 10,
+                columns: [
+                  const DataColumn(
+                    label: Text('ID'),
+                    tooltip: 'ID',
+                  ),
+                  const DataColumn(
+                    label: Text('Sell'),
+                    tooltip: 'Sell',
+                  ),
+                  // DataColumn(
+                  //   label: Text('Barcode'),
+                  //   tooltip: 'Barcode',
+                  // ),
+                  DataColumn(
+                      label: const Text('Product Name'),
+                      tooltip: 'Product Name',
+                      onSort: (int columnIndex, bool ascending) {
+                        sort<String>((ProductModel d) => d.productName,
+                            columnIndex, ascending);
+                      }),
+                  const DataColumn(
+                    label: Text('Quantity'),
+                    tooltip: 'Quantity',
+                  ),
+                  const DataColumn(
+                    label: Text('Price In'),
+                    tooltip: 'Price In',
+                  ),
+                  const DataColumn(
+                    label: Text('Price Out'),
+                    tooltip: 'Price Out',
+                  ),
+                  const DataColumn(
+                    label: Text('Suplier'),
+                    tooltip: 'Suplier',
+                  ),
+                  const DataColumn(
+                    label: Text('Date In'),
+                    tooltip: 'Date In',
+                  ),
+                  const DataColumn(
+                    label: Text('Category'),
+                    tooltip: 'Category',
+                  ),
+                  const DataColumn(
+                    label: Text('Description'),
+                    tooltip: 'Description',
+                  ),
+                  const DataColumn(
+                    label: Text('Edit'),
+                    tooltip: 'Edit',
+                  ),
+                  const DataColumn(
+                    label: Text('Delete'),
+                    tooltip: 'Delete',
+                  ),
+                ],
+                source: _data!,
+              ),
+            ],
+          ),
         );
       },
     );

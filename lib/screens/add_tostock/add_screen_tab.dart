@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../blocs/productbloc/product_bloc.dart';
 import '../../components.dart';
 import '../../local_components.dart';
 import '../client/client_list.dart';
@@ -20,37 +19,49 @@ class AddScreenTab extends ConsumerWidget {
           backgroundColor: Colors.transparent,
           leading: Container(),
           elevation: 0,
-          flexibleSpace: TabBar(
-            indicatorColor: Theme.of(context).tabBarTheme.labelColor,
+          flexibleSpace: const TabBar(
+            labelStyle: TextStyle(fontSize: 18),
+            indicatorColor: Colors.transparent,
+            labelColor: Color.fromARGB(255, 254, 242, 255),
+            //unselectedLabelColor: Colors.black,
+            indicatorSize: TabBarIndicatorSize.label,
+            labelPadding: EdgeInsets.symmetric(horizontal: 80),
+            padding: EdgeInsets.symmetric(horizontal: 8),
+            //indicatorPadding: const EdgeInsets.symmetric(horizontal: 8),
+            //splashBorderRadius: const BorderRadius.all(Radius.circular(6)),
+
+            indicator: BoxDecoration(
+              color: Color.fromARGB(50, 255, 255, 255),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+            ),
             isScrollable: false,
             tabs: [
-              Text(
-                'Product'.tr(),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(color: MThemeData.serviceColor),
+              Tab(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text("Products"),
+                ),
               ),
-              Text(
-                'Service'.tr(),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(color: MThemeData.productColor),
+              Tab(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text("Services"),
+                ),
               ),
-              Text(
-                'Client'.tr(),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(color: MThemeData.salesColor),
+              Tab(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text("Clients"),
+                ),
               ),
-              Text(
-                'Suplier'.tr(),
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(color: MThemeData.revenuColor),
+              Tab(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text("Supliers"),
+                ),
               ),
             ],
           ),

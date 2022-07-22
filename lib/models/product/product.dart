@@ -84,14 +84,21 @@ class ProductTableDataSource extends DataTableSource {
             onSellPressed?.call(row);
           },
         ),
-        DataCell(Text(row.productName.toString())),
+        DataCell(Text(
+          row.productName.toString(),
+          style: Theme.of(context).textTheme.headline6,
+          overflow: TextOverflow.ellipsis,
+        )),
         DataCell(Text(row.quantity.toString())),
         DataCell(Text(row.priceIn.toString())),
         DataCell(Text(row.priceOut.toString())),
         DataCell(Text(row.suplier.toString())),
         DataCell(Text(row.dateIn.ddmmyyyy())),
         DataCell(Text(row.category.toString())),
-        DataCell(Text(row.description.toString())),
+        DataCell(Text(
+          row.description.toString(),
+          overflow: TextOverflow.ellipsis,
+        )),
         DataCell(
             const Icon(
               Icons.edit_rounded,

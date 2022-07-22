@@ -57,7 +57,7 @@ class TaggedSales {
   }
 
   SalesData get salesData {
-    return SalesData(filteredSales: sales);
+    return SalesData(sales: sales);
   }
 
   FilteredSales? get filteredSalesData {
@@ -75,5 +75,10 @@ class TaggedSales {
       'totalSoldAmount': salesData.totalSoldAmount.toString(),
       'totalQuantitySold': salesData.totalQuantitySold.toString(),
     };
+  }
+
+  @override
+  String toString() {
+    return tag;
   }
 }

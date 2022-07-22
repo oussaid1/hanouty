@@ -9,8 +9,8 @@ enum DebtStatus {
   error,
 }
 
-class DebtsState extends Equatable {
-  const DebtsState({
+class DebtState extends Equatable {
+  const DebtState({
     this.status = DebtStatus.initial,
     this.debts = const [],
     this.debt,

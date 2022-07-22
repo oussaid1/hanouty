@@ -17,6 +17,7 @@ class DebtTab extends ConsumerWidget {
       child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
+            backgroundColor: Colors.transparent,
             leading: Container(),
             elevation: 0,
             flexibleSpace: Column(
@@ -40,12 +41,7 @@ class DebtTab extends ConsumerWidget {
           ),
           body: const TabBarView(
             physics: BouncingScrollPhysics(),
-            children: [
-              ClientDebtListView(
-                debts: [],
-              ),
-              PaymentsListView(payments: [])
-            ],
+            children: [ClientDebtListView(), PaymentsListView(payments: [])],
           )),
     );
   }
@@ -217,13 +213,13 @@ class PaymentsListView extends ConsumerWidget {
                                 withDollarSign: true,
                                 right: const SizedBox.shrink(),
                                 price: payment.amount,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline3!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary),
+                                // style: Theme.of(context)
+                                //     .textTheme
+                                //     .headline3!
+                                //     .copyWith(
+                                //         color: Theme.of(context)
+                                //             .colorScheme
+                                //             .primary),
                               ),
                               subtitle: Text(
                                 payment.date.ddmmyyyy(),

@@ -1,5 +1,6 @@
 import 'package:hanouty/components.dart';
 import 'package:flutter/material.dart';
+import 'package:hanouty/utils/constents.dart';
 
 import '../local_components.dart';
 import 'price_number_zone.dart';
@@ -58,18 +59,21 @@ class MyInventoryTable extends StatelessWidget {
               rows: [
                 buildDataRow(
                   context,
+                  AppConstants.whiteOpacity,
                   cellTitle: data['row1Title'] ?? '',
                   value1: data['row1Value1'] ?? 0,
                   value2: data['row1Value2'] ?? 0,
                 ),
                 buildDataRow(
                   context,
+                  AppConstants.whiteOpacity,
                   cellTitle: data['row2Title'] ?? '',
                   value1: data['row2Value1'] ?? 0,
                   value2: data['row2Value2'] ?? 0,
                 ),
                 buildDataRow(
                   context,
+                  AppConstants.whiteOpacity,
                   cellTitle: data['row3Title'] ?? '',
                   value1: data['row3Value1'] ?? 0,
                   value2: data['row3Value2'] ?? 0,
@@ -106,10 +110,10 @@ class MyInventoryTable extends StatelessWidget {
                     right: const SizedBox.shrink(),
                     withDollarSign: false,
                     price: data['bottomValue'] ?? 0,
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline2!
-                        .copyWith(color: Theme.of(context).colorScheme.primary),
+                    // style: Theme.of(context)
+                    //     .textTheme
+                    //     .headline2!
+                    //     .copyWith(color: Theme.of(context).colorScheme.primary),
                   ),
                 ],
               ),
@@ -121,12 +125,13 @@ class MyInventoryTable extends StatelessWidget {
   }
 }
 
-buildDataRow(BuildContext context,
+buildDataRow(BuildContext context, Color rowColor,
     {required String cellTitle,
     required double value1,
     required double value2,
-    bool withDollarSign = false}) {
+    withDollarSign}) {
   return DataRow(
+    color: MaterialStateProperty.all(rowColor),
     cells: [
       DataCell(
         Text(
@@ -141,10 +146,10 @@ buildDataRow(BuildContext context,
           withDollarSign: withDollarSign,
           right: const SizedBox.shrink(),
           price: value1.toPrecision(2),
-          style: Theme.of(context)
-              .textTheme
-              .headline5!
-              .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          // style: Theme.of(context)
+          //     .textTheme
+          //     .headline5!
+          //     .copyWith(color: Theme.of(context).colorScheme.onPrimary),
         ),
       ),
       DataCell(
@@ -152,10 +157,10 @@ buildDataRow(BuildContext context,
           withDollarSign: withDollarSign,
           right: const SizedBox.shrink(),
           price: value2.toPrecision(2),
-          style: Theme.of(context)
-              .textTheme
-              .headline5!
-              .copyWith(color: Theme.of(context).colorScheme.onPrimary),
+          // style: Theme.of(context)
+          //     .textTheme
+          //     .headline5!
+          //     .copyWith(color: Theme.of(context).colorScheme.onPrimary),
         ),
       ),
     ],
@@ -167,8 +172,10 @@ buildTable(BuildContext context,
     required String label1,
     required String label2}) {
   return DataTable(
-    dataRowColor: MaterialStateProperty.all(
-        const Color.fromARGB(255, 60, 228, 234).withOpacity(0.1)),
+    columnSpacing: 30,
+    dataRowHeight: 30,
+    showBottomBorder: true,
+    headingRowHeight: 38,
     columns: [
       DataColumn(
         label: Text(
@@ -181,7 +188,7 @@ buildTable(BuildContext context,
       DataColumn(
         label: Text(
           label1,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+          style: Theme.of(context).textTheme.caption!.copyWith(
                 color: MThemeData.productColor,
               ),
         ),
@@ -189,7 +196,7 @@ buildTable(BuildContext context,
       DataColumn(
         label: Text(
           label2,
-          style: Theme.of(context).textTheme.bodyText1!.copyWith(
+          style: Theme.of(context).textTheme.caption!.copyWith(
                 color: MThemeData.serviceColor,
               ),
         ),
@@ -198,44 +205,3 @@ buildTable(BuildContext context,
     rows: rows,
   );
 }
-
-// buildTextOnValue(BuildContext context,
-//     {required double value, String? text, required bool withDollarSign}) {
-//   return SizedBox(
-//     //color: Color.fromARGB(34, 255, 255, 255).withOpacity(0.1),
-//     child: Padding(
-//       padding: const EdgeInsets.only(left: 8.0, top: 8, bottom: 8, right: 8),
-//       child: Row(
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//         children: [
-//           Text(
-//             '$text',
-//             style: Theme.of(context)
-//                 .textTheme
-//                 .caption!
-//                 .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-//           ),
-//           PriceNumberZone(
-//             withDollarSign: withDollarSign,
-//             right: const SizedBox.shrink(),
-//             price: value,
-//             style: Theme.of(context)
-//                 .textTheme
-//                 .headline6!
-//                 .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-//           ),
-//           PriceNumberZone(
-//             withDollarSign: withDollarSign,
-//             right: const SizedBox.shrink(),
-//             price: value,
-//             style: Theme.of(context)
-//                 .textTheme
-//                 .headline6!
-//                 .copyWith(color: Theme.of(context).colorScheme.onPrimary),
-//           ),
-//         ],
-//       ),
-//     ),
-//   );
-// }

@@ -22,6 +22,7 @@ class MThemeData {
     ],
   );
   /////// light theme
+  static const backgroundColor = Color(0xff61E3AF);
   static const accentColorm = Color(0xFF1EABFB);
   static const primaryColorm = Color(0xFF0074B6);
   static const secondaryColorm = Color(0xFF00446D);
@@ -219,13 +220,13 @@ class MThemeData {
   static const _light = FontWeight.w300;
 
   static final TextTheme _textTheme = TextTheme(
-      headline1: GoogleFonts.robotoMono(fontWeight: _bold, fontSize: 24.0),
+      headline1: GoogleFonts.robotoMono(fontWeight: _bold, fontSize: 22.0),
       /***************************** */
-      headline2: GoogleFonts.robotoMono(fontWeight: _semiBold, fontSize: 22.0),
+      headline2: GoogleFonts.robotoMono(fontWeight: _semiBold, fontSize: 20.0),
       /***************************** */
-      headline3: GoogleFonts.robotoMono(fontWeight: _semiBold, fontSize: 18.0),
+      headline3: GoogleFonts.robotoMono(fontWeight: _semiBold, fontSize: 16.0),
       /***************************** */
-      headline4: GoogleFonts.robotoMono(fontWeight: _medium, fontSize: 18.0),
+      headline4: GoogleFonts.robotoMono(fontWeight: _medium, fontSize: 16.0),
       /***************************** */
       headline5: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 16.0),
       /***************************** */
@@ -241,10 +242,10 @@ class MThemeData {
       overline: GoogleFonts.robotoMono(
           fontWeight: _light, fontSize: 12.0, color: hintTextColor),
       /***************************** */
-      bodyText1: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 16.0),
+      bodyText1: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 14.0),
       /***************************** */
-      bodyText2: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 14.0),
+      bodyText2: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 13.0),
       /***************************** */
 
-      button: GoogleFonts.robotoMono(fontWeight: _semiBold, fontSize: 14.0));
+      button: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 14.0));
 }

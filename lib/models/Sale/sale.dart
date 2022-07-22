@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:hanouty/local_components.dart';
 
 import '../../components.dart';
+import 'product_sales_data.dart';
+import 'service_sales_data.dart';
 
 part 'filtered_product_sales.dart';
 part 'filtered_sales.dart';
@@ -83,7 +85,10 @@ class SaleTableDataSource extends DataTableSource {
             onUnSellPressed?.call(row);
           },
         ),
-        DataCell(Text(row.productName.toString())),
+        DataCell(Text(
+          row.productName.toString(),
+          overflow: TextOverflow.ellipsis,
+        )),
         DataCell(Text(row.quantitySold.toString())),
         DataCell(Text(row.priceIn.toString())),
         DataCell(Text(row.priceOut.toString())),
@@ -100,7 +105,10 @@ class SaleTableDataSource extends DataTableSource {
         )),
         DataCell(Text(row.dateSold.ddmmyyyy())),
         DataCell(Text(row.category ?? '')),
-        DataCell(Text(row.description.toString())),
+        DataCell(Text(
+          row.description.toString(),
+          overflow: TextOverflow.ellipsis,
+        )),
         DataCell(
             const Icon(
               Icons.edit_rounded,
@@ -297,7 +305,7 @@ class SaleModel extends ProductModel {
   }
 
   factory SaleModel.fromMap(DocumentSnapshot map) {
-    final type = map['type'].toString().split('.').first == 'product'
+    final type = map['type'].toString().split('.').last == 'product'
         ? SaleType.product
         : SaleType.service;
     // print(map['type']);

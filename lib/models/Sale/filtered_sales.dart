@@ -2,12 +2,12 @@ part of 'sale.dart';
 
 class FilteredSales {
   List<SaleModel> sales;
-  FilterType filterType;
+  DateFilter filterType;
   MDateRange? selectedDateRange;
 
   FilteredSales({
     required this.sales,
-    this.filterType = FilterType.all,
+    this.filterType = DateFilter.all,
     this.selectedDateRange,
   });
 
@@ -15,13 +15,13 @@ class FilteredSales {
   /// @returns List<SaleModel>
 
   List<SaleModel> get filteredSalesByFilterType {
-    if (filterType == FilterType.all) {
+    if (filterType == DateFilter.all) {
       return sales;
-    } else if (filterType == FilterType.month) {
+    } else if (filterType == DateFilter.month) {
       return sales
           .where((sale) => sale.dateSold.month == DateTime.now().month)
           .toList();
-    } else if (filterType == FilterType.custom) {
+    } else if (filterType == DateFilter.custom) {
       return sales
           .where((sale) =>
               sale.dateSold.isAfter(selectedDateRange!.start) &&
@@ -31,20 +31,6 @@ class FilteredSales {
       return sales;
     }
   }
-
-  // List<SaleModel> get filteredSales {
-  //   switch (filterType) {
-  //     case FilterType.all:
-  //       return sales;
-  //     case FilterType.month:
-  //       return sales
-  //           .where((sale) => sale.dateSold.month == DateTime.now().month)
-  //           .toList();
-
-  //     default:
-  //       return sales;
-  //   }
-  // }
 
   List<SaleModel> salesByType(SaleType saleType) {
     switch (saleType) {
@@ -85,6 +71,15 @@ class FilteredSales {
     List<String> mlist = [];
     for (var element in sales) {
       mlist.add(element.shopClientId);
+    }
+    return mlist.toSet().toList();
+  }
+
+  /// distinct categories
+  List<String> get distinctCategories {
+    List<String> mlist = [];
+    for (var element in sales) {
+      mlist.add(element.category!);
     }
     return mlist.toSet().toList();
   }

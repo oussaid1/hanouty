@@ -8,6 +8,7 @@ import '../../blocs/salesbloc/sales_bloc.dart';
 import '../../blocs/sellactionsbloc/sellactions_bloc.dart';
 import '../../components.dart';
 import '../../local_components.dart';
+import '../../utils/constents.dart';
 import '../../utils/global_functions.dart';
 import '../../widgets/charts/inventory_widget.dart';
 import '../../widgets/search_widget.dart';
@@ -77,6 +78,10 @@ class SalesList extends StatelessWidget {
                 var productList = fullSalesState.products;
                 var dbSalesList = fullSalesState.dbSales;
                 var fullSales = fullSalesState.fullSales;
+                FilteredSales filteredSales = FilteredSales(
+                  sales: fullSales,
+                );
+                SalesData salesData = SalesData(sales: fullSales);
 
                 return Builder(builder: (context) {
                   return SingleChildScrollView(
@@ -98,7 +103,8 @@ class SalesList extends StatelessWidget {
                                   child: MySalesWidget(),
                                 ),
                               ),
-                              buildSalesByCategory(context),
+                              buildSalesByCategory(
+                                  context, salesData.salesByCategory),
                             ],
                           ),
                           const SizedBox(height: 15),
@@ -130,12 +136,32 @@ class SalesList extends StatelessWidget {
         ));
   }
 
-  Padding buildSalesByCategory(BuildContext context) {
+  buildSalesByCategory(BuildContext context, List<TaggedSales> taggedSales) {
+    return SalesByCategoryWidget(taggedSales: taggedSales);
+  }
+}
+
+class SalesByCategoryWidget extends StatefulWidget {
+  final List<TaggedSales> taggedSales;
+
+  const SalesByCategoryWidget({
+    Key? key,
+    required this.taggedSales,
+  }) : super(key: key);
+
+  @override
+  State<SalesByCategoryWidget> createState() => _SalesByCategoryWidgetState();
+}
+
+class _SalesByCategoryWidgetState extends State<SalesByCategoryWidget> {
+  TaggedSales? taggedSales1;
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       child: BluredContainer(
         width: 420,
-        height: 240,
+        height: 200,
         child: Column(
           children: [
             Padding(
@@ -155,54 +181,109 @@ class SalesList extends StatelessWidget {
                       ),
                     ],
                   ),
-                  DropDownButton(
-                    dropDownItems: const ['All', 'Food', 'Drink', 'Other'],
-                    onChanged: (value) {
-                      log(value!.toString());
-                    },
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Container(
+                      width: 120,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: const Color.fromARGB(61, 255, 255, 255),
+                      ),
+                      child: Autocomplete<TaggedSales>(
+                        optionsBuilder: (TextEditingValue textEditingValue) {
+                          if (textEditingValue.text == '') {
+                            return const Iterable<TaggedSales>.empty();
+                          }
+                          return widget.taggedSales.where((TaggedSales option) {
+                            return option.tag
+                                .toLowerCase()
+                                .contains(textEditingValue.text.toLowerCase());
+                          });
+                        },
+                        fieldViewBuilder: (BuildContext context,
+                            TextEditingController textEditingController,
+                            FocusNode focusNode,
+                            VoidCallback onFieldSubmitted) {
+                          return TextFormField(
+                            controller: textEditingController,
+                            decoration: InputDecoration(
+                              labelText: 'Category',
+                              // border: OutlineInputBorder(
+                              //   borderRadius: BorderRadius.circular(6.0),
+                              //   borderSide: BorderSide(
+                              //     width: 0.2,
+                              //       color: AppConstants.whiteOpacity),
+                              // ),
+                              border: InputBorder.none,
+                              hintText: 'category_hint',
+                              hintStyle: Theme.of(context).textTheme.subtitle2!,
+                              filled: true,
+                            ),
+                            focusNode: focusNode,
+                          );
+                        },
+                        onSelected: (TaggedSales selection) {
+                          setState(() {
+                            taggedSales1 = selection;
+                          });
+                          log('Selected: $selection');
+                        },
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 10),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(top: 4.0, bottom: 4),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Amount Sold'),
+                        Text(
+                          'Amount Sold',
+                          style: Theme.of(context).textTheme.caption!.copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
+                        ),
                         PriceNumberZone(
-                          price: 2999,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5!
-                              .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
+                          price: taggedSales1?.salesData.totalSoldAmount ?? 0,
+                          // style: Theme.of(context)
+                          //     .textTheme
+                          //     .headline5!
+                          //     .copyWith(
+                          //         color:
+                          //             Theme.of(context).colorScheme.onPrimary),
                           withDollarSign: true,
                         ),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(top: 4.0, bottom: 4),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Quantity Sold'),
+                        Text(
+                          'Quantity Sold',
+                          style: Theme.of(context).textTheme.caption!.copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
+                        ),
                         PriceNumberZone(
-                          price: 2999,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline5!
-                              .copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
+                          price: taggedSales1?.salesData.totalQuantitySold ?? 0,
+                          // style: Theme.of(context)
+                          //     .textTheme
+                          //     .headline5!
+                          //     .copyWith(
+                          //         color:
+                          //             Theme.of(context).colorScheme.onPrimary),
                           withDollarSign: true,
                         ),
                       ],
@@ -210,18 +291,23 @@ class SalesList extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(top: 4.0, bottom: 4),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Profit'),
+                        Text(
+                          'Profit',
+                          style: Theme.of(context).textTheme.caption!.copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
+                        ),
                         PriceNumberZone(
-                          price: 2999,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline4!
-                              .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
+                          price: taggedSales1?.salesData.totalNetProfit ?? 0,
+                          // style: Theme.of(context)
+                          //     .textTheme
+                          //     .headline4!
+                          //     .copyWith(
+                          //         color: Theme.of(context).colorScheme.primary),
                           withDollarSign: true,
                         ),
                       ],

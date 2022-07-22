@@ -44,7 +44,7 @@ class DebtList extends ConsumerWidget {
                                 amount: debt.amount,
                                 date: debt.timeStamp,
                                 clientId: debt.clientId!,
-                                clientName: debt.clientName,
+                                clientName: debt.clientId,
                                 description: '',
                               ),
                             ),
@@ -186,7 +186,7 @@ class DebtList extends ConsumerWidget {
                     ),
                   ),
                   title: Text(
-                    '${debt.clientName}',
+                    '${debt.clientId}',
                     style: Theme.of(context)
                         .textTheme
                         .bodyText2!
@@ -196,9 +196,9 @@ class DebtList extends ConsumerWidget {
                     withDollarSign: true,
                     right: const SizedBox.shrink(), //const Text('left'),
                     price: debt.amount,
-                    style: Theme.of(context).textTheme.headline2!.copyWith(
-                          color: MThemeData.serviceColor,
-                        ),
+                    // style: Theme.of(context).textTheme.headline2!.copyWith(
+                    //       color: MThemeData.serviceColor,
+                    //     ),
                   ),
                   subtitle: Text(
                     debt.deadLine.ddmmyyyy(),

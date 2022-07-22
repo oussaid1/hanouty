@@ -2,11 +2,11 @@ part of 'debt.dart';
 
 class FilteredDebts {
   late List<DebtModel> debts;
-  late FilterType filterType;
+  late DateFilter filterType;
   // List<ShopClientModel>? shopClients;
   FilteredDebts({
     required this.debts,
-    this.filterType = FilterType.all,
+    this.filterType = DateFilter.all,
     // this.shopClients,
   });
 
@@ -21,7 +21,7 @@ class FilteredDebts {
   List<DebtModel> debtsByClient(List<DebtModel> debts) {
     List<DebtModel> debts = [];
     for (var item in distinctClients) {
-      debts = debts.where((element) => element.clientName == item).toList();
+      debts = debts.where((element) => element.clientId == item).toList();
     }
     return debts;
   }

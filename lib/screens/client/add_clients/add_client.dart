@@ -55,55 +55,38 @@ class AddClientState extends ConsumerState<AddClient> {
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
     log('add stuff ${context.widget}');
-    return SizedBox(
-      width: context.width,
-      height: context.height,
-      child: Column(
-        children: [
-          buildFlexible(context, ref),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        buildFlexible(context, ref),
+      ],
     );
   }
 
-  Flexible buildFlexible(BuildContext context, WidgetRef ref) {
-    return Flexible(
-      fit: FlexFit.tight,
-      flex: 2,
-      child: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(8),
-          width: Responsive.isDesktop(context) ? 600 : context.width - 10,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            //color: Theme.of(context).colorScheme.onBackground,
-          ),
-          child: Form(
-            key: formKey,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  buildClientName(ref),
-                  const SizedBox(height: 20),
-                  buildClientPhone(ref),
-                  const SizedBox(height: 20),
-                  buildClientEmail(ref),
-                  const SizedBox(height: 20),
-                  buildRating(ref, context),
-                  const SizedBox(height: 20),
-                  buildSaveButton(ref, context),
-                  const SizedBox(
-                    height: 100,
-                  ) //but
-                ],
-              ),
-            ),
+  buildFlexible(BuildContext context, WidgetRef ref) {
+    return SingleChildScrollView(
+      child: Form(
+        key: formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 50),
+              buildClientName(ref),
+              const SizedBox(height: 20),
+              buildClientPhone(ref),
+              const SizedBox(height: 20),
+              buildClientEmail(ref),
+              const SizedBox(height: 20),
+              buildRating(ref, context),
+              const SizedBox(height: 20),
+              buildSaveButton(ref, context),
+              const SizedBox(
+                height: 100,
+              ) //but
+            ],
           ),
         ),
       ),

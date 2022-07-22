@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hanouty/components.dart';
+import 'package:hanouty/blocs/filteredsalesbloc/filteredsales_bloc.dart';
 import '../../blocs/fullsalesbloc/fullsales_bloc.dart';
 import '../../blocs/productbloc/product_bloc.dart';
-import '../../blocs/salesbloc/sales_bloc.dart';
+import '../../components.dart';
 import '../../local_components.dart';
 import '../../models/Sale/product_sales_data.dart';
 import '../../models/Sale/service_sales_data.dart';
@@ -35,8 +35,8 @@ class MyStock extends StatelessWidget {
       builder: (context, state) {
         if (state.status == ProductStatus.loaded) {
           var filteredProducts = FilteredProduct(products: state.products);
-          var productStock = ProductStockData(
-              products: filteredProducts.productsfilteredByCat);
+          var productStock =
+              ProductStockData(products: filteredProducts.products);
           return MyInventoryTable(
             data: {
               'iconData': FontAwesomeIcons.store,
@@ -83,26 +83,19 @@ class MySalesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FullSalesBloc, FullSalesState>(
+    return BlocBuilder<FilteredSalesBloc, FilteredSalesState>(
       builder: (context, state) {
-        if (state.status == FullSalesStatus.loaded) {
-          // log('SalesLoadedState ${state.sales.length}');
-          FilteredSales filteredSales = FilteredSales(
-              sales: state.fullSales,
-              filterType: FilterType.all,
-              selectedDateRange: null);
-
+        if (state is FilteredSalesLoadedState) {
           /// all sales data
-          SalesData salesData =
-              SalesData(filteredSales: filteredSales.filteredSalesByFilterType);
+          SalesData salesData = state.filteredSalesData;
 
           /// techserviceSales Data
           TechServiceSalesData techServiceSalesData =
-              TechServiceSalesData(sales: salesData.filteredSales);
+              salesData.serviceSalesData;
 
           /// productSales Data
-          ProductSalesData productSalesData =
-              ProductSalesData(sales: salesData.filteredSales);
+          ProductSalesData productSalesData = salesData.productSalesData;
+
           return MyInventoryTable(
             data: {
               'iconData': FontAwesomeIcons.coins,
@@ -126,7 +119,7 @@ class MySalesWidget extends StatelessWidget {
           return Center(
             child: Column(
               children: [
-                Text('Loading...${state.status}'),
+                Text('Loading...${state.toString()}'),
                 const CircularProgressIndicator(),
               ],
             ),
@@ -137,15 +130,15 @@ class MySalesWidget extends StatelessWidget {
   }
 }
 
-class SalesByCategoryWidgetBlurred extends StatelessWidget {
-  const SalesByCategoryWidgetBlurred({super.key});
+// class SalesByCategoryWidgetBlurred extends StatelessWidget {
+//   const SalesByCategoryWidgetBlurred({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return const BluredContainer(
-        height: 320, width: 420, child: MySalesWidget());
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return const BluredContainer(
+//         height: 320, width: 420, child: SalesByCategoryWidget([]));
+//   }
+// }
 
 // class SalesByCategoryWidget extends StatelessWidget {
 //   final SalesData salesData;
@@ -183,66 +176,66 @@ class SalesByCategoryWidgetBlurred extends StatelessWidget {
 //   }
 // }
 
-class DropDownButton extends StatelessWidget {
-  final List<String> dropDownItems;
-  final Function(String?) onChanged;
-  final Function(String)? onInit;
-  final String? initialValue;
-  const DropDownButton({
-    Key? key,
-    required this.dropDownItems,
-    required this.onChanged,
-    this.onInit,
-    this.initialValue,
-  }) : super(key: key);
+// class DropDownButton extends StatelessWidget {
+//   final List<String> dropDownItems;
+//   final Function(String?) onChanged;
+//   final Function(String)? onInit;
+//   final String? initialValue;
+//   const DropDownButton({
+//     Key? key,
+//     required this.dropDownItems,
+//     required this.onChanged,
+//     this.onInit,
+//     this.initialValue,
+//   }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Container(
-        width: 120,
-        height: 32,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          color: const Color.fromARGB(61, 255, 255, 255),
-        ),
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton<String>(
-            isExpanded: true,
-            isDense: true,
-            alignment: Alignment.center,
-            borderRadius: BorderRadius.circular(8),
-            value: initialValue,
-            icon: const Icon(Icons.arrow_drop_down),
-            iconSize: 24,
-            elevation: 16,
-            style: const TextStyle(color: Colors.deepPurple),
-            underline: Container(
-              height: 2,
-              color: const Color.fromARGB(255, 77, 175, 255),
-            ),
-            onChanged: (String? newValue) {
-              onChanged(newValue);
-            },
-            items: dropDownItems.map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text(
-                    value,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(horizontal: 8.0),
+//       child: Container(
+//         width: 120,
+//         height: 32,
+//         decoration: BoxDecoration(
+//           borderRadius: BorderRadius.circular(8),
+//           color: const Color.fromARGB(61, 255, 255, 255),
+//         ),
+//         child: DropdownButtonHideUnderline(
+//           child: DropdownButton<String>(
+//             isExpanded: true,
+//             isDense: true,
+//             alignment: Alignment.center,
+//             borderRadius: BorderRadius.circular(8),
+//             value: initialValue,
+//             icon: const Icon(Icons.arrow_drop_down),
+//             iconSize: 24,
+//             elevation: 16,
+//             style: const TextStyle(color: Colors.deepPurple),
+//             underline: Container(
+//               height: 2,
+//               color: const Color.fromARGB(255, 77, 175, 255),
+//             ),
+//             onChanged: (String? newValue) {
+//               onChanged(newValue);
+//             },
+//             items: dropDownItems.map<DropdownMenuItem<String>>((String value) {
+//               return DropdownMenuItem<String>(
+//                 value: value,
+//                 child: Padding(
+//                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+//                   child: Text(
+//                     value,
+//                     textAlign: TextAlign.center,
+//                   ),
+//                 ),
+//               );
+//             }).toList(),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 // class My13SalesWidget extends ConsumerWidget {
 //   const My13SalesWidget({
 //     Key? key,

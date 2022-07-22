@@ -9,7 +9,7 @@
 //   final MDateRange? dateRange;
 // }
 
-enum FilterType {
+enum DateFilter {
   all,
   month,
   custom,
