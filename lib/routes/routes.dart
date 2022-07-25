@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 
 import '../screens/add_tostock/add_screen_tab.dart';
-import '../screens/debt/debt_tab_screen.dart';
+import '../screens/debt/deb_list.dart';
 import '../screens/device_specific/homeforweb/home_for_web.dart';
 import '../screens/expenses/expenses_tab.dart';
 import '../screens/income/income_tab.dart';
@@ -69,7 +69,7 @@ class RouteGenerator {
         case debts:
           return const HomeForAll(
             title: 'debts',
-            centreWidget: DebtTab(),
+            centreWidget: DebtsView(),
           );
         case income:
           return const HomeForAll(

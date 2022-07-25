@@ -29,7 +29,13 @@ class HomeForAll extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      decoration: const BoxDecoration(gradient: MThemeData.gradient2),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/background.png'),
+          fit: BoxFit.cover,
+        ),
+        //gradient: MThemeData.gradient2,
+      ),
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
@@ -85,11 +91,11 @@ class HomeForAll extends ConsumerWidget {
                 PaymentsBloc(databaseOperations: GetIt.I<DatabaseOperations>())
                   ..add(GetPaymentsEvent()),
           ),
-          BlocProvider(
-            create: (context) => FilteredSalesBloc(FullSalesBloc(
-                databaseOperations: GetIt.I<DatabaseOperations>()))
-              ..add(GetFilteredSaleDataEvent(DateFilter.all)),
-          ),
+          // BlocProvider(
+          //   create: (context) => FilteredSalesBloc(FullSalesBloc(
+          //       databaseOperations: GetIt.I<DatabaseOperations>()))
+          //     ..add(const GetFilteredSaleDataEvent(DateFilter.all)),
+          // ),
         ],
         child: Scaffold(
           // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

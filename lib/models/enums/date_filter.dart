@@ -9,8 +9,18 @@
 //   final MDateRange? dateRange;
 // }
 
+import 'package:flutter/material.dart';
 enum DateFilter {
-  all,
-  month,
-  custom,
+  all(),
+  month(),
+  custom(),
+  Custom(), 
+  final MDateRange? dateRange;
+}
+
+@immutable
+class Custom {
+ 
+
+  const Custom({this.dateRange});
 }

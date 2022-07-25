@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hanouty/blocs/filteredsalesbloc/filteredsales_bloc.dart';
 import 'package:hanouty/components.dart';
 
 import '../../local_components.dart';
@@ -25,47 +24,47 @@ class RangeFilterSpinner extends StatelessWidget {
 
   /// build popup menu
   Widget buildFilterSelectMenu(BuildContext context) {
-    return DropdownButton<DateFilter>(
-      onChanged: (value) {
-        switch (value) {
-          case DateFilter.all:
-            context
-                .read<FilteredSalesBloc>()
-                .add(const FilterSalesAutoState(filterType: DateFilter.custom));
-            break;
-          case DateFilter.custom:
-            context.read<FilteredSalesBloc>().add(FilterSalesByCustomEvent(
-                  filterType: DateFilter.custom,
-                  dateRange: MDateRange(
-                    start: DateTime.now().subtract(const Duration(days: 30)),
-                    end: DateTime.now(),
-                  ),
-                ));
-            break;
-          // case FilterType.today:
-          //   context.read(filterCubit).setFilter(FilterType.today);
-          //   break;
-          // case FilterType.week:
-          //   context.read(filterCubit).setFilter(FilterType.week);
-          //   break;
-          case DateFilter.month:
-            context
-                .read<FilteredSalesBloc>()
-                .add(const FilterSalesAutoState(filterType: DateFilter.custom));
-            break;
-          default:
-            break;
-        }
-      },
-      items: DateFilter.values.map((DateFilter value) {
-        return DropdownMenuItem<DateFilter>(
-            value: value,
-            child: Text(
-              DateFilter.custom.name.tr(),
-              textAlign: TextAlign.start,
-              style: Theme.of(context).textTheme.subtitle1!,
-            ));
-      }).toList(),
+    return DropdownButtonHideUnderline(
+      child: DropdownButton<DateFilter>(
+        onChanged: (value) {
+          switch (value) {
+            case DateFilter.all:
+              context.read<FilteredSalesBloc>().add(
+                  const FilterSalesAutoState(filterType: DateFilter.custom));
+              break;
+            case DateFilter.custom:
+              context.read<FilteredSalesBloc>().add(FilterSalesByCustomEvent(
+                    filterType: DateFilter.custom,
+                    dateRange: MDateRange(
+                      start: DateTime.now().subtract(const Duration(days: 30)),
+                      end: DateTime.now(),
+                    ),
+                  ));
+              break;
+            // case FilterType.today:
+            //   context.read(filterCubit).setFilter(FilterType.today);
+            //   break;
+            // case FilterType.week:
+            //   context.read(filterCubit).setFilter(FilterType.week);
+            //   break;
+            case DateFilter.month:
+              context.read<FilteredSalesBloc>().add(
+                  const FilterSalesAutoState(filterType: DateFilter.custom));
+              break;
+            default:
+              break;
+          }
+        },
+        items: DateFilter.values.map((DateFilter value) {
+          return DropdownMenuItem<DateFilter>(
+              value: value,
+              child: Text(
+                value.name.tr(),
+                textAlign: TextAlign.start,
+                style: Theme.of(context).textTheme.subtitle1!,
+              ));
+        }).toList(),
+      ),
     );
   }
 }

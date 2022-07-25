@@ -1,3 +1,4 @@
+import 'package:hanouty/local_components.dart';
 import 'package:hanouty/utils/constents.dart';
 import 'package:hanouty/utils/glasswidgets.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ import 'spinners/search_spinner.dart';
 class SearchByWidget extends StatefulWidget {
   final bool withCategory;
   final List<String> listOfCategories;
-  final void Function(String) onChanged;
+  final void Function(String)? onChanged;
   final String? initialCategoryValue;
   final void Function(String) onSearchTextChanged;
   final void Function(String, String) onBothChanged;
@@ -18,7 +19,7 @@ class SearchByWidget extends StatefulWidget {
     Key? key,
     this.withCategory = false,
     required this.listOfCategories,
-    required this.onChanged,
+    this.onChanged,
     required this.onSearchTextChanged,
     required this.onBothChanged,
 
@@ -38,27 +39,27 @@ class _SearchByWidgetState extends State<SearchByWidget> {
     return GlassContainer(
       child: Row(
         children: [
-          if (widget.withCategory)
-            SizedBox(
-                width: 200,
-                child: Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SearchCategorySpinner(
-                      initialItem: 'Name',
-                      onChanged: (value) {
-                        setState(() {
-                          selectedCategory = value;
-                        });
-                        widget.onChanged(value);
-                      },
-                      list: widget.listOfCategories,
+          (widget.withCategory)
+              ? SizedBox(
+                  width: 200,
+                  child: Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SearchCategorySpinner(
+                        initialItem: 'Name',
+                        onChanged: (value) {
+                          setState(() {
+                            selectedCategory = value;
+                          });
+                          //if (widget.onChanged != null)
+                          widget.onChanged!(value);
+                        },
+                        list: widget.listOfCategories,
+                      ),
                     ),
-                  ),
-                ))
-          else
-            const SizedBox.shrink(),
+                  ))
+              : const SizedBox.shrink(),
           Expanded(
             flex: 2,
             child: SizedBox(
@@ -76,7 +77,7 @@ class _SearchByWidgetState extends State<SearchByWidget> {
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
-                      .copyWith(color: Theme.of(context).colorScheme.primary),
+                      .copyWith(color: context.theme.primary),
                   decoration: InputDecoration(
                     disabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(

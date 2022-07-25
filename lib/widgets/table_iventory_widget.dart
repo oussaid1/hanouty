@@ -129,7 +129,7 @@ buildDataRow(BuildContext context, Color rowColor,
     {required String cellTitle,
     required double value1,
     required double value2,
-    withDollarSign}) {
+    bool withDollarSign = false}) {
   return DataRow(
     color: MaterialStateProperty.all(rowColor),
     cells: [

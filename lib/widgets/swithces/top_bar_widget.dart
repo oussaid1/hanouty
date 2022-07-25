@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hanouty/blocs/filteredsalesbloc/filteredsales_bloc.dart';
 import 'package:hanouty/components.dart';
 import '../../local_components.dart';
 import '../../localization/language.dart';
@@ -16,9 +17,6 @@ class TopBarWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //final appThemeState = ref.watch(appThemeStateNotifier);
-    //var selectedRangeFilter = ref.watch(rangeFilterProvider.state);
-    // final filterType = context.watch<FilterCubit>().state;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -26,10 +24,6 @@ class TopBarWidget extends ConsumerWidget {
 
         buildLocalSwitch(context, ref),
         myAppBarIcon(context, ref),
-        // IconButton(
-        //   icon: const Icon(Icons.settings),
-        //   onPressed: () {},
-        // ),
         // buildThemeSwitch(context, appThemeState),
         if (Responsive.isDesktop(context)) const SizedBox(width: 10),
       ],

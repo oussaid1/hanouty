@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hanouty/local_components.dart';
 
-import '../../blocs/filteredsalesbloc/filteredsales_bloc.dart';
+import '../../blocs/fullsalesbloc/fullsales_bloc.dart';
 import '../../components.dart';
 
 class DateRangePicker extends ConsumerWidget {
@@ -9,12 +9,12 @@ class DateRangePicker extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return BlocBuilder<FilteredSalesBloc, FilteredSalesState>(
+    return BlocBuilder<FullSalesBloc, FullSalesState>(
       builder: (context, state) {
-        if (state is FilteredSalesLoadedState) {
-          if (state.filterType == DateFilter.custom) {
-            return Container();
-          }
+        if (state.status == FullSalesStatus.loaded) {
+          // if (state.filterType == DateFilter.custom) {
+          //   return Container();
+          // }
           return MaterialButton(
             child: Wrap(
               direction: Axis.horizontal,

@@ -61,7 +61,7 @@ class FilteredDebts {
 // get debts which are 10 days or more overdue
   List<DebtModel> overdueDebts({int days = 10}) {
     List<DebtModel> debtsz = debts;
-    debts.retainWhere((debt) => debt.daysOverdue >= days);
+    // debts.retainWhere((debt) => debt.daysOverdue >= days);
     return debtsz;
   }
 

@@ -83,11 +83,11 @@ class MySalesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FilteredSalesBloc, FilteredSalesState>(
+    return BlocBuilder<FullSalesBloc, FullSalesState>(
       builder: (context, state) {
-        if (state is FilteredSalesLoadedState) {
+        if (state.status == FullSalesStatus.loaded) {
           /// all sales data
-          SalesData salesData = state.filteredSalesData;
+          SalesData salesData = SalesData(sales: state.fullSales);
 
           /// techserviceSales Data
           TechServiceSalesData techServiceSalesData =

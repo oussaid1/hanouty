@@ -88,6 +88,9 @@ flutter:
     - assets/translations/fr.json
     - assets/icons/
     - assets/svgs/
+    - assets/images/lightback.png
+    - assets/images/lightback.jpg
+    - assets/images/background.jpg
   #- assets/icons/logocircle.svg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

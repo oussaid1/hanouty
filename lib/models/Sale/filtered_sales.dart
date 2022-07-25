@@ -84,30 +84,6 @@ class FilteredSales {
     return mlist.toSet().toList();
   }
 
-  List<String> distinctddmmyy(SaleType saleType) {
-    List<String> mlist = [];
-    for (var element in salesByType(saleType)) {
-      mlist.add(element.dateSold.ddmmyyyy());
-    }
-    return mlist.toSet().toList();
-  }
-
-  List<String> distinctmmyy(SaleType saleType) {
-    List<String> mlist = [];
-    for (var element in salesByType(saleType)) {
-      mlist.add(element.dateSold.mmyyyy());
-    }
-    return mlist.toSet().toList();
-  }
-
-  List<String> distinctyy(SaleType saleType) {
-    List<String> mlist = [];
-    for (var element in salesByType(saleType)) {
-      mlist.add(element.dateSold.yyyy());
-    }
-    return mlist.toSet().toList();
-  }
-
 /////////////////////////////////////////////////////////////////////
   int get salesCount {
     int mcount = 0;
@@ -160,18 +136,6 @@ class FilteredSales {
   List<SaleModel> soldProductsByDay(SaleType saleType, String dateTime) {
     return salesByType(saleType)
         .where((element) => element.dateSold.ddmmyyyy() == dateTime)
-        .toList();
-  }
-
-  List<SaleModel> soldProductsByMonth(SaleType saleType, String dateTime) {
-    return salesByType(saleType)
-        .where((element) => element.dateSold.mmyyyy() == dateTime)
-        .toList();
-  }
-
-  List<SaleModel> soldProductsByYear(SaleType saleType, String dateTime) {
-    return salesByType(saleType)
-        .where((element) => element.dateSold.yyyy() == dateTime)
         .toList();
   }
 }

@@ -1,16 +1,11 @@
 import 'dart:developer';
 
-import 'package:hanouty/models/Sale/sale.dart';
-import 'package:hanouty/models/expenses/expenses.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-import '../components.dart';
-import '../models/product/product.dart';
+import '../models/Sale/sale.dart';
+import '../models/models.dart';
 
-// Our design contains Neumorphism design and i made a extention for it
-// We can apply it on any  widget
-/// TODO: Test this extension
 extension Neumorphism on Widget {
   addNeumorphism({
     double borderRadius = 10.0,
@@ -71,52 +66,79 @@ extension DtExtension on DateTime {
     }
   }
 
-  String ddmmyyyy() {
-    try {
-      return DateFormat("yyyy-MM-dd").format(this);
-    } catch (e) {
-      return '';
-    }
-  }
+//   String ddmmyyyy() {
+//     try {
+//       return DateFormat("yyyy-MM-dd").format(this);
+//     } catch (e) {
+//       return '';
+//     }
+//   }
 
-  String mmyyyy() {
-    try {
-      return DateFormat("yyyy-MM").format(this);
-    } catch (e) {
-      return '';
-    }
-  }
+//   String mmyyyy() {
+//     try {
+//       return DateFormat("yyyy-MM").format(this);
+//     } catch (e) {
+//       return '';
+//     }
+//   }
 
-  String yyyy() {
-    try {
-      return DateFormat("yyyy").format(this);
-    } catch (e) {
-      return '';
-    }
-  }
+//   String yyyy() {
+//     try {
+//       return DateFormat("yyyy").format(this);
+//     } catch (e) {
+//       return '';
+//     }
+//   }
 
-  DateTime stripTime() {
-    {
-      return DateTime(year, month, day, 0, 0, 0);
-    }
-  }
+//   DateTime stripTime() {
+//     {
+//       return DateTime(year, month, day, 0, 0, 0);
+//     }
+//   }
 
-  DateTime stripTimeDay() {
-    {
-      return DateTime(year, month, 00);
-    }
-  }
+//   DateTime stripTimeDay() {
+//     {
+//       return DateTime(year, month, 00);
+//     }
+//   }
 
-  DateTime stripTimeDayMonth() {
-    {
-      return DateTime(year, 00, 00);
-    }
-  }
+//   DateTime stripTimeDayMonth() {
+//     {
+//       return DateTime(year, 00, 00);
+//     }
+//   }
+// }
+
+// extension EnumExtension on SaleType {
+//   String get value => describeEnum(this);
+// }
+
+// extension EnumExtension2 on ExpenseCategory {
+//   String get value => describeEnum(this);
+// }
+
+// extension EnumParser on String {
+//   ExpenseCategory toExpenseCategory() {
+//     return ExpenseCategory.values.firstWhere(
+//         (e) =>
+//             e.toString().toLowerCase() == 'ExpenseCategory.$this'.toLowerCase(),
+//         orElse: () => ExpenseCategory.other); //return null if not found
+//   }
+// }
 }
 
-extension Ex on double {
-  double toPrecision(int digitsAfter) =>
-      double.parse(toStringAsFixed(digitsAfter));
+extension EnumParser2 on String {
+  DateTime? get getDate {
+    List<String> date = split('-');
+    if (date.length == 3) {
+      return DateTime.parse(this);
+    } else if (date.length == 2) {
+      return DateTime.parse('${date[0]}-${date[1]}-01');
+    } else if (date.length == 1) {
+      return DateTime.parse('${date[0]}-01-01');
+    }
+    return null;
+  }
 }
 
 /// extension on [List<String>] to turn all items to lower case
@@ -127,6 +149,24 @@ extension LowerCaseList on List<String> {
     }
     return this;
   }
+}
+
+/// extension on DateTime to get a string in the format dd/mm/yyyy
+extension DateTimeExt on DateTime {
+  String ddmmyyyy() {
+    return '$day/$month/$year';
+  }
+}
+
+/// extention on context to get the current theme
+extension ThemeExt on BuildContext {
+  ColorScheme get theme => Theme.of(this).colorScheme;
+  TextTheme get textTheme => Theme.of(this).textTheme;
+}
+
+extension Ex on double {
+  double toPrecision(int digitsAfter) =>
+      double.parse(toStringAsFixed(digitsAfter));
 }
 
 extension SaleListExtension on List<SaleModel> {

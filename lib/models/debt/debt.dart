@@ -1,16 +1,25 @@
 import 'dart:convert';
+import 'dart:math';
 
-import 'package:hanouty/components.dart';
-
-import '../../local_components.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hanouty/local_components.dart';
 import '../payment/payment.dart';
 part 'debt_data.dart';
 part 'filtered_debts.dart';
 
+enum DebtFilter {
+  all,
+  overdue,
+  today,
+  thisWeek,
+  thisMonth,
+  thisYear,
+}
+
 class DebtModel {
   String? id;
   String? productName;
+  String? clientName;
   String? clientId;
   String? type; // product or service
   DateTime timeStamp = DateTime.now();
@@ -38,6 +47,7 @@ class DebtModel {
     this.productName,
     this.clientId,
     this.type,
+    this.clientName,
     required this.amount,
     required this.paidAmount,
     required this.timeStamp,
@@ -51,16 +61,17 @@ class DebtModel {
     String? productName,
     String? type,
     double? amount,
-    double? paid,
+    double? paidAmount,
     int? count,
   }) {
     return DebtModel(
       id: id ?? this.id,
       productName: productName ?? this.productName,
       clientId: clientId ?? this.clientId,
+      clientName: clientName ?? this.clientName,
       type: type ?? this.type,
       amount: amount ?? this.amount,
-      paidAmount: paid ?? this.paidAmount,
+      paidAmount: paidAmount ?? this.paidAmount,
       timeStamp: timeStamp,
       deadLine: deadLine,
     );
@@ -70,6 +81,7 @@ class DebtModel {
     return {
       'productName': productName,
       'clientId': clientId,
+      'clientName': clientName,
       'type': type,
       'amount': amount,
       'paid': paidAmount,
@@ -88,6 +100,7 @@ class DebtModel {
       id: map.id,
       productName: map['productName'] ?? '',
       clientId: map['clientId'] ?? '',
+      clientName: map['clientName'] ?? '',
       type: map['type'] ?? '',
       amount: map['amount'] ?? 0,
       paidAmount: map['paid'] ?? 0,
@@ -105,7 +118,7 @@ class DebtModel {
 
   @override
   String toString() {
-    return 'Debt(id: $id, productName: $productName,clientId:$clientId , type: $type, amount: $amount, paid: $paidAmount, dueDate:$deadLine,timeStamp:$timeStamp)';
+    return 'Debt(id: $id, productName: $productName,clientId:$clientId, clientName:$clientName , type: $type, amount: $amount, paid: $paidAmount, dueDate:$deadLine,timeStamp:$timeStamp)';
   }
 
   @override
@@ -116,6 +129,7 @@ class DebtModel {
         other.id == id &&
         other.productName == productName &&
         other.clientId == clientId &&
+        other.clientName == clientName &&
         other.type == type &&
         other.amount == amount &&
         other.deadLine == deadLine &&
@@ -128,10 +142,32 @@ class DebtModel {
     return id.hashCode ^
         productName.hashCode ^
         clientId.hashCode ^
+        clientName.hashCode ^
         type.hashCode ^
         amount.hashCode ^
         paidAmount.hashCode ^
         deadLine.hashCode ^
         timeStamp.hashCode;
+  }
+
+  /// fake debts
+  static List<DebtModel> get fakeDebts {
+    List<DebtModel> debts = [];
+    for (var i = 0; i < 10; i++) {
+      debts.add(
+        DebtModel(
+          id: '1',
+          productName: 'product $i',
+          clientId: '$i',
+          clientName: 'client $i',
+          type: 'product',
+          amount: Random().nextInt(100000).toDouble(),
+          paidAmount: 0,
+          timeStamp: DateTime.now()..add(Duration(days: -i)),
+          deadLine: DateTime.now().add(const Duration(days: 30)),
+        ),
+      );
+    }
+    return debts;
   }
 }
