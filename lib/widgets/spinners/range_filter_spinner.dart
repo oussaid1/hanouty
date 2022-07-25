@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
 
+import '../../blocs/bloc/date_filter_bloc.dart';
 import '../../local_components.dart';
 import '../../utils/constents.dart';
 
@@ -26,33 +27,74 @@ class RangeFilterSpinner extends StatelessWidget {
   Widget buildFilterSelectMenu(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: DropdownButton<DateFilter>(
+        alignment: Alignment.center,
+        value: context.watch<DateFilterBloc>().state.filterType,
         onChanged: (value) {
           switch (value) {
             case DateFilter.all:
-              context.read<FilteredSalesBloc>().add(
-                  const FilterSalesAutoState(filterType: DateFilter.custom));
+              context
+                  .read<DateFilterBloc>()
+                  .add(const UpdateFilterEvent(filterType: DateFilter.all));
               break;
             case DateFilter.custom:
-              context.read<FilteredSalesBloc>().add(FilterSalesByCustomEvent(
-                    filterType: DateFilter.custom,
-                    dateRange: MDateRange(
-                      start: DateTime.now().subtract(const Duration(days: 30)),
-                      end: DateTime.now(),
+              showDialog<void>(
+                context: context,
+                builder: (BuildContext bcontext) {
+                  return AlertDialog(
+                    title: const Text('Date Range Picker'),
+                    content: SizedBox(
+                      height: 300,
+                      width: 400,
+                      child: Material(
+                        child: Scaffold(
+                          body: SfDateRangePicker(
+                              backgroundColor:
+                                  Theme.of(context).backgroundColor,
+                              showTodayButton: true,
+                              rangeSelectionColor:
+                                  MThemeData.accentColor.withOpacity(0.5),
+                              initialSelectedDate: DateTime.now(),
+                              initialDisplayDate: DateTime.now(),
+                              todayHighlightColor: MThemeData.revenuColor,
+                              selectionColor: MThemeData.accentColor,
+                              selectionShape:
+                                  DateRangePickerSelectionShape.rectangle,
+                              selectionMode: DateRangePickerSelectionMode.range,
+                              showActionButtons: true,
+                              onCancel: () {
+                                Navigator.pop(context);
+                              },
+                              onSubmit: (Object? range) {
+                                var dateRange = range as PickerDateRange;
+
+                                context
+                                    .read<DateFilterBloc>()
+                                    .add(UpdateFilterEvent(
+                                      filterType: DateFilter.custom,
+                                      dateRange: MDateRange(
+                                        start: dateRange.startDate!,
+                                        end: dateRange.endDate!,
+                                      ),
+                                    ));
+                                Navigator.pop(context);
+                              }),
+                        ),
+                      ),
                     ),
-                  ));
+                  );
+                },
+              );
               break;
-            // case FilterType.today:
-            //   context.read(filterCubit).setFilter(FilterType.today);
-            //   break;
-            // case FilterType.week:
-            //   context.read(filterCubit).setFilter(FilterType.week);
-            //   break;
+
             case DateFilter.month:
-              context.read<FilteredSalesBloc>().add(
-                  const FilterSalesAutoState(filterType: DateFilter.custom));
+              context
+                  .read<DateFilterBloc>()
+                  .add(const UpdateFilterEvent(filterType: DateFilter.month));
               break;
             default:
-              break;
+              context
+                  .read<DateFilterBloc>()
+                  .add(const UpdateFilterEvent(filterType: DateFilter.all));
           }
         },
         items: DateFilter.values.map((DateFilter value) {
@@ -68,6 +110,7 @@ class RangeFilterSpinner extends StatelessWidget {
     );
   }
 }
+
 // class RangeFilterSpinner extends ConsumerWidget {
 //   const RangeFilterSpinner({
 //     Key? key,

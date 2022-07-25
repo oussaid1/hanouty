@@ -1,10 +1,12 @@
 part of 'date_filter_bloc.dart';
 
-abstract class DateFilterState extends Equatable {
-  const DateFilterState();
-  
+class DateFilterState extends Equatable {
+  final DateFilter filterType;
+  final MDateRange? dateRange;
+  const DateFilterState({
+    required this.filterType,
+    this.dateRange,
+  });
   @override
-  List<Object> get props => [];
+  List<Object> get props => [filterType];
 }
-
-class DateFilterInitial extends DateFilterState {}

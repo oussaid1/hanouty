@@ -71,7 +71,7 @@ class Hanouty extends ConsumerWidget {
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: appLocalState.locale,
-        theme: MThemeData.lightThemeData,
+        theme: MThemeData.darkThemeData,
         //darkTheme: MThemeData.darkThemeData,
         //themeMode: appThemeState.darkMode ? ThemeMode.dark : ThemeMode.light,
         initialRoute: RouteGenerator.root,

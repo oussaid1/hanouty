@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hanouty/blocs/filteredsalesbloc/filteredsales_bloc.dart';
-
+import '../../../blocs/bloc/date_filter_bloc.dart';
 import '../../../blocs/clientsbloc/clients_bloc.dart';
 import '../../../blocs/debtbloc /debt_bloc.dart';
 import '../../../blocs/expensesbloc/expenses_bloc.dart';
@@ -28,92 +27,80 @@ class HomeForAll extends ConsumerWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/background.png'),
-          fit: BoxFit.cover,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                ..add(GetProductsEvent()),
         ),
-        //gradient: MThemeData.gradient2,
-      ),
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) =>
-                ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetProductsEvent()),
-          ),
-          BlocProvider(
-            create: (context) => SellActionsBloc(GetIt.I<DatabaseOperations>()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                SalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetSalesEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                FullSalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetFullSalesEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                DebtBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetDebtEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                ExpenseBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetExpensesEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                IncomeBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetIncomeEvent()),
-          ),
-          BlocProvider(
-            create: (context) => ShopClientBloc(
-                databaseOperations: GetIt.I<DatabaseOperations>())
-              ..add(GetShopClientsEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                SuplierBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetSupliersEvent()),
-          ),
-          BlocProvider(
-            create: (context) => TechServiceBloc(
-                databaseOperations: GetIt.I<DatabaseOperations>())
-              ..add(GetTechServiceEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                PaymentsBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetPaymentsEvent()),
-          ),
-          // BlocProvider(
-          //   create: (context) => FilteredSalesBloc(FullSalesBloc(
-          //       databaseOperations: GetIt.I<DatabaseOperations>()))
-          //     ..add(const GetFilteredSaleDataEvent(DateFilter.all)),
-          // ),
-        ],
+        BlocProvider(
+          create: (context) => SellActionsBloc(GetIt.I<DatabaseOperations>()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              SalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                ..add(GetSalesEvent()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              FullSalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                ..add(GetFullSalesEvent()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              DebtBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                ..add(GetDebtEvent()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              ExpenseBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                ..add(GetExpensesEvent()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              IncomeBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                ..add(GetIncomeEvent()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              ShopClientBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                ..add(GetShopClientsEvent()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              SuplierBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                ..add(GetSupliersEvent()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              TechServiceBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                ..add(GetTechServiceEvent()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              PaymentsBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                ..add(GetPaymentsEvent()),
+        ),
+        BlocProvider(
+          create: (context) => DateFilterBloc()
+            ..add(const UpdateFilterEvent(filterType: DateFilter.all)),
+        ),
+      ],
+      child: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+              colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.2), BlendMode.darken),
+              image: const AssetImage(
+                'assets/images/background.jpg',
+                // bundle: AssetBundle,/// TODO: fix this, read docs
+              ),
+              fit: BoxFit.cover,
+            ),
+            //gradient: MThemeData.gradient1,
+            color: Colors.transparent),
         child: Scaffold(
-          // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          // floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-          // floatingActionButton: FloatingActionButton.extended(
-          //   isExtended: true,
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(50),
-          //   ),
-          //   onPressed: () {},
-          //   label: Row(
-          //     children: const [
-          //       Icon(Icons.sell),
-          //       SizedBox(width: 10),
-          //       Text('Sell'),
-          //     ],
-          //   ),
-          // ),
           backgroundColor: Colors.transparent,
           drawer: const SizedBox(width: 80, child: Drawer(child: NavMenu())),
           appBar: !Responsive.isDesktop(context)

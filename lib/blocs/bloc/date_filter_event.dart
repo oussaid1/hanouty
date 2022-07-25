@@ -7,12 +7,16 @@ abstract class DateFilterEvent extends Equatable {
   List<Object> get props => [];
 }
 
-/// get DateFilter from [DateFilterEvent]
-class GetDateFilter extends DateFilterEvent {
-  final DateFilter dateFilter;
+/// add event to filter by date
+class UpdateFilterEvent extends DateFilterEvent {
+  final DateFilter filterType;
+  final MDateRange? dateRange;
 
-  const GetDateFilter({required this.dateFilter});
+  const UpdateFilterEvent({
+    required this.filterType,
+    this.dateRange,
+  });
 
   @override
-  List<Object> get props => [dateFilter];
+  List<Object> get props => [filterType];
 }
