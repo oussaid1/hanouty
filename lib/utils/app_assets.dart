@@ -10,7 +10,7 @@ class AppAssets {
   static const String splashLeftPng = 'assets/svgs/splash.png';
   static final Widget logoTm = SvgPicture.asset(
     logo,
-    color: MThemeData.primaryColorm,
+    color: MThemeData.primaryColor,
     semanticsLabel: 'Corp Logo',
   );
 

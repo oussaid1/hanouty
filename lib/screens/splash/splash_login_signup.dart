@@ -85,7 +85,8 @@ class AuthPageState extends State<AuthPage> {
       height: MediaQuery.of(context).size.height,
       alignment: Alignment.center,
       decoration: const BoxDecoration(
-        gradient: MThemeData.gradient2,
+        gradient: MThemeData.gradient1,
+        //  color: MThemeData.secondaryColor,
       ),
       //color: Theme.of(context).scaffoldBackgroundColor,
       child: Column(
@@ -238,7 +239,7 @@ class AuthPageState extends State<AuthPage> {
   buildLefttSide(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        gradient: MThemeData.gradient1,
+        color: MThemeData.primaryColor,
       ),
       height: MediaQuery.of(context).size.height,
       // color: Theme.of(context).colorScheme.primary,
@@ -354,7 +355,7 @@ class AuthPageState extends State<AuthPage> {
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: MThemeData.primaryColorm),
+            borderSide: const BorderSide(color: MThemeData.primaryColor),
           ),
           hintText: 'enter your username here',
           hintStyle: Theme.of(context).textTheme.subtitle2!,
@@ -391,7 +392,7 @@ class AuthPageState extends State<AuthPage> {
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: MThemeData.primaryColorm),
+            borderSide: const BorderSide(color: MThemeData.primaryColor),
           ),
           hintText: 'enter your email here',
           hintStyle: Theme.of(context).textTheme.subtitle2!,
@@ -428,11 +429,11 @@ class AuthPageState extends State<AuthPage> {
           suffixIcon: IconButton(
             icon: !_obscurepass
                 ? const Icon(Icons.visibility_off_sharp,
-                    size: 18, color: MThemeData.hint2Colorm)
+                    size: 18, color: MThemeData.hintColor)
                 : const Icon(
                     Icons.visibility_outlined,
                     size: 18,
-                    color: MThemeData.hint2Colorm,
+                    color: MThemeData.hintColor,
                   ),
             onPressed: () {
               setState(() {
@@ -442,7 +443,7 @@ class AuthPageState extends State<AuthPage> {
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: MThemeData.primaryColorm),
+            borderSide: const BorderSide(color: MThemeData.primaryColor),
           ),
           hintText: 'enter your password here',
           hintStyle: Theme.of(context).textTheme.subtitle2!,
@@ -483,11 +484,11 @@ class AuthPageState extends State<AuthPage> {
           suffixIcon: IconButton(
             icon: _obscureconfirmpass
                 ? const Icon(Icons.visibility_off_sharp,
-                    size: 18, color: MThemeData.hint2Colorm)
+                    size: 18, color: MThemeData.hintColor)
                 : const Icon(
                     Icons.visibility_outlined,
                     size: 18,
-                    color: MThemeData.hint2Colorm,
+                    color: MThemeData.hintColor,
                   ),
             onPressed: () {
               setState(() {
@@ -497,7 +498,7 @@ class AuthPageState extends State<AuthPage> {
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: MThemeData.primaryColorm),
+            borderSide: const BorderSide(color: MThemeData.primaryColor),
           ),
           hintText: 'confirm your password here',
           hintStyle: Theme.of(context).textTheme.subtitle2!,

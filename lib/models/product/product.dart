@@ -265,7 +265,7 @@ class ProductModel {
       default:
         Colors.green[300];
     }
-    return MThemeData.primaryColorm;
+    return MThemeData.primaryColor;
   }
 
   double? get priceOutTotal {

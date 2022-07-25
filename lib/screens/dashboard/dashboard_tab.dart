@@ -1,35 +1,22 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:hanouty/blocs/filteredsalesbloc/filteredsales_bloc.dart';
 import 'package:hanouty/local_components.dart';
+import 'package:hanouty/screens/debt/add_debt.dart';
+import 'package:hanouty/screens/expenses/add_expense/add_expense.dart';
+import 'package:hanouty/screens/income/add_income/add_income.dart';
+import 'package:hanouty/screens/sales/add_sale/edit_sale.dart';
 
-import '../../blocs/clientsbloc/clients_bloc.dart';
 import '../../blocs/debtbloc /debt_bloc.dart';
 import '../../blocs/expensesbloc/expenses_bloc.dart';
 import '../../blocs/fullsalesbloc/fullsales_bloc.dart';
 import '../../blocs/incomebloc/income_bloc.dart';
 import '../../blocs/paymentsbloc/payments_bloc.dart';
-import '../../blocs/productbloc/product_bloc.dart';
 import '../../blocs/salesbloc/sales_bloc.dart';
 import '../../components.dart';
-import '../../models/Sale/sale.dart';
-import '../../models/chart_data.dart';
-import '../../models/debt/debt.dart';
-import '../../models/expenses/expenses.dart';
-import '../../models/income/income.dart';
-import '../../models/product/product.dart';
-import '../../models/revenu/revenu.dart';
-import '../../settings/themes.dart';
-import '../../utils/glasswidgets.dart';
-import '../../utils/popup_dialogues.dart';
 import '../../widgets/cards/latest_trans_list_card.dart';
 import '../../widgets/cards/scares_productss_instock.dart';
 import '../../widgets/charts/inventory_widget.dart';
-import '../../widgets/charts/syncfusion_charts.dart';
 import '../client/add_clients/add_client.dart';
 import '../product/add_product/add_product.dart';
-import '../suplier/add_suplier/add_suplier.dart';
 import '../techservice/add_service/add_service.dart';
 
 class DashBoardPage extends StatelessWidget {
@@ -37,16 +24,15 @@ class DashBoardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // log('fullSalesBloc.state.fullSales: ${fullSalesBloc.fullSales.length}');
-    // log('filterType: $filterType');
-    // log('productBloc: ${productBloc.products.length}');
-    // log('clientsBloc: ${clientsBloc.clients.length}');
-    // log('clientsBloc: ${productBloc.status}');
     return Scaffold(
       backgroundColor: Colors.transparent,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: const Padding(
         padding: EdgeInsets.only(bottom: 80.0),
-        child: AddStuffWidget(),
+        child: SizedBox(
+          width: 120,
+          child: AddStuffWidget(),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -60,8 +46,8 @@ class DashBoardPage extends StatelessWidget {
                 alignment: WrapAlignment.spaceBetween,
                 runSpacing: 20,
                 children: const [
-                  MyInventoryWidget(),
-                  MySalesWidgetBlurred(),
+                  SalesOverAllWidget(),
+                  StockInventory(),
                   SizedBox(height: 20),
                   RevenuWidget(),
                 ],
@@ -72,19 +58,7 @@ class DashBoardPage extends StatelessWidget {
                 direction: Axis.horizontal,
                 alignment: WrapAlignment.spaceBetween,
                 children: [
-                  const BluredContainer(
-                      width: 420,
-                      height: 400,
-                      child: LineChartCard(data: [], title: 'Inventory')),
-                  const BluredContainer(
-                    width: 420,
-                    height: 400,
-                    child: BarChartCard(
-                      data: [],
-                      title: 'Sales',
-                    ),
-                  ),
-                  const SizedBox(width: 2),
+                  const DashboardCharts(),
                   Wrap(
                     direction: Axis.vertical,
                     children: const [
@@ -103,6 +77,217 @@ class DashBoardPage extends StatelessWidget {
   }
 }
 
+class DashboardBarChart extends StatelessWidget {
+  final List<ChartData> data;
+  final String? title;
+  const DashboardBarChart({
+    Key? key,
+    required this.data,
+    this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BluredContainer(
+      width: 420,
+      height: 400,
+      child: Column(
+        children: [
+          Flexible(
+            fit: FlexFit.tight,
+            flex: 1,
+            child: SfCartesianChart(
+              borderWidth: 0,
+              legend: Legend(
+                isVisible: true,
+                overflowMode: LegendItemOverflowMode.wrap,
+                position: LegendPosition.top,
+                height: '50%',
+                legendItemBuilder: (legendText, series, point, seriesIndex) {
+                  return SizedBox(
+                      height: 16,
+                      width: 80,
+                      child: Row(children: <Widget>[
+                        Icon(Icons.bar_chart_rounded,
+                            size: 16, color: series.color),
+                        Text(
+                          legendText,
+                          style: Theme.of(context).textTheme.subtitle2!,
+                        ),
+                      ]));
+                },
+                alignment: ChartAlignment.center,
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .subtitle2!
+                    .copyWith(fontSize: 12, color: MThemeData.secondaryColor),
+              ),
+              annotations: const <CartesianChartAnnotation>[
+                CartesianChartAnnotation(
+                    widget: SizedBox(child: Text('Empty data')),
+                    coordinateUnit: CoordinateUnit.point,
+                    region: AnnotationRegion.plotArea,
+                    x: 3.5,
+                    y: 60),
+              ],
+              primaryXAxis: DateTimeAxis(
+                majorGridLines: const MajorGridLines(width: 0),
+                intervalType: DateTimeIntervalType.days,
+                dateFormat: DateFormat.MMMd(),
+                interval: 1,
+                axisLine: const AxisLine(width: 0.5),
+                //labelFormat: 'dd/MM',
+                edgeLabelPlacement: EdgeLabelPlacement.shift,
+                labelStyle: Theme.of(context).textTheme.subtitle2!,
+              ),
+              enableAxisAnimation: true,
+              plotAreaBorderColor: Colors.transparent,
+              plotAreaBorderWidth: 0,
+              plotAreaBackgroundColor: Colors.transparent,
+              primaryYAxis: NumericAxis(
+                minimum: 0,
+                labelRotation: 0,
+                labelStyle: Theme.of(context).textTheme.subtitle2!,
+                majorGridLines: const MajorGridLines(width: 0),
+                majorTickLines: const MajorTickLines(width: 0),
+                minorGridLines: const MinorGridLines(width: 0),
+                minorTickLines: const MinorTickLines(width: 0),
+              ),
+              series: <ChartSeries>[
+                // Renders spline chart
+                ColumnSeries<ChartData, DateTime>(
+                    name: 'Services'.tr(),
+                    color: MThemeData.productColor,
+                    dataSource: [],
+                    xValueMapper: (ChartData sales, _) => (sales.date),
+                    yValueMapper: (ChartData sales, z) => sales.value),
+                ColumnSeries<ChartData, DateTime>(
+                    name: 'Products',
+                    color: MThemeData.serviceColor,
+                    dataSource: [],
+                    xValueMapper: (ChartData sales, _) => sales.date,
+                    yValueMapper: (ChartData sales, _) => sales.value),
+                ColumnSeries<ChartData, DateTime>(
+                    name: 'Sales',
+                    color: MThemeData.expensesColor,
+                    dataSource: [],
+                    xValueMapper: (ChartData sales, _) => sales.date,
+                    yValueMapper: (ChartData sales, _) => sales.value),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DashboardLineChart extends StatelessWidget {
+  final List<ChartData> data;
+  final String? title;
+  const DashboardLineChart({
+    Key? key,
+    required this.data,
+    this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BluredContainer(
+      width: 420,
+      height: 400,
+      child: Column(
+        children: [
+          Flexible(
+            flex: 2,
+            fit: FlexFit.tight,
+            child: SfCartesianChart(
+              backgroundColor: Colors.transparent,
+              borderWidth: 0,
+              legend: Legend(
+                isVisible: true,
+                overflowMode: LegendItemOverflowMode.wrap,
+                position: LegendPosition.top,
+                height: '50%',
+                legendItemBuilder: (legendText, series, point, seriesIndex) {
+                  return SizedBox(
+                      height: 16,
+                      width: 80,
+                      child: Row(children: <Widget>[
+                        Icon(Icons.bar_chart_rounded,
+                            size: 16, color: series.color),
+                        Text(
+                          legendText,
+                          style: Theme.of(context).textTheme.subtitle2!,
+                        ),
+                      ]));
+                },
+                alignment: ChartAlignment.center,
+                textStyle: Theme.of(context)
+                    .textTheme
+                    .subtitle2!
+                    .copyWith(fontSize: 12, color: MThemeData.secondaryColor),
+              ),
+              annotations: const <CartesianChartAnnotation>[
+                CartesianChartAnnotation(
+                    widget: SizedBox(child: Text('Empty data')),
+                    coordinateUnit: CoordinateUnit.point,
+                    region: AnnotationRegion.plotArea,
+                    x: 3.5,
+                    y: 60),
+              ],
+              primaryXAxis: DateTimeAxis(
+                majorGridLines: const MajorGridLines(width: 0),
+                intervalType: DateTimeIntervalType.days,
+                dateFormat: DateFormat.MMMd(),
+                interval: 1,
+                axisLine: const AxisLine(width: 0.5),
+                //labelFormat: 'dd/MM',
+                edgeLabelPlacement: EdgeLabelPlacement.shift,
+                labelStyle: Theme.of(context).textTheme.subtitle2!,
+              ),
+              enableAxisAnimation: true,
+              plotAreaBorderColor: Colors.transparent,
+              plotAreaBorderWidth: 0,
+              plotAreaBackgroundColor: Colors.transparent,
+              primaryYAxis: NumericAxis(
+                minimum: 0,
+                labelRotation: 0,
+                labelStyle: Theme.of(context).textTheme.subtitle2!,
+                majorGridLines: const MajorGridLines(width: 0),
+                majorTickLines: const MajorTickLines(width: 0),
+                minorGridLines: const MinorGridLines(width: 0),
+                minorTickLines: const MinorTickLines(width: 0),
+              ),
+              series: <ChartSeries>[
+                // Renders spline chart
+                SplineSeries<ChartData, DateTime>(
+                    name: 'Sales'.tr(),
+                    color: MThemeData.salesColor,
+                    dataSource: const [],
+                    xValueMapper: (ChartData sales, _) => sales.date,
+                    yValueMapper: (ChartData sales, _) => sales.value),
+                SplineSeries<ChartData, DateTime>(
+                    name: 'Products'.tr(),
+                    color: MThemeData.productColor,
+                    dataSource: [],
+                    xValueMapper: (ChartData sales, _) => sales.date,
+                    yValueMapper: (ChartData sales, _) => sales.value),
+                SplineSeries<ChartData, DateTime>(
+                    name: 'Services'.tr(),
+                    color: MThemeData.serviceColor,
+                    dataSource: const [],
+                    xValueMapper: (ChartData sales, _) => sales.date,
+                    yValueMapper: (ChartData sales, _) => sales.value),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class AddStuffWidget extends StatelessWidget {
   const AddStuffWidget({
     Key? key,
@@ -113,80 +298,73 @@ class AddStuffWidget extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        FloatingActionButton.extended(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            MDialogs.dialogSimple(
-              context,
-              title: Text(
-                "Add Product",
-                style: Theme.of(context).textTheme.headline3!,
-              ),
-              contentWidget: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                //  gradient: MThemeData.gradient2),
-                height: 500,
-                width: 420,
-                child: const AddOrEditProduct(),
-              ),
-            );
-          },
-          label: const Text("Add Product").tr(),
-        ),
+        buildExpandedFab(context,
+            title: "Client",
+            child: AddClient(
+              pContext: context,
+            )),
         const SizedBox(height: 10),
-        FloatingActionButton.extended(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            MDialogs.dialogSimple(
-              context,
-              title: Text(
-                "Add Service",
-                style: Theme.of(context).textTheme.headline3!,
-              ),
-              contentWidget: const AddService(),
-            );
-          },
-          label: const Text("Add Service").tr(),
-        ),
+        // buildExpandedFab(context,title: "Add Supplier",child: const AddSuplier()),
+        // const SizedBox(height: 10),
+        buildExpandedFab(context,
+            title: "Product", child: const AddOrEditProduct()),
         const SizedBox(height: 10),
-        FloatingActionButton.extended(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            MDialogs.dialogSimple(
-              context,
-              title: Text(
-                "Add Client",
-                style: Theme.of(context).textTheme.headline3!,
-              ),
-              contentWidget: AddClient(
-                pContext: context,
-              ),
-            );
-          },
-          label: const Text("Add Client").tr(),
-        ),
+        buildExpandedFab(context, title: "Service", child: const AddService()),
         const SizedBox(height: 10),
-        FloatingActionButton.extended(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            MDialogs.dialogSimple(
-              context,
-              title: Text(
-                "Add Suplier",
-                style: Theme.of(context).textTheme.headline3!,
-              ),
-              contentWidget: const SizedBox(
-                height: 400,
-                width: 400,
-                child: AddSuplier(),
-              ),
-            );
-          },
-          label: const Text("Add Suplier").tr(),
-        ),
+        buildExpandedFab(context, title: "Add Debt", child: const AddDebt()),
+        const SizedBox(height: 10),
+        buildExpandedFab(context, title: "Expense", child: const AddExpense()),
+        const SizedBox(height: 10),
+        buildExpandedFab(context,
+            title: "Sale", child: const AddOrEditSaleWidget()),
+        const SizedBox(height: 10),
+        buildExpandedFab(context, title: "Income", child: const AddIncome()),
       ],
+    );
+  }
+
+  FloatingActionButton buildExpandedFab(BuildContext context,
+      {String? title, Widget? child}) {
+    return FloatingActionButton.extended(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50),
+      ),
+      extendedIconLabelSpacing: 0,
+      onPressed: () {
+        MDialogs.dialogSimple(
+          context,
+          title: Text(
+            title ?? '',
+            style: Theme.of(context).textTheme.headline3!,
+          ),
+          contentWidget: SizedBox(
+            // height: 400,
+            width: 410,
+            child: SingleChildScrollView(
+                child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                child ?? const SizedBox.shrink(),
+              ],
+            )),
+          ),
+        );
+      },
+      label: SizedBox(
+        width: 100,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.add, size: 18),
+            const SizedBox(width: 5),
+            Text(title ?? '',
+                style: Theme.of(context).textTheme.headline3!.copyWith(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    )),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -207,14 +385,14 @@ class DashboardCharts extends StatelessWidget {
             BluredContainer(
                 width: 420,
                 height: 400,
-                child: LineChartCard(
+                child: DashboardLineChart(
                   data: salesData.chartDataDDMMYY,
                   title: 'Inventory',
                 )),
             BluredContainer(
               width: 420,
               height: 400,
-              child: BarChartCard(
+              child: DashboardBarChart(
                 data: salesData.chartDataDDMMYY,
                 title: 'Sales',
               ),
@@ -256,7 +434,7 @@ class RevenuWidget extends StatelessWidget {
         );
         return BluredContainer(
           width: 420,
-          height: 400,
+          height: 200,
           child: RevenuRadialChart(
             data: revenu,
           ),
@@ -306,6 +484,7 @@ class RevenuRadialChart extends StatelessWidget {
         color: Colors.transparent,
         child: BluredContainer(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Stack(
                 fit: StackFit.passthrough,

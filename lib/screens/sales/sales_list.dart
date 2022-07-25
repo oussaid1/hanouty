@@ -98,7 +98,7 @@ class SalesList extends StatelessWidget {
                                 child: BluredContainer(
                                   width: 420,
                                   height: 320,
-                                  child: MySalesWidget(),
+                                  child: SalesOverAllWidget(),
                                 ),
                               ),
                               buildSalesByCategory(

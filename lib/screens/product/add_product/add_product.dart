@@ -282,6 +282,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
         hintText: 'description_hint'.tr(),
         hintStyle: Theme.of(context).textTheme.subtitle2!,
         filled: true,
+        contentPadding: const EdgeInsets.all(8.0),
       ),
     );
   }
