@@ -13,7 +13,25 @@ class AppAssets {
     color: MThemeData.primaryColor,
     semanticsLabel: 'Corp Logo',
   );
+  static final String assetName = 'assets/images/logo.svg';
+  static final String google = 'assets/images/google.svg';
+  static final String pinkCircle = 'assets/images/pinkball.png';
+  static final String purpleCircle = 'assets/images/purpleball.png';
+  static final String blueCircle = 'assets/images/blueball.png';
+  ////////////////////////////////////////////////////////////////////////////////
+  static final Widget svgIcon = SvgPicture.asset(assetName,
+      semanticsLabel: 'app logo', width: 100, height: 100);
+  static final Widget googleSvgIcon = SvgPicture.asset(google,
+      semanticsLabel: 'google icon', width: 24, height: 24);
 
+  static final Widget pinkCircleWidget = Image.asset(pinkCircle,
+      semanticLabel: 'A circle', width: 100, height: 100);
+
+  static final Widget purpleCircleWidget = Image.asset(purpleCircle,
+      semanticLabel: 'A cirle', width: 100, height: 100);
+
+  static final Widget blueCircleWidget = Image.asset(blueCircle,
+      semanticLabel: 'A circle', width: 100, height: 100);
   // static final Widget logoC = SvgPicture.asset(logoc,
   //     semanticsLabel: 'Corp Logo', cacheColorFilter: true);
   // static final Widget svgCircle = SvgPicture.asset(splashLeft,

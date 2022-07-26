@@ -1,36 +1,48 @@
-import 'package:hanouty/local_components.dart';
-import 'package:hanouty/models/payment/payment.dart';
-
-import 'package:hanouty/widgets/date_pickers.dart/date_picker.dart';
-import 'package:hanouty/widgets/spinners/client_spinner.dart';
-import 'package:flutter/services.dart';
-import '../../blocs/paymentsbloc/payments_bloc.dart';
-import '/../components.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../../models/client/shop_client.dart';
+import '../../models/debt/debt.dart';
+import '../../models/payment/payment.dart';
+import '../../settings/themes.dart';
+import '../../widgets/autocomplete/autocomlete_textfield.dart';
+import '../../widgets/date_pickers.dart/date_picker.dart';
+
+/// these are the states of the add payment screen //to disable the client name  if the payment is paying
+/// and to show only minumum fields if the payment is paying
 
 enum PayingStatus {
   editing,
-  saving,
+  adding,
   paying,
 }
 
-class AddPayment extends ConsumerStatefulWidget {
-  const AddPayment({Key? key, this.payment, required this.payingStatus})
-      : super(key: key);
+class AddPayment extends StatefulWidget {
+  const AddPayment({
+    Key? key,
+    this.payment,
+    this.debt,
+    required this.payingStatus,
+  }) : super(key: key);
   final PaymentModel? payment;
-
   final PayingStatus payingStatus;
+  final DebtModel? debt;
   @override
   AddPaymentState createState() => AddPaymentState();
 }
 
-class AddPaymentState extends ConsumerState<AddPayment> {
+class AddPaymentState extends State<AddPayment> {
   final GlobalKey<FormState> dformKey = GlobalKey<FormState>();
   //final TextEditingController clientController = TextEditingController();
   // final TextEditingController productNameController = TextEditingController();
   final TextEditingController amuontamountController = TextEditingController();
   // final TextEditingController dueAmountController = TextEditingController();
-
+  String clientId = '';
+  ShopClientModel? client;
+  String description = '';
+  DateTime date = DateTime.now();
+  bool canSave = false;
   void clear() {
     // productNameController.clear();
     amuontamountController.clear();
@@ -39,10 +51,16 @@ class AddPaymentState extends ConsumerState<AddPayment> {
 
   @override
   void initState() {
-    if (widget.payment != null) {
-      //  productNameController.text = widget.payment!.productName!;
+    if (widget.payingStatus == PayingStatus.editing) {
       amuontamountController.text = widget.payment!.amount.toString();
-      //_dueAmountController.text = widget.payment!.amount.toString();
+      date = widget.payment!.date;
+      clientId = widget.payment!.clientId;
+
+      description = widget.payment!.description!;
+    }
+    if (widget.payingStatus == PayingStatus.paying) {
+      amuontamountController.text = widget.debt!.amount.toString();
+      clientId = widget.debt!.clientId!;
     }
     super.initState();
   }
@@ -55,211 +73,110 @@ class AddPaymentState extends ConsumerState<AddPayment> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: context.width,
-      height: context.height,
-      child: Column(
-        children: [
-          Flexible(
-            fit: FlexFit.tight,
-            flex: 2,
-            child: SingleChildScrollView(
-              child: Container(
-                margin: const EdgeInsets.all(8),
-                width: Responsive.isDesktop(context) ? 600 : context.width - 10,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  //color: Theme.of(context).colorScheme.onBackground,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Form(
+          key: dformKey,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                buildClientName(),
+                const SizedBox(height: 20),
+                buildamountAmount(),
+                const SizedBox(height: 20),
+                buildDate(),
+                const SizedBox(height: 40),
+                buildSaveButton(
+                  context,
                 ),
-                child: Form(
-                  key: dformKey,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        buildClientName(ref, []),
-
-                        const SizedBox(height: 20),
-                        buildamountAmount(ref),
-                        const SizedBox(height: 20),
-                        buildDate(),
-                        const SizedBox(height: 40),
-                        buildSaveButton(
-                          ref,
-                          context,
-                        ),
-                        const SizedBox(
-                          height: 100,
-                        ) //but
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                const SizedBox(
+                  height: 100,
+                ) //but
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  Widget buildClientName(
-    WidgetRef ref,
-    List<ShopClientModel> list,
-  ) {
-    return ClientSpinnerWidget(
-      onChanged: (value) {},
-      list: list,
+  Widget buildClientName() {
+    return ClientAutocompleteField(
+      // validator: (value) {
+      //   if (client == null) {
+      //     return 'client_name_is_required';
+      //   }
+      //   return null;
+      // },
+      onChanged: (selectedClient) {
+        setState(() {
+          client = selectedClient;
+          canSave = true;
+          clientId = selectedClient.id!;
+        });
+      },
     );
   }
 
-  Widget buildSaveButton(WidgetRef ref, BuildContext context) {
-    if (widget.payingStatus == PayingStatus.editing) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          ElevatedButton(
-              style: MThemeData.raisedButtonStyleSave,
-              child: Text(
-                'Update'.tr(),
-              ),
-              onPressed: () {
-                // var selectedShopClient = ref.watch(selectedShopClient);
-                if (dformKey.currentState!.validate()) {
-                  final payment = PaymentModel(
-                    id: widget.payment!.id,
-                    description: widget.payment!.description,
-                    amount: double.tryParse(amuontamountController.text)!,
-                    clientName: widget.payment!.clientName,
-                    clientId: widget.payment!.clientId,
-                    date: widget.payment!.date,
-                  );
+  Widget buildSaveButton(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        ElevatedButton(
+            style: MThemeData.raisedButtonStyleSave,
+            onPressed: !canSave
+                ? null
+                : () {
+                    // var selectedShopClient = ref.watch(selectedShopClient);
+                    if (dformKey.currentState!.validate()) {
+                      setState(() {
+                        canSave = false;
+                      });
+                      final payment = PaymentModel(
+                        id: widget.payingStatus == PayingStatus.adding
+                            ? null
+                            : widget.payment!.id,
+                        description: description,
+                        amount: double.tryParse(amuontamountController.text)!,
+                        clientId: widget.payingStatus == PayingStatus.adding
+                            ? clientId
+                            : widget.payment!.clientId,
+                        date: date,
+                      );
 
-                  GetIt.I<PaymentsBloc>().add(UpdatePaymentEvent(payment));
-                  Navigator.pop(context);
-                }
-              }),
-          ElevatedButton(
-            style: MThemeData.raisedButtonStyleCancel,
-            child: Text(
-              'Cancel'.tr(),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      );
-    }
-    if (widget.payingStatus == PayingStatus.saving) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          ElevatedButton(
-              style: MThemeData.raisedButtonStyleSave,
-              child: Text(
-                'Save'.tr(),
-              ),
-              onPressed: () {
-                if (dformKey.currentState!.validate()) {
-                  // final payment = Payment(
-                  //   amount: double.tryParse(amuontamountController.text)!,
-                  //   clientName:
-                  //       ref.read(selectedShopClient.state).state!.clientName,
-                  //   clientId: ref.read(selectedShopClient.state).state!.id!,
-                  //   date: ref.read(pickedDateTime.state).state,
-                  // );
-                  // ref.read(databaseProvider)!.addPayment(payment).then((value) {
-                  //   if (value) {
-                  //     ScaffoldMessenger.of(context)
-                  //         .showSnackBar(MDialogs.snackBar('Done !'));
-                  //     clear();
-                  //     Navigator.of(context).pop();
-                  //   } else {
-                  //     ScaffoldMessenger.of(context)
-                  //         .showSnackBar(MDialogs.errorSnackBar('Error !'));
-                  //   }
-                  // });
-                }
-              }),
-          ElevatedButton(
-            style: MThemeData.raisedButtonStyleCancel,
-            child: Text(
-              'Cancel'.tr(),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      );
-    }
-    if (widget.payingStatus == PayingStatus.paying) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          ElevatedButton(
-              style: MThemeData.raisedButtonStyleSave,
-              child: Text(
-                'Pay'.tr(),
-              ),
-              onPressed: () {
-                // var selectedShopClient = ref.watch(selectedShopClient);
-                if (dformKey.currentState!.validate()) {
-                  // final payment = Payment(
-                  //   // id: widget.payment!.id,
-                  //   description: widget.payment!.description,
-                  //   amount: double.tryParse(amuontamountController.text)!,
-                  //   clientName: widget.payment!.clientName,
-                  //   clientId: widget.payment!.clientId,
-                  //   date: widget.payment!.date,
-                  // );
-
-                  // ref.read(databaseProvider)!.addPayment(payment).then((value) {
-                  //   if (value) {
-                  //     ScaffoldMessenger.of(context)
-                  //         .showSnackBar(MDialogs.snackBar('Done !'));
-                  //     clear();
-                  //     Navigator.of(context).pop();
-                  //   } else {
-                  //     ScaffoldMessenger.of(context)
-                  //         .showSnackBar(MDialogs.errorSnackBar('Error !'));
-                  //   }
-                  // });
-                }
-              }),
-          ElevatedButton(
-            style: MThemeData.raisedButtonStyleCancel,
-            child: Text(
-              'Cancel'.tr(),
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      );
-    }
-    return const SizedBox.shrink();
+                      // GetIt.I<PaymentsBloc>().add(widget.payingStatus==PayingStatus.adding? AddPaymentEvent(payment):UpdatePaymentEvent(payment));
+                      Navigator.pop(context);
+                    }
+                  },
+            child: Text(widget.payingStatus == PayingStatus.editing
+                ? 'update'
+                : 'save')),
+        ElevatedButton(
+          style: MThemeData.raisedButtonStyleCancel,
+          child: Text('Cancel'.tr()),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
   }
 
   Widget buildDate() {
-    return SizedBox(
-      height: 50,
-      width: 240,
-      child: SelectDate(
-        onDateSelected: (date) {
-          setState(() {
-            date = date;
-          });
-        },
-      ),
+    return SelectDate(
+      onDateSelected: (date) {
+        setState(() {
+          date = date;
+        });
+      },
     );
   }
 
-  TextFormField buildamountAmount(WidgetRef ref) {
+  TextFormField buildamountAmount() {
     return TextFormField(
       controller: amuontamountController,
       validator: (text) {
@@ -273,7 +190,9 @@ class AddPaymentState extends ConsumerState<AddPayment> {
         FilteringTextInputFormatter.allow(RegExp('[0-9.]+')),
       ],
       textAlign: TextAlign.center,
+      maxLength: 10,
       decoration: InputDecoration(
+        counterText: '',
         labelText: 'Amount-amount'.tr(),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.0),

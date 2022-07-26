@@ -5,8 +5,8 @@ import 'package:hanouty/widgets/date_pickers.dart/date_picker.dart';
 import 'package:hanouty/widgets/spinners/client_spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../components.dart';
-import '../../../models/models.dart';
+import '../../components.dart';
+import '../../models/models.dart';
 
 class AddOrEditSaleWidget extends ConsumerStatefulWidget {
   final SaleModel? sale;

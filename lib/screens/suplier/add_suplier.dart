@@ -1,9 +1,14 @@
-import 'package:hanouty/local_components.dart';
-
-import 'package:hanouty/components.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hanouty/extensions/extensions.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../../../blocs/suplierbloc/suplier_bloc.dart';
+import '../../blocs/suplierbloc/suplier_bloc.dart';
+import '../../components.dart';
+import '../../models/suplier/suplier.dart';
+import '../../responsive/responsive.dart';
+import '../../settings/themes.dart';
 
 class AddSuplier extends ConsumerStatefulWidget {
   const AddSuplier({Key? key, this.suplier}) : super(key: key);
@@ -153,7 +158,7 @@ class AddSuplierState extends ConsumerState<AddSuplier> {
                       email: emailController.text.trim(),
                       location: SuplierModel.laayoune,
                     );
-                    GetIt.I<SuplierBloc>().add(AddSupliersEvent(suplier));
+                    // GetIt.I<SuplierBloc>().add(AddSupliersEvent(suplier));
                   }
                 },
               ),
@@ -280,7 +285,3 @@ class AddSuplierState extends ConsumerState<AddSuplier> {
     );
   }
 }
-
-final suplierLocationProvider = StateProvider<GeoPoint>((ref) {
-  return SuplierModel.laayoune;
-});

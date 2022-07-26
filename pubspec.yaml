@@ -46,6 +46,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   flutter_localizations:
     sdk: flutter
+  flutter_rating_bar: ^4.0.1
   flutter_riverpod: ^1.0.4
   flutter_slidable: ^2.0.0
   flutter_svg: ^1.1.0
@@ -88,7 +89,10 @@ flutter:
     - assets/translations/fr.json
     - assets/icons/
     - assets/svgs/
-    - assets/images/lightback.png
+    - assets/images/
+    - assets/images/blueball.png
+    - assets/images/pinkball.png
+    - assets/images/purpleball.png
     - assets/images/lightback.jpg
     - assets/images/background.jpg
   #- assets/icons/logocircle.svg

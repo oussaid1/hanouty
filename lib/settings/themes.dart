@@ -26,15 +26,15 @@ class MThemeData {
   /// static const primaryColor = Color(0xFF185A9D);
   ///static const secondaryColor = Color(0xFF43CEA2);
   ////////////////////
-  static const accentColor = Color(0xFFEAB93C);
-  static const primaryColor = Color.fromARGB(255, 25, 66, 179);
-  static const secondaryColor = Color(0xff61E3AF);
+  static const accentColor = Color(0xFF038C8C);
+  static const primaryColor = Color(0xFF012326);
+  static const secondaryColor = Color(0xff025159);
 // black and white
   static const black = Color(0xFF000000);
   static const almostBlackColor = Color(0xFF22282F);
   static const white = Color(0xFFFFFFFF);
   static const almostWhiteColor = Color(0xFFF5F5F5);
-  static const hintColor = Color(0x8D4A6474);
+  static const hintColor = Color.fromARGB(141, 177, 171, 140);
   static const errorColor = Color.fromARGB(255, 255, 0, 0);
 
   /////////////////////

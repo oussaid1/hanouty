@@ -1,12 +1,13 @@
 import 'dart:developer';
 
-import 'package:hanouty/local_components.dart';
-
-import '../../../blocs/clientsbloc/clients_bloc.dart';
-import '/../components.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class AddClient extends ConsumerStatefulWidget {
+import '../../models/client/shop_client.dart';
+import '../../settings/themes.dart';
+
+class AddClient extends StatefulWidget {
   const AddClient({
     Key? key,
     this.client,
@@ -18,7 +19,7 @@ class AddClient extends ConsumerStatefulWidget {
   AddClientState createState() => AddClientState();
 }
 
-class AddClientState extends ConsumerState<AddClient> {
+class AddClientState extends State<AddClient> {
   bool _canSave = false;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController titleController =
@@ -27,6 +28,7 @@ class AddClientState extends ConsumerState<AddClient> {
       TextEditingController(text: '0687888888');
   final TextEditingController emailController =
       TextEditingController(text: 'oussaid.abdellatif@gmail.com');
+  double _rating = 3.5;
 
   void clear() {
     titleController.clear();
@@ -40,7 +42,7 @@ class AddClientState extends ConsumerState<AddClient> {
       titleController.text = widget.client!.clientName.toString();
       phoneController.text = widget.client!.phone.toString();
       emailController.text = widget.client!.email.toString();
-      ref.read(clientRaringProvider.state).state = widget.client!.stars;
+      _rating = widget.client!.stars;
     }
     super.initState();
   }
@@ -58,42 +60,40 @@ class AddClientState extends ConsumerState<AddClient> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        buildFlexible(context, ref),
+        buildFlexible(context),
       ],
     );
   }
 
-  buildFlexible(BuildContext context, WidgetRef ref) {
-    return SingleChildScrollView(
-      child: Form(
-        key: formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(height: 50),
-              buildClientName(ref),
-              const SizedBox(height: 20),
-              buildClientPhone(ref),
-              const SizedBox(height: 20),
-              buildClientEmail(ref),
-              const SizedBox(height: 20),
-              buildRating(ref, context),
-              const SizedBox(height: 20),
-              buildSaveButton(ref, context),
-              const SizedBox(
-                height: 100,
-              ) //but
-            ],
-          ),
+  buildFlexible(BuildContext context) {
+    return Form(
+      key: formKey,
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(height: 50),
+            buildClientName(),
+            const SizedBox(height: 20),
+            buildClientPhone(),
+            const SizedBox(height: 20),
+            buildClientEmail(),
+            const SizedBox(height: 20),
+            buildRating(context),
+            const SizedBox(height: 20),
+            buildSaveButton(context),
+            const SizedBox(
+              height: 100,
+            ) //but
+          ],
         ),
       ),
     );
   }
 
-  Row buildSaveButton(WidgetRef ref, BuildContext context) {
+  Row buildSaveButton(BuildContext context) {
     return widget.client != null
         ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -110,12 +110,12 @@ class AddClientState extends ConsumerState<AddClient> {
                       clientName: titleController.text.trim(),
                       phone: phoneController.text.trim(),
                       email: emailController.text.trim(),
-                      stars: ref.read(clientRaringProvider.state).state,
+                      stars: _rating,
                     );
-                    context
-                        .read<ShopClientBloc>()
-                        .add(AddShopClientEvent(client));
-                    Navigator.pop(context);
+                    // context
+                    //     .read<ShopClientBloc>()
+                    //     .add(AddShopClientEvent(client));
+                    // Navigator.pop(context);
                   }
                 },
               ),
@@ -144,23 +144,13 @@ class AddClientState extends ConsumerState<AddClient> {
                       clientName: titleController.text.trim(),
                       phone: phoneController.text.trim(),
                       email: emailController.text.trim(),
-                      stars: ref.read(clientRaringProvider.state).state,
+                      stars: _rating,
                     );
-                    widget.pContext
-                        .read<ShopClientBloc>()
-                        .add(AddShopClientEvent(client));
-                    Navigator.pop(context);
-                    // ref.read(databaseProvider)!.addClient(client).then((value) {
-                    //   if (value) {
-                    //     ScaffoldMessenger.of(context)
-                    //         .showSnackBar(MDialogs.snackBar('Done !'));
-                    //     clear();
-                    //     Navigator.of(context).pop();
-                    //   } else {
-                    //     ScaffoldMessenger.of(context)
-                    //         .showSnackBar(MDialogs.errorSnackBar('Error !'));
-                    //   }
-                    // });
+                    // widget.pContext
+                    //     .read<ShopClientBloc>()
+                    //     .add(AddShopClientEvent(client));
+                    // Navigator.pop(context);
+
                   }
                 },
               ),
@@ -177,7 +167,7 @@ class AddClientState extends ConsumerState<AddClient> {
           );
   }
 
-  TextFormField buildClientName(WidgetRef ref) {
+  TextFormField buildClientName() {
     return TextFormField(
       controller: titleController,
       validator: (text) {
@@ -191,7 +181,9 @@ class AddClientState extends ConsumerState<AddClient> {
           _canSave = true;
         });
       },
+      maxLength: 20,
       decoration: InputDecoration(
+        counterText: '',
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.0),
           borderSide: const BorderSide(),
@@ -206,7 +198,7 @@ class AddClientState extends ConsumerState<AddClient> {
     );
   }
 
-  TextFormField buildClientPhone(WidgetRef ref) {
+  TextFormField buildClientPhone() {
     return TextFormField(
       controller: phoneController,
       validator: (text) {
@@ -215,7 +207,9 @@ class AddClientState extends ConsumerState<AddClient> {
         }
         return null;
       },
+      maxLength: 10,
       decoration: InputDecoration(
+        counterText: '',
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.0),
           borderSide: const BorderSide(),
@@ -230,7 +224,7 @@ class AddClientState extends ConsumerState<AddClient> {
     );
   }
 
-  TextFormField buildClientEmail(WidgetRef ref) {
+  TextFormField buildClientEmail() {
     return TextFormField(
       controller: emailController,
       validator: (text) {
@@ -239,7 +233,9 @@ class AddClientState extends ConsumerState<AddClient> {
         }
         return null;
       },
+      maxLength: 50,
       decoration: InputDecoration(
+        counterText: '',
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.0),
           borderSide: const BorderSide(),
@@ -253,70 +249,26 @@ class AddClientState extends ConsumerState<AddClient> {
     );
   }
 
-  Row buildRating(WidgetRef ref, BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 8.0,
-            top: 8,
-          ),
-          child: Text(
-            'Reputation'.tr(),
-            style: Theme.of(context).textTheme.subtitle2!,
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).bottomAppBarColor),
-              borderRadius: BorderRadius.circular(6)),
-          height: 50,
-          width: 160,
-          child: Row(
-            children: [
-              IconButton(
-                  icon: const Icon(
-                    Icons.thumb_down_alt_rounded,
-                    color: Colors.grey,
-                  ),
-                  onPressed: () {
-                    if (ref.read(clientRaringProvider.state).state > 0) {
-                      ref.read(clientRaringProvider.state).state -= 1;
-                    }
-                  }),
-              Expanded(
-                child: Consumer(
-                  // 2. specify the builder and obtain a WidgetRef
-                  builder: (_, WidgetRef ref, __) {
-                    // 3. use ref.ref.watch() to get the value of the provider
-                    final value = ref.watch(clientRaringProvider.state).state;
-                    return Text(
-                      value.toString(),
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headline1,
-                    );
-                  },
-                ),
-              ),
-              IconButton(
-                  icon: const Icon(
-                    Icons.thumb_up_alt_rounded,
-                    color: Colors.grey,
-                  ),
-                  onPressed: () {
-                    ref.read(clientRaringProvider.state).state += 1;
-                  }),
-            ],
-          ),
-        ),
-      ],
+  buildRating(BuildContext context) {
+    return RatingBar.builder(
+      initialRating: 3,
+      itemSize: 32,
+      minRating: 0,
+      maxRating: 5,
+      direction: Axis.horizontal,
+      allowHalfRating: true,
+      itemCount: 5,
+      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+      itemBuilder: (context, _) => const Icon(
+        Icons.star,
+        color: Colors.amber,
+      ),
+      onRatingUpdate: (rating) {
+        setState(() {
+          _canSave = true;
+          _rating = rating;
+        });
+      },
     );
   }
 }
-
-final clientRaringProvider = StateProvider<int>((ref) {
-  return 1;
-});

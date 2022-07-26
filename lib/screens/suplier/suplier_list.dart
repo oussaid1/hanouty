@@ -1,4 +1,4 @@
-import 'package:hanouty/screens/suplier/add_suplier/add_suplier.dart';
+import 'package:hanouty/screens/suplier/add_suplier.dart';
 import 'package:hanouty/settings/themes.dart';
 import 'package:hanouty/utils/popup_dialogues.dart';
 import 'package:flutter/material.dart';

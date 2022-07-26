@@ -1,23 +1,14 @@
-import 'dart:developer';
-
-import 'package:hanouty/local_components.dart';
-import 'package:flutter/services.dart';
-import '../../../blocs/productbloc/product_bloc.dart';
-import '../../../database/database_operations.dart';
-import '../../../utils/constents.dart';
-import '../../../widgets/date_pickers.dart/date_picker.dart';
-import '../../../widgets/number_incrementer.dart';
-import '/../components.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:overlay_support/overlay_support.dart';
 
-class AddProductFullPage extends StatelessWidget {
-  const AddProductFullPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(body: AddOrEditProduct());
-  }
-}
+import '../../models/product/product.dart';
+import '../../settings/themes.dart';
+import '../../utils/constents.dart';
+import '../../widgets/autocomplete/autocomlete_textfield.dart';
+import '../../widgets/date_pickers.dart/date_picker.dart';
+import '../../widgets/number_incrementer.dart';
 
 class AddOrEditProduct extends StatefulWidget {
   final DateTime? initialDateTime;
@@ -93,88 +84,58 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
-      child: SizedBox(
-        width: 400,
-        height: 800,
-        child: Column(
-          children: [
-            //InStockWidget(dBProducts: dBProducts),
-            buildFlexible(
-              context,
-              [],
-            ),
-          ],
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        buildFields(
+          context,
+          [],
         ),
-      ),
+      ],
     );
   }
 
-  Flexible buildFlexible(BuildContext context, List<String> suplierList) {
-    return Flexible(
-      fit: FlexFit.tight,
-      flex: 2,
-      child: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(8),
-          width: Responsive.isDesktop(context) ? 600 : context.width - 10,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            color: Theme.of(context).dialogBackgroundColor,
-            // gradient: MThemeData.gradient1,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+  buildFields(BuildContext context, List<String> suplierList) {
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Form(
+            key: formKey,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(height: 10),
-                //buildBarcode(ref),
-                //const SizedBox(height: 8),
-                Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      _buildProductName(),
-                      const SizedBox(height: 8),
-                      _buildPriceIn(),
-                      const SizedBox(height: 8),
-                      _buildPriceOut(),
-                      const SizedBox(height: 8),
-                      _buildQuantity(context),
-                      const SizedBox(height: 8),
-                      _buildCategory(context, []),
-                      const SizedBox(height: 8),
-                      _buildDate(),
-                      const SizedBox(height: 8),
-                      _buildSuplier(suplierList),
-                      const SizedBox(height: 8),
-                      _buildDescription(),
-                      const SizedBox(
-                        height: 40,
-                      ),
-                    ],
-                  ),
-                ),
-
-                _buildSaveButton(context),
-                const SizedBox(
-                  height: 100,
-                ) //but
+                _buildProductName(),
+                const SizedBox(height: 20),
+                _buildPriceIn(),
+                const SizedBox(height: 20),
+                _buildPriceOut(),
+                const SizedBox(height: 20),
+                _buildQuantity(context),
+                const SizedBox(height: 20),
+                _buildCategory(context, []),
+                const SizedBox(height: 20),
+                _buildDate(),
+                const SizedBox(height: 20),
+                _buildSuplier(context),
+                const SizedBox(height: 20),
+                _buildDescription(),
+                const SizedBox(height: 20),
               ],
             ),
           ),
-        ),
+
+          _buildSaveButton(context),
+          const SizedBox(height: 40) //but
+        ],
       ),
     );
   }
 
   _buildSaveButton(BuildContext context) {
-    var prdBloc =
-        ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>());
+    // var prdBloc =
+    //     ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>());
     return widget.product == null
         ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -202,7 +163,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
                           setState(() {
                             canSave = false;
                           });
-                          prdBloc.add(AddProductEvent(product));
+                          //prdBloc.add(AddProductEvent(product));
                         }
                       },
                 child: Text(
@@ -228,29 +189,33 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
                 child: Text(
                   'Update'.tr(),
                 ),
-                onPressed: () {
-                  final product = ProductModel(
-                    pId: widget.product!.pId,
-                    barcode: barcodeController.text.trim(),
-                    dateIn: _pickedDateTime,
-                    description: descrController.text.trim(),
-                    category: productCat,
-                    productName: productNameController.text.trim(),
-                    priceIn: double.tryParse(priceInController.text.trim())!,
-                    priceOut: double.tryParse(priceOutController.text.trim())!,
-                    quantity: quantity.toInt(),
-                    suplier: suplier,
-                  );
+                onPressed: !canSave
+                    ? null
+                    : () {
+                        final product = ProductModel(
+                          pId: widget.product!.pId,
+                          barcode: barcodeController.text.trim(),
+                          dateIn: _pickedDateTime,
+                          description: descrController.text.trim(),
+                          category: productCat,
+                          productName: productNameController.text.trim(),
+                          priceIn:
+                              double.tryParse(priceInController.text.trim())!,
+                          priceOut:
+                              double.tryParse(priceOutController.text.trim())!,
+                          quantity: quantity.toInt(),
+                          suplier: suplier,
+                        );
 
-                  if (formKey.currentState!.validate()) {
-                    setState(() {
-                      canSave = false;
-                    });
-                    prdBloc.add(
-                      UpdateProductEvent(product),
-                    );
-                  }
-                },
+                        if (formKey.currentState!.validate()) {
+                          setState(() {
+                            canSave = false;
+                          });
+                          // prdBloc.add(
+                          //   UpdateProductEvent(product),
+                          // );
+                        }
+                      },
               ),
               ElevatedButton(
                 style: MThemeData.raisedButtonStyleCancel,
@@ -265,6 +230,14 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
           );
   }
 
+  _buildSuplier(BuildContext context) {
+    return SuplierAutocompleteField(onChanged: (suplier) {
+      setState(() {
+        suplier = suplier;
+      });
+    });
+  }
+
   _buildDescription() {
     return TextFormField(
       controller: descrController,
@@ -272,6 +245,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
         return null;
       },
       maxLines: 4,
+      maxLength: 100,
       decoration: InputDecoration(
         labelText: 'Description'.tr(),
         border: OutlineInputBorder(
@@ -282,136 +256,18 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
         hintText: 'description_hint'.tr(),
         hintStyle: Theme.of(context).textTheme.subtitle2!,
         filled: true,
-        contentPadding: const EdgeInsets.all(8.0),
+        contentPadding: const EdgeInsets.all(18.0),
       ),
     );
   }
 
   _buildCategory(BuildContext context, List<String> list) {
-    return SizedBox(
-      width: context.width,
-      child: Autocomplete<String>(
-        optionsBuilder: (TextEditingValue textEditingValue) {
-          if (textEditingValue.text == '') {
-            return const Iterable<String>.empty();
-          }
-          return Category.categoriesStrings.where((String option) {
-            return option
-                .toString()
-                .contains(textEditingValue.text.toLowerCase());
-          });
-        },
-        fieldViewBuilder: (BuildContext context,
-            TextEditingController textEditingController,
-            FocusNode focusNode,
-            VoidCallback onFieldSubmitted) {
-          return TextFormField(
-            controller: textEditingController,
-            onChanged: (text) {
-              setState(() {
-                productCat = text;
-              });
-            },
-            decoration: InputDecoration(
-              labelText: 'Category'.tr(),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(6.0),
-                borderSide: BorderSide(color: AppConstants.whiteOpacity),
-              ),
-              //border: InputBorder.none,
-              hintText: 'category_hint'.tr(),
-              hintStyle: Theme.of(context).textTheme.subtitle2!,
-              filled: true,
-            ),
-            focusNode: focusNode,
-            onFieldSubmitted: (String value) {
-              onFieldSubmitted();
-              log('You just typed a new entry  $value');
-            },
-          );
-        },
-        onSelected: (String selection) {
-          setState(() {
-            productCat = selection;
-          });
-          log('Selected: $selection');
-        },
-      ),
-    );
-  }
-
-  _buildSuplier(List<String> list) {
-    return SizedBox(
-      width: 400,
-      child: Autocomplete<String>(
-        optionsBuilder: (TextEditingValue textEditingValue) {
-          if (textEditingValue.text == '') {
-            return const Iterable<String>.empty();
-          }
-          return list.where((String option) {
-            return option
-                .toString()
-                .contains(textEditingValue.text.toLowerCase());
-          });
-        },
-        fieldViewBuilder: (BuildContext context,
-            TextEditingController textEditingController,
-            FocusNode focusNode,
-            VoidCallback onFieldSubmitted) {
-          return TextFormField(
-            controller: textEditingController,
-            onChanged: (String value) {
-              setState(() {
-                suplier = value;
-              });
-            },
-            decoration: InputDecoration(
-              prefixIcon: Tooltip(
-                message: 'Add new suplier'.tr(),
-                child: IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () {
-                    /// TODO: add new suplier Dialog
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => AddSuplierPage(),
-                    //   ),
-                    // );
-                  },
-                ),
-              ),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: () {
-                  textEditingController.clear();
-                },
-              ),
-              labelText: 'Suplier'.tr(),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(6.0),
-                borderSide: BorderSide(color: AppConstants.whiteOpacity),
-              ),
-              //border: InputBorder.none,
-              hintText: 'suplier'.tr(),
-              // label: const Text('suplier').tr(),
-              hintStyle: Theme.of(context).textTheme.subtitle2!,
-              filled: true,
-            ),
-            focusNode: focusNode,
-            onFieldSubmitted: (String value) {
-              onFieldSubmitted();
-              log('You just typed a new entry  $value');
-            },
-          );
-        },
-        onSelected: (String selection) {
-          setState(() {
-            suplier = selection;
-          });
-          log('Selected: $selection');
-        },
-      ),
+    return CategoryAutocompleteField(
+      onChanged: (category) {
+        setState(() {
+          productCat = category;
+        });
+      },
     );
   }
 
@@ -434,16 +290,13 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
   }
 
   _buildQuantity(BuildContext context) {
-    return SizedBox(
-      width: context.width,
-      child: NumberIncrementerWidget(
-        initialValue: quantity,
-        onChanged: (num number) {
-          setState(() {
-            quantity = number;
-          });
-        },
-      ),
+    return NumberIncrementerWidget(
+      initialValue: quantity,
+      onChanged: (num number) {
+        setState(() {
+          quantity = number;
+        });
+      },
     );
   }
 
@@ -460,8 +313,10 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
         FilteringTextInputFormatter.allow(RegExp('[0-9.]+')),
       ],
       textAlign: TextAlign.center,
+      maxLength: 10,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       decoration: InputDecoration(
+        counterText: '',
         labelText: 'Price-out'.tr(),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.0),
@@ -490,7 +345,9 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
         FilteringTextInputFormatter.allow(RegExp('[0-9.]+')),
       ],
       textAlign: TextAlign.center,
+      maxLength: 10,
       decoration: InputDecoration(
+        counterText: '',
         labelText: 'Price-in'.tr(),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.0),
@@ -520,7 +377,10 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
           canSave = value.isNotEmpty;
         });
       },
+      maxLength: 40,
+      textAlign: TextAlign.center,
       decoration: InputDecoration(
+        counterText: '',
         labelText: 'Product-Name'.tr(),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.0),

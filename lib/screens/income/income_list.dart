@@ -1,6 +1,6 @@
 import 'package:hanouty/models/income/income.dart';
 import 'package:hanouty/providers/var_provider.dart';
-import 'package:hanouty/screens/income/add_income/add_income.dart';
+import 'package:hanouty/screens/income/add_income.dart';
 import 'package:hanouty/settings/themes.dart';
 import 'package:hanouty/utils/popup_dialogues.dart';
 import 'package:flutter/material.dart';

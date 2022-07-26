@@ -239,10 +239,10 @@ class AuthPageState extends State<AuthPage> {
   buildLefttSide(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: MThemeData.primaryColor,
+        color: Colors.transparent,
+        gradient: MThemeData.gradient2,
       ),
       height: MediaQuery.of(context).size.height,
-      // color: Theme.of(context).colorScheme.primary,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import 'package:hanouty/components.dart';
-import 'package:hanouty/local_components.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 part 'expenses_data.dart';
 part 'filered_expenses.dart';
@@ -15,7 +14,7 @@ class ExpenseModel {
   DateTime deadLine;
   double amount;
   double amountPaid;
-  ExpenseCategory expenseCategory;
+  String expenseCategory;
   bool get isPaid => amountPaid == amount;
   ExpenseModel({
     this.id,
@@ -54,7 +53,7 @@ class ExpenseModel {
       'deadLine': deadLine,
       'amount': amount,
       'amountPaid': amountPaid,
-      'expenseCategory': expenseCategory.name,
+      'expenseCategory': expenseCategory,
     };
   }
 
@@ -66,7 +65,7 @@ class ExpenseModel {
       deadLine: map['deadLine'].toDate(),
       amount: map['amount'],
       amountPaid: map['amountPaid'],
-      expenseCategory: map['expenseCategory'],
+      expenseCategory: map['expenseCategory'].toString().split('.').last,
     );
   }
 

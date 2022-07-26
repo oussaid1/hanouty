@@ -1,36 +1,38 @@
-import 'package:hanouty/blocs/productbloc/product_bloc.dart';
-import 'package:hanouty/local_components.dart';
+import 'dart:developer';
 
-import 'package:hanouty/widgets/date_pickers.dart/date_picker.dart';
-
-import 'package:hanouty/widgets/select_or_add/select_or_add_cat.dart';
-import 'package:flutter/services.dart';
-import '../../blocs/debtbloc /debt_bloc.dart';
-import '../../utils/constents.dart';
-import '/../components.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class AddDebt extends ConsumerStatefulWidget {
+import '../../models/debt/debt.dart';
+import '../../models/product/product.dart';
+import '../../settings/themes.dart';
+import '../../widgets/autocomplete/autocomlete_textfield.dart';
+import '../../widgets/date_pickers.dart/date_picker.dart';
+
+class AddDebt extends StatefulWidget {
   const AddDebt({Key? key, this.debt}) : super(key: key);
   final DebtModel? debt;
   @override
   AddProductState createState() => AddProductState();
 }
 
-class AddProductState extends ConsumerState<AddDebt> {
+class AddProductState extends State<AddDebt> {
   final GlobalKey<FormState> dformKey = GlobalKey<FormState>();
   //final TextEditingController clientController = TextEditingController();
   final TextEditingController paidAmountController = TextEditingController();
-  String productName = "any";
+  String productId = "any";
   final TextEditingController dueAmountController = TextEditingController();
   DateTime date = DateTime.now();
-  DateTime deadline = DateTime.now();
-  String clientName = "client";
+  DateTime deadline = DateTime.now().add(const Duration(days: 30));
+  String clientId = "";
+  String type = "";
   bool _canSave = false;
   bool _isUpdate = false;
 
   /// clear the controller when the user clicks on the field
   void clear() {
+    paidAmountController.clear();
     dueAmountController.clear();
   }
 
@@ -39,10 +41,10 @@ class AddProductState extends ConsumerState<AddDebt> {
     super.initState();
     if (widget.debt != null) {
       _isUpdate = true;
-      productName = widget.debt!.productName!;
       date = widget.debt!.timeStamp;
       deadline = widget.debt!.deadLine;
       dueAmountController.text = widget.debt!.amount.toString();
+      clientId = widget.debt!.clientId!;
     }
   }
 
@@ -62,57 +64,39 @@ class AddProductState extends ConsumerState<AddDebt> {
   Widget build(BuildContext context) {
     // var clientNamesLis = ref.watch(shopClientsProvider.state).state;
     // var productCatList = ref.watch(productCategoryListProvider.state).state;
-    var productsList = context.read<ProductBloc>().state;
-    return SizedBox(
-      width: context.width,
-      height: context.height,
-      child: Column(
-        children: [
-          Flexible(
-            fit: FlexFit.tight,
-            flex: 2,
-            child: SingleChildScrollView(
-              child: Container(
-                margin: const EdgeInsets.all(8),
-                width: Responsive.isDesktop(context) ? 600 : context.width - 10,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
+    // var productsList = context.read<ProductBloc>().state;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Form(
+          key: dformKey,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                buildClientName(),
+                const SizedBox(height: 20),
+                buildDueDate(),
+                const SizedBox(height: 20),
+                buildDueAmount(),
+                const SizedBox(height: 20),
+                buildProductId(
+                  context,
                 ),
-                child: Form(
-                  key: dformKey,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        buildDate(),
-                        const SizedBox(height: 10),
-                        buildClientName(),
-                        const SizedBox(height: 10),
-                        buildProductName(context, productsList.products),
-                        const SizedBox(height: 10),
-                        buildCategory([]),
-                        const SizedBox(height: 10),
-                        buildDueAmount(ref),
-                        const SizedBox(height: 10),
-                        buildDueDate(),
-                        buildPaidAmount(ref),
-                        const SizedBox(height: 10),
-                        const SizedBox(height: 40),
-                        buildSaveButton(context),
-                        const SizedBox(
-                          height: 20,
-                        ) //but
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                const SizedBox(height: 20),
+                buildDate(),
+                const SizedBox(height: 20),
+                buildPaidAmount(),
+                const SizedBox(height: 40),
+                buildSaveButton(context),
+                const SizedBox(height: 40) //but
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -132,17 +116,14 @@ class AddProductState extends ConsumerState<AddDebt> {
                       final debt = DebtModel(
                         id: _isUpdate ? widget.debt!.id : null,
                         amount: double.tryParse(dueAmountController.text)!,
-                        paidAmount: double.tryParse(paidAmountController.text)!,
-                        clientId: widget.debt!.clientId,
-                        productName: productName,
+                        clientId: _isUpdate ? widget.debt!.clientId : clientId,
                         deadLine: deadline,
-                        timeStamp: widget.debt!.timeStamp,
-                        type: ref.read(selectedSelectOrAddCat.state).state,
+                        timeStamp: date,
                       );
-                      GetIt.I<DebtBloc>().add(_isUpdate
-                          ? UpdateDebtEvent(debt)
-                          : AddDebtEvent(debt));
-                      // Navigator.pop(context);
+                      // GetIt.I<DebtBloc>().add(_isUpdate
+                      //     ? UpdateDebtEvent(debt)
+                      //     : AddDebtEvent(debt));
+                      // // Navigator.pop(context);
                     }
                   },
             child: Text(_isUpdate ? "Update" : "Save").tr()),
@@ -159,46 +140,30 @@ class AddProductState extends ConsumerState<AddDebt> {
     );
   }
 
-  Widget buildCategory(List<String> list) {
-    return SelectOrAddNewDropDown(
-      list: list,
-      onSaved: (value) {},
-      hintText: "Item-Type".tr(),
-    );
-  }
-
   Widget buildDueDate() {
-    return SizedBox(
-      height: 50,
-      width: 240,
-      child: SelectDate(
-        initialDate: deadline,
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2050),
-        onDateSelected: (value) {
-          deadline = value;
-        },
-      ),
+    return SelectDate(
+      labelText: 'Deadline Date'.tr(),
+      initialDate: deadline,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2050),
+      onDateSelected: (value) {
+        deadline = value;
+      },
     );
   }
 
   Widget buildDate() {
-    return SizedBox(
-      height: 50,
-      width: 240,
-      child: SelectDate(
-        labelText: 'Deadline Date'.tr(),
-        initialDate: date,
-        onDateSelected: (value) {
-          setState(() {
-            deadline = value;
-          });
-        },
-      ),
+    return SelectDate(
+      initialDate: date,
+      onDateSelected: (value) {
+        setState(() {
+          date = value;
+        });
+      },
     );
   }
 
-  TextFormField buildDueAmount(WidgetRef ref) {
+  TextFormField buildDueAmount() {
     return TextFormField(
       controller: dueAmountController,
       validator: (text) {
@@ -212,7 +177,9 @@ class AddProductState extends ConsumerState<AddDebt> {
       ],
       textAlign: TextAlign.center,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      maxLength: 10,
       decoration: InputDecoration(
+        counterText: '',
         labelText: 'Amount-Due'.tr(),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.0),
@@ -227,60 +194,17 @@ class AddProductState extends ConsumerState<AddDebt> {
     );
   }
 
-  buildProductName(BuildContext context, List<ProductModel> products) {
-    return SizedBox(
-      width: context.width,
-      child: Autocomplete<ProductModel>(
-        initialValue: TextEditingValue(text: productName),
-        optionsBuilder: (TextEditingValue textEditingValue) {
-          if (textEditingValue.text == '') {
-            return const Iterable<ProductModel>.empty();
-          }
-          return products.where((ProductModel option) {
-            return option.productName
-                .toString()
-                .contains(textEditingValue.text.toLowerCase());
-          });
-        },
-        fieldViewBuilder: (BuildContext context,
-            TextEditingController textEditingController,
-            FocusNode focusNode,
-            VoidCallback onFieldSubmitted) {
-          return TextFormField(
-            controller: textEditingController,
-            onChanged: (text) {
-              setState(() {
-                _canSave = text.trim().isNotEmpty;
-                productName = text.trim();
-              });
-            },
-            decoration: InputDecoration(
-              labelText: 'Product-Name'.tr(),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(6.0),
-                borderSide: BorderSide(color: AppConstants.whiteOpacity),
-              ),
-              //border: InputBorder.none,
-              hintText: 'product_name'.tr(),
-              hintStyle: Theme.of(context).textTheme.subtitle2!,
-              filled: true,
-            ),
-            focusNode: focusNode,
-            onFieldSubmitted: (String value) {
-              onFieldSubmitted();
-            },
-          );
-        },
-        onSelected: (ProductModel selection) {
-          setState(() {
-            productName = selection.productName;
-          });
-        },
-      ),
+  buildProductId(BuildContext context) {
+    return ProductsAutocompleteField(
+      onChanged: (product) {
+        setState(() {
+          productId = product.pId!;
+        });
+      },
     );
   }
 
-  TextFormField buildPaidAmount(WidgetRef ref) {
+  TextFormField buildPaidAmount() {
     return TextFormField(
       controller: paidAmountController,
       validator: (text) {
@@ -294,7 +218,9 @@ class AddProductState extends ConsumerState<AddDebt> {
         FilteringTextInputFormatter.allow(RegExp('[0-9.]+')),
       ],
       textAlign: TextAlign.center,
+      maxLength: 10,
       decoration: InputDecoration(
+        counterText: '',
         labelText: 'Amount-Paid'.tr(),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.0),
@@ -310,76 +236,18 @@ class AddProductState extends ConsumerState<AddDebt> {
   }
 
   buildClientName() {
-    return SizedBox(
-      width: 400,
-      child: Autocomplete<String>(
-        optionsBuilder: (TextEditingValue textEditingValue) {
-          if (textEditingValue.text == '') {
-            return const Iterable<String>.empty();
-          }
-          return <String>[].where((String option) {
-            return option
-                .toString()
-                .contains(textEditingValue.text.toLowerCase());
-          });
-        },
-        fieldViewBuilder: (BuildContext context,
-            TextEditingController textEditingController,
-            FocusNode focusNode,
-            VoidCallback onFieldSubmitted) {
-          return TextFormField(
-            controller: textEditingController,
-            onChanged: (String value) {
-              setState(() {
-                clientName = value.trim();
-              });
-            },
-            decoration: InputDecoration(
-              prefixIcon: Tooltip(
-                message: 'Add new suplier'.tr(),
-                child: IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () {
-                    /// TODO: add new suplier Dialog
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => AddSuplierPage(),
-                    //   ),
-                    // );
-                  },
-                ),
-              ),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: () {
-                  textEditingController.clear();
-                },
-              ),
-              labelText: 'Client'.tr(),
-              border: OutlineInputBorder(
-                /// TODO: globalize this
-                borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-                borderSide: BorderSide(color: AppConstants.whiteOpacity),
-              ),
-              //border: InputBorder.none,
-              hintText: 'client'.tr(),
-              // label: const Text('suplier').tr(),
-              hintStyle: Theme.of(context).textTheme.subtitle2!,
-              filled: true,
-            ),
-            focusNode: focusNode,
-            onFieldSubmitted: (String value) {
-              onFieldSubmitted();
-            },
-          );
-        },
-        onSelected: (String selection) {
-          setState(() {
-            clientName = selection;
-          });
-        },
-      ),
+    return ClientAutocompleteField(
+      // validator: (client) {
+      //   if (client == null) {
+      //     return "error".tr();
+      //   }
+      //   return null;
+      // },
+      onChanged: (client) {
+        setState(() {
+          clientId = client.id!;
+        });
+      },
     );
   }
 }

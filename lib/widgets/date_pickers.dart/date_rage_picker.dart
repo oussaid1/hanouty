@@ -2,8 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:hanouty/local_components.dart';
-
-import '../../blocs/bloc/date_filter_bloc.dart';
+import '../../blocs/datefilterbloc/date_filter_bloc.dart';
 import '../../components.dart';
 
 class DateRangePicker extends StatelessWidget {
@@ -24,7 +23,7 @@ class DateRangePicker extends StatelessWidget {
                 Text(
                   (state.dateRange ?? MDateRange.empty).start.ddmmyyyy(),
                 ),
-                Text(
+                const Text(
                   '-',
                 ),
                 Text((state.dateRange ?? MDateRange.empty).end.ddmmyyyy()),

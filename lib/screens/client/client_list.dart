@@ -3,7 +3,7 @@ import 'package:hanouty/components.dart';
 
 import '../../blocs/clientsbloc/clients_bloc.dart';
 import '../../local_components.dart';
-import 'add_clients/add_client.dart';
+import 'add_client.dart';
 
 class ShopClientsList extends ConsumerWidget {
   const ShopClientsList({Key? key}) : super(key: key);
@@ -63,10 +63,6 @@ class ShopClientsList extends ConsumerWidget {
                                   children: [
                                     SlidableAction(
                                       onPressed: (context) {
-                                        ref
-                                            .read(clientRaringProvider.state)
-                                            .state = shopClient.stars;
-
                                         MDialogs.dialogSimple(
                                           context,
                                           title: Text(
@@ -118,29 +114,7 @@ class ShopClientsList extends ConsumerWidget {
                                                       .textTheme
                                                       .bodyText1!,
                                                 ),
-                                                onPressed: () {
-                                                  // ref
-                                                  //     .read(databaseProvider)!
-                                                  //     .deleteClient(shopClient)
-                                                  //     .then((value) {
-                                                  //   if (value) {
-                                                  //     ScaffoldMessenger.of(
-                                                  //             context)
-                                                  //         .showSnackBar(
-                                                  //             MDialogs.snackBar(
-                                                  //                 'Done !'));
-
-                                                  //     Navigator.of(context)
-                                                  //         .pop();
-                                                  //   } else {
-                                                  //     ScaffoldMessenger.of(
-                                                  //             context)
-                                                  //         .showSnackBar(MDialogs
-                                                  //             .errorSnackBar(
-                                                  //                 'Error !'));
-                                                  //   }
-                                                  // });
-                                                },
+                                                onPressed: () {},
                                               ),
                                               ElevatedButton(
                                                 style: MThemeData

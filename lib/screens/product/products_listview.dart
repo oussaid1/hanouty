@@ -12,7 +12,7 @@ import '../../widgets/charts/inventory_widget.dart';
 import '../../widgets/charts/syncfusion_charts.dart';
 import '../../widgets/search_widget.dart';
 import '../sell/sell_product/sell_product_dialogue.dart';
-import 'add_product/add_product.dart';
+import 'add_product.dart';
 
 class ProductList extends ConsumerWidget {
   const ProductList({

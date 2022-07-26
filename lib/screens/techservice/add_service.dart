@@ -2,7 +2,7 @@ import 'package:hanouty/blocs/techservicebloc/techservice_bloc.dart';
 import 'package:hanouty/local_components.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import '../../../utils/constents.dart';
+import '../../utils/constents.dart';
 import '/../components.dart';
 import 'package:flutter/material.dart';
 

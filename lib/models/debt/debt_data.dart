@@ -122,18 +122,18 @@ class DebtData {
   // get total  paid  for the client
   double get totalPaid {
     double total = 0;
-    for (var item in allDebts) {
-      total += item.paidAmount;
-    }
+    // for (var item in allDebts) {
+    //   total += item.paidAmount;
+    // }
     return total;
   }
 
 // get total paid amount paidamount + payments
   double get totalPaidDebtAmount {
     double total = 0;
-    for (var item in allDebts) {
-      total += item.paidAmount;
-    }
+    // for (var item in allDebts) {
+    //   total += item.paidAmount;
+    // }
     total += totalPayments;
     return total;
   }

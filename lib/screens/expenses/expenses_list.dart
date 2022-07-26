@@ -1,6 +1,6 @@
 import 'package:hanouty/local_components.dart';
 
-import 'package:hanouty/screens/expenses/add_expense/add_expense.dart';
+import 'package:hanouty/screens/expenses/add_expense.dart';
 import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
 
@@ -206,7 +206,7 @@ class ExpenseListCard extends ConsumerWidget {
                   style: Theme.of(context).textTheme.subtitle2!,
                   children: [
                     TextSpan(
-                      text: ' ${expense.expenseCategory.name}',
+                      text: ' ${expense.expenseCategory}',
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             color: MThemeData.expensesColor,
                           ),

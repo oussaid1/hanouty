@@ -1,6 +1,6 @@
 import 'package:hanouty/models/techservice/techservice.dart';
 
-import 'package:hanouty/screens/techservice/add_service/add_service.dart';
+import 'package:hanouty/screens/techservice/add_service.dart';
 
 import 'package:hanouty/settings/themes.dart';
 import 'package:hanouty/utils/glasswidgets.dart';

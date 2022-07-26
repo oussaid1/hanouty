@@ -10,7 +10,7 @@ import '../../local_components.dart';
 import '../../utils/global_functions.dart';
 import '../../widgets/charts/inventory_widget.dart';
 import '../../widgets/search_widget.dart';
-import 'add_sale/edit_sale.dart';
+import 'edit_sale.dart';
 
 class SalesList extends StatelessWidget {
   const SalesList({

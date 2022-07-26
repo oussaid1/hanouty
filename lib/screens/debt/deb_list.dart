@@ -703,7 +703,7 @@ class SimpleDebtCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  '${debt.clientName}',
+                  '${debt.clientId}',
                   style: Theme.of(context).textTheme.bodyText2!.copyWith(
                       color:
                           Theme.of(context).colorScheme.onSecondaryContainer),

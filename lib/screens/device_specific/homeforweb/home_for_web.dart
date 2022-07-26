@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../blocs/bloc/date_filter_bloc.dart';
 import '../../../blocs/clientsbloc/clients_bloc.dart';
+import '../../../blocs/datefilterbloc/date_filter_bloc.dart';
 import '../../../blocs/debtbloc /debt_bloc.dart';
 import '../../../blocs/expensesbloc/expenses_bloc.dart';
 import '../../../blocs/fullsalesbloc/fullsales_bloc.dart';
@@ -89,17 +89,18 @@ class HomeForAll extends ConsumerWidget {
       ],
       child: Container(
         decoration: BoxDecoration(
-            image: DecorationImage(
-              colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.2), BlendMode.darken),
-              image: const AssetImage(
-                'assets/images/background.jpg',
-                // bundle: AssetBundle,/// TODO: fix this, read docs
-              ),
-              fit: BoxFit.cover,
-            ),
-            //gradient: MThemeData.gradient1,
-            color: Colors.transparent),
+          // image: DecorationImage(
+          //   colorFilter: ColorFilter.mode(
+          //       Colors.black.withOpacity(0.2), BlendMode.darken),
+          //   image: const AssetImage(
+          //     'assets/images/background.jpg',
+          //     // bundle: AssetBundle,/// TODO: fix this, read docs
+          //   ),
+          //   fit: BoxFit.cover,
+          // ),
+          gradient: MThemeData.gradient1,
+        ),
+        //  / color: Colors.transparent),
         child: Scaffold(
           backgroundColor: Colors.transparent,
           drawer: const SizedBox(width: 80, child: Drawer(child: NavMenu())),

@@ -7,7 +7,7 @@ import '../../models/techservice/techservice.dart';
 
 import '../../utils/popup_dialogues.dart';
 
-import '../techservice/add_service/add_service.dart';
+import '../techservice/add_service.dart';
 import '../techservice/service_listview.dart';
 
 class TechServiceList extends ConsumerWidget {
