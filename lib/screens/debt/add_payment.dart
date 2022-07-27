@@ -1,12 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hanouty/blocs/paymentsbloc/payments_bloc.dart';
 
 import '../../models/client/shop_client.dart';
 import '../../models/debt/debt.dart';
 import '../../models/payment/payment.dart';
 import '../../settings/themes.dart';
-import '../../widgets/autocomplete/autocomlete_textfield.dart';
+import '../../widgets/autocomplete/autocomlete_textfields.dart';
 import '../../widgets/date_pickers.dart/date_picker.dart';
 
 /// these are the states of the add payment screen //to disable the client name  if the payment is paying
@@ -84,7 +86,9 @@ class AddPaymentState extends State<AddPayment> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                buildClientName(),
+                widget.payingStatus != PayingStatus.paying
+                    ? buildClientName()
+                    : const SizedBox.shrink(),
                 const SizedBox(height: 20),
                 buildamountAmount(),
                 const SizedBox(height: 20),
@@ -105,7 +109,7 @@ class AddPaymentState extends State<AddPayment> {
   }
 
   Widget buildClientName() {
-    return ClientAutocompleteField(
+    return ClientsAutocompleteWidget(
       // validator: (value) {
       //   if (client == null) {
       //     return 'client_name_is_required';
@@ -136,19 +140,33 @@ class AddPaymentState extends State<AddPayment> {
                       setState(() {
                         canSave = false;
                       });
-                      final payment = PaymentModel(
-                        id: widget.payingStatus == PayingStatus.adding
-                            ? null
-                            : widget.payment!.id,
-                        description: description,
-                        amount: double.tryParse(amuontamountController.text)!,
-                        clientId: widget.payingStatus == PayingStatus.adding
-                            ? clientId
-                            : widget.payment!.clientId,
-                        date: date,
-                      );
-
-                      // GetIt.I<PaymentsBloc>().add(widget.payingStatus==PayingStatus.adding? AddPaymentEvent(payment):UpdatePaymentEvent(payment));
+                      if (widget.payingStatus == PayingStatus.editing) {
+                        widget.payment!.amount =
+                            double.parse(amuontamountController.text);
+                        widget.payment!.date = date;
+                        widget.payment!.clientId = clientId;
+                        widget.payment!.description = description;
+                        context
+                            .read<PaymentsBloc>()
+                            .add(AddPaymentEvent(widget.payment!));
+                      } else if (widget.payingStatus == PayingStatus.paying) {
+                        widget.debt!.amount =
+                            double.parse(amuontamountController.text);
+                        widget.debt!.clientId = clientId;
+                        context
+                            .read<PaymentsBloc>()
+                            .add(UpdatePaymentEvent(widget.payment!));
+                      } else {
+                        PaymentModel payment = PaymentModel(
+                          amount: double.parse(amuontamountController.text),
+                          date: date,
+                          clientId: clientId,
+                          description: description,
+                        );
+                        context
+                            .read<PaymentsBloc>()
+                            .add(AddPaymentEvent(payment));
+                      }
                       Navigator.pop(context);
                     }
                   },

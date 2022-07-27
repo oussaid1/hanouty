@@ -16,20 +16,17 @@ class DateRangePicker extends StatelessWidget {
       builder: (context, state) {
         if (state.filterType == DateFilter.custom && state.dateRange != null) {
           log('custom date range is ${state.dateRange}');
-          return MaterialButton(
-            child: Wrap(
-              direction: Axis.horizontal,
-              children: [
-                Text(
-                  (state.dateRange ?? MDateRange.empty).start.ddmmyyyy(),
-                ),
-                const Text(
-                  '-',
-                ),
-                Text((state.dateRange ?? MDateRange.empty).end.ddmmyyyy()),
-              ],
-            ),
-            onPressed: () {},
+          return Wrap(
+            direction: Axis.horizontal,
+            children: [
+              Text(
+                (state.dateRange ?? MDateRange.empty).start.ddmmyyyy(),
+              ),
+              const Text(
+                '-',
+              ),
+              Text((state.dateRange ?? MDateRange.empty).end.ddmmyyyy()),
+            ],
           );
         }
 

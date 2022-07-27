@@ -24,12 +24,10 @@ class ShopClientsList extends ConsumerWidget {
                 "Add Client",
                 style: Theme.of(context).textTheme.headline3!,
               ),
-              contentWidget: SizedBox(
+              contentWidget: const SizedBox(
                 height: 400,
                 width: 400,
-                child: AddClient(
-                  pContext: context,
-                ),
+                child: AddClient(),
               ),
             );
           },
@@ -43,132 +41,117 @@ class ShopClientsList extends ConsumerWidget {
               List<ShopClientModel> clientsList = state.clients;
               return Column(
                 children: [
-                  Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: SingleChildScrollView(
-                        child: SizedBox(
-                          height: 800,
-                          width: 400,
-                          child: ListView.builder(
-                            itemCount: clientsList.length,
-                            itemBuilder: (context, index) {
-                              final ShopClientModel shopClient =
-                                  clientsList[index];
-                              return Slidable(
-                                startActionPane: ActionPane(
-                                  motion: const ScrollMotion(),
-                                  dismissible:
-                                      DismissiblePane(onDismissed: () {}),
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (context) {
-                                        MDialogs.dialogSimple(
-                                          context,
-                                          title: Text(
-                                            "Edit techService".tr(),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline3!,
-                                          ),
-                                          contentWidget: SizedBox(
-                                            height: 400,
-                                            width: 400,
-                                            child: AddClient(
-                                              client: shopClient,
-                                              pContext: context,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      icon: Icons.delete,
-                                      label: 'Edit',
-                                    ),
-                                  ],
-                                ),
-                                endActionPane: ActionPane(
-                                  motion: const ScrollMotion(),
-                                  dismissible:
-                                      DismissiblePane(onDismissed: () {}),
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (context) {
-                                        MDialogs.dialogSimple(
-                                          context,
-                                          title: Text(
-                                            " ${shopClient.clientName}",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline3!,
-                                          ),
-                                          contentWidget: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              ElevatedButton(
-                                                style: MThemeData
-                                                    .raisedButtonStyleSave,
-                                                child: Text(
-                                                  'Delete'.tr(),
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText1!,
-                                                ),
-                                                onPressed: () {},
-                                              ),
-                                              ElevatedButton(
-                                                style: MThemeData
-                                                    .raisedButtonStyleCancel,
-                                                child: Text(
-                                                  'Cancel'.tr(),
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText1!,
-                                                ),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                      icon: Icons.delete,
-                                      label: 'Edit',
-                                    ),
-                                  ],
-                                ),
-                                child: Card(
-                                  child: ListTile(
-                                    leading: const Icon(
-                                      Icons.person_outline_outlined,
-                                      color: MThemeData.accentColor,
-                                    ),
+                  SizedBox(
+                    height: 800,
+                    width: 400,
+                    child: ListView.builder(
+                      itemCount: clientsList.length,
+                      itemBuilder: (context, index) {
+                        final ShopClientModel shopClient = clientsList[index];
+                        return Slidable(
+                          startActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            dismissible: DismissiblePane(onDismissed: () {}),
+                            children: [
+                              SlidableAction(
+                                onPressed: (context) {
+                                  MDialogs.dialogSimple(
+                                    context,
                                     title: Text(
-                                      '${shopClient.clientName}',
+                                      "Edit techService".tr(),
                                       style: Theme.of(context)
                                           .textTheme
                                           .headline3!,
                                     ),
-                                    trailing: Text(
-                                      '${shopClient.email}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!,
+                                    contentWidget: SizedBox(
+                                      height: 400,
+                                      width: 400,
+                                      child: AddClient(
+                                        client: shopClient,
+                                      ),
                                     ),
-                                    subtitle: Text(
-                                      '${shopClient.phone}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .subtitle2!,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
+                                  );
+                                },
+                                icon: Icons.delete,
+                                label: 'Edit',
+                              ),
+                            ],
                           ),
-                        ),
-                      )),
+                          endActionPane: ActionPane(
+                            motion: const ScrollMotion(),
+                            dismissible: DismissiblePane(onDismissed: () {}),
+                            children: [
+                              SlidableAction(
+                                onPressed: (context) {
+                                  MDialogs.dialogSimple(
+                                    context,
+                                    title: Text(
+                                      " ${shopClient.clientName}",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline3!,
+                                    ),
+                                    contentWidget: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        ElevatedButton(
+                                          style:
+                                              MThemeData.raisedButtonStyleSave,
+                                          child: Text(
+                                            'Delete'.tr(),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!,
+                                          ),
+                                          onPressed: () {},
+                                        ),
+                                        ElevatedButton(
+                                          style: MThemeData
+                                              .raisedButtonStyleCancel,
+                                          child: Text(
+                                            'Cancel'.tr(),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1!,
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                icon: Icons.delete,
+                                label: 'Edit',
+                              ),
+                            ],
+                          ),
+                          child: Card(
+                            child: ListTile(
+                              leading: const Icon(
+                                Icons.person_outline_outlined,
+                                color: MThemeData.accentColor,
+                              ),
+                              title: Text(
+                                '${shopClient.clientName}',
+                                style: Theme.of(context).textTheme.headline3!,
+                              ),
+                              trailing: Text(
+                                '${shopClient.email}',
+                                style: Theme.of(context).textTheme.subtitle2!,
+                              ),
+                              subtitle: Text(
+                                '${shopClient.phone}',
+                                style: Theme.of(context).textTheme.subtitle2!,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               );
             }

@@ -17,94 +17,93 @@ class RangeFilterSpinner extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
           color: AppConstants.whiteOpacity,
         ),
-        width: 120.0,
-        //height: 40,
+        width: 100.0,
+        height: 32,
         child: buildFilterSelectMenu(context));
   }
 
   /// build popup menu
   Widget buildFilterSelectMenu(BuildContext context) {
     return DropdownButtonHideUnderline(
-      child: DropdownButton<DateFilter>(
-        alignment: Alignment.center,
-        value: context.watch<DateFilterBloc>().state.filterType,
-        onChanged: (value) {
-          switch (value) {
-            case DateFilter.all:
-              context
-                  .read<DateFilterBloc>()
-                  .add(const UpdateFilterEvent(filterType: DateFilter.all));
-              break;
-            case DateFilter.custom:
-              showDialog<void>(
-                context: context,
-                builder: (BuildContext bcontext) {
-                  return AlertDialog(
-                    title: const Text('Date Range Picker'),
-                    content: SizedBox(
-                      height: 300,
-                      width: 400,
-                      child: Material(
-                        child: Scaffold(
-                          body: SfDateRangePicker(
-                              backgroundColor:
-                                  Theme.of(context).backgroundColor,
-                              showTodayButton: true,
-                              rangeSelectionColor:
-                                  MThemeData.accentColor.withOpacity(0.5),
-                              initialSelectedDate: DateTime.now(),
-                              initialDisplayDate: DateTime.now(),
-                              todayHighlightColor: MThemeData.revenuColor,
-                              selectionColor: MThemeData.accentColor,
-                              selectionShape:
-                                  DateRangePickerSelectionShape.rectangle,
-                              selectionMode: DateRangePickerSelectionMode.range,
-                              showActionButtons: true,
-                              onCancel: () {
-                                Navigator.pop(context);
-                              },
-                              onSubmit: (Object? range) {
-                                var dateRange = range as PickerDateRange;
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: DropdownButton<DateFilter>(
+          alignment: Alignment.centerLeft,
+          isDense: true,
+          value: context.watch<DateFilterBloc>().state.filterType,
+          onChanged: (value) {
+            switch (value) {
+              case DateFilter.all:
+                context
+                    .read<DateFilterBloc>()
+                    .add(const UpdateFilterEvent(filterType: DateFilter.all));
+                break;
+              case DateFilter.custom:
+                showDialog<void>(
+                  context: context,
+                  builder: (BuildContext bcontext) {
+                    return AlertDialog(
+                      title: const Text('Date Range Picker'),
+                      content: SizedBox(
+                        width: 420,
+                        height: 360,
+                        child: SfDateRangePicker(
+                            backgroundColor: Theme.of(context).backgroundColor,
+                            showTodayButton: true,
+                            rangeSelectionColor:
+                                MThemeData.accentColor.withOpacity(0.5),
+                            initialSelectedDate: DateTime.now(),
+                            initialDisplayDate: DateTime.now(),
+                            todayHighlightColor: MThemeData.revenuColor,
+                            selectionColor: MThemeData.accentColor,
+                            selectionShape:
+                                DateRangePickerSelectionShape.rectangle,
+                            selectionMode: DateRangePickerSelectionMode.range,
+                            showActionButtons: true,
+                            onCancel: () {
+                              Navigator.pop(context);
+                            },
+                            onSubmit: (Object? range) {
+                              var dateRange = range as PickerDateRange;
 
-                                context
-                                    .read<DateFilterBloc>()
-                                    .add(UpdateFilterEvent(
-                                      filterType: DateFilter.custom,
-                                      dateRange: MDateRange(
-                                        start: dateRange.startDate!,
-                                        end: dateRange.endDate!,
-                                      ),
-                                    ));
-                                Navigator.pop(context);
-                              }),
-                        ),
+                              context
+                                  .read<DateFilterBloc>()
+                                  .add(UpdateFilterEvent(
+                                    filterType: DateFilter.custom,
+                                    dateRange: MDateRange(
+                                      start: dateRange.startDate!,
+                                      end: dateRange.endDate!,
+                                    ),
+                                  ));
+                              Navigator.pop(context);
+                            }),
                       ),
-                    ),
-                  );
-                },
-              );
-              break;
+                    );
+                  },
+                );
+                break;
 
-            case DateFilter.month:
-              context
-                  .read<DateFilterBloc>()
-                  .add(const UpdateFilterEvent(filterType: DateFilter.month));
-              break;
-            default:
-              context
-                  .read<DateFilterBloc>()
-                  .add(const UpdateFilterEvent(filterType: DateFilter.all));
-          }
-        },
-        items: DateFilter.values.map((DateFilter value) {
-          return DropdownMenuItem<DateFilter>(
-              value: value,
-              child: Text(
-                value.name.tr(),
-                textAlign: TextAlign.start,
-                style: Theme.of(context).textTheme.subtitle1!,
-              ));
-        }).toList(),
+              case DateFilter.month:
+                context
+                    .read<DateFilterBloc>()
+                    .add(const UpdateFilterEvent(filterType: DateFilter.month));
+                break;
+              default:
+                context
+                    .read<DateFilterBloc>()
+                    .add(const UpdateFilterEvent(filterType: DateFilter.all));
+            }
+          },
+          items: DateFilter.values.map((DateFilter value) {
+            return DropdownMenuItem<DateFilter>(
+                value: value,
+                child: Text(
+                  value.name.tr(),
+                  textAlign: TextAlign.start,
+                  style: Theme.of(context).textTheme.subtitle1!,
+                ));
+          }).toList(),
+        ),
       ),
     );
   }

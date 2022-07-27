@@ -42,7 +42,7 @@ class DebtData {
 
   double get lowestDebtAmount {
     var amount = 0.0;
-
+    lowestDebts.sort((a, b) => a.amount.compareTo(b.amount));
     if (lowestDebts.isNotEmpty) {
       amount = lowestDebts.first.amount;
     }
@@ -61,7 +61,7 @@ class DebtData {
 //total debts amount for the provided debts list
   double get totalDebtAmountLeft {
     double total = 0;
-    total = totalDebtAmount - totalPaidDebtAmount;
+    total = totalDebtAmount - totalPayments;
     return total;
   }
 
@@ -74,21 +74,11 @@ class DebtData {
     return total;
   }
 
-// // total paid detsAmount of  debts
-//   double get totalPaidDebtAmount {
-//     double total = 0;
-//     for (var item in allDebts) {
-//       total += item.paidAmount;
-//     }
-//     total += totalPayments;
-//     return total;
-//   }
-
   // get difference between total unpaid expenses and total paid expenses in percentage
   int get totalDifferencePercentage {
     double total = 0;
     if (totalDebtAmount != 0) {
-      total = (totalPaidDebtAmount * 100) / totalDebtAmount;
+      total = (totalPayments * 100) / totalDebtAmount;
     }
     // total = 100;
     if (total > 100) {
@@ -119,37 +109,11 @@ class DebtData {
 ///////////////////////////////////////////////////////////////////////
   ///sums and totals/////////////////////////////////////////////////////
 
-  // get total  paid  for the client
-  double get totalPaid {
-    double total = 0;
-    // for (var item in allDebts) {
-    //   total += item.paidAmount;
-    // }
-    return total;
-  }
-
-// get total paid amount paidamount + payments
-  double get totalPaidDebtAmount {
-    double total = 0;
-    // for (var item in allDebts) {
-    //   total += item.paidAmount;
-    // }
-    total += totalPayments;
-    return total;
-  }
-
-  // get total left for the client
-  double get totalLeft {
-    double total = 0;
-    total = totalDebtAmount - totalPaidDebtAmount;
-    return total;
-  }
-
 ///////////////////////////////////////////////////////////////////////
   ///other return types /////////////////////////////////////////////////////
   // bool get isPaid if total left is 0
   bool get isFullyPaid {
-    return totalLeft == 0;
+    return totalDebtAmountLeft == 0;
   }
 
   /// get the nearest debt deadline Date/////////////////////////////////////////////////////

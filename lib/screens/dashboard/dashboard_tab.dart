@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hanouty/cubits/usermodel_cubit/user_model_cubit.dart';
 import 'package:hanouty/local_components.dart';
 import '../../blocs/clientsbloc/clients_bloc.dart';
 import '../../blocs/debtbloc /debt_bloc.dart';

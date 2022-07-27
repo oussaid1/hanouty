@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:hanouty/widgets/autocomplete/autocomlete_textfield.dart';
+import 'package:hanouty/widgets/autocomplete/autocomlete_textfields.dart';
 import 'package:hanouty/widgets/number_incrementer.dart';
 import 'package:flutter/services.dart';
 import '../../../blocs/clientsbloc/clients_bloc.dart';
@@ -226,7 +226,7 @@ class AddProductState extends State<SellProductDialoge> {
 
   buildClientName(List<String> list) {
     log('buildClientName ${list.length}');
-    return ClientAutocompleteField(
+    return ClientsAutocompleteWidget(
       onChanged: (value) {
         setState(() {
           clientId = value.id!;

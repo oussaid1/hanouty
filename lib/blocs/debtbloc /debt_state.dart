@@ -4,8 +4,11 @@ enum DebtStatus {
   initial,
   loaded,
   added,
+  notAdded,
   updated,
+  notUpdated,
   deleted,
+  notDeleted,
   error,
 }
 

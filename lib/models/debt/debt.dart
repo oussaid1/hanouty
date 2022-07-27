@@ -21,7 +21,6 @@ class DebtModel {
   String? clientId;
   DateTime timeStamp = DateTime.now();
   double amount;
-  //double paidAmount;
   DateTime deadLine = DateTime.now();
 
   /// get total amount of debt left to pay
@@ -68,6 +67,7 @@ class DebtModel {
 
   Map<String, dynamic> toMap() {
     return {
+      if (id != null) 'id': id,
       'clientId': clientId,
       'amount': amount,
       'dueDate': deadLine,
@@ -123,20 +123,20 @@ class DebtModel {
         deadLine.hashCode;
   }
 
-  /// fake debts
-  static List<DebtModel> get fakeDebts {
-    List<DebtModel> debts = [];
-    for (var i = 0; i < 10; i++) {
-      debts.add(
-        DebtModel(
-          id: '1',
-          clientId: '$i',
-          amount: Random().nextInt(100000).toDouble(),
-          timeStamp: DateTime.now()..add(Duration(days: -i)),
-          deadLine: DateTime.now().add(const Duration(days: 30)),
-        ),
-      );
-    }
-    return debts;
-  }
+  // /// fake debts
+  // static List<DebtModel> get fakeDebts {
+  //   List<DebtModel> debts = [];
+  //   for (var i = 0; i < 10; i++) {
+  //     debts.add(
+  //       DebtModel(
+  //         id: '1',
+  //         clientId: '$i',
+  //         amount: Random().nextInt(100000).toDouble(),
+  //         timeStamp: DateTime.now()..add(Duration(days: -i)),
+  //         deadLine: DateTime.now().add(const Duration(days: 30)),
+  //       ),
+  //     );
+  //   }
+  //   return debts;
+  // }
 }

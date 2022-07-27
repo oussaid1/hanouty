@@ -17,14 +17,20 @@ class DebtsStatsViewModel {
   /// join each client to its debts payments and debts as a list of ShopClientsDeb
   List<ClientDebt> get clientDebts {
     List<ClientDebt> list = [];
-    for (var i = 0; i < shopClients.length; i++) {
-      list.add(ClientDebt(
-          shopClient: shopClients[i],
-          debts: debts.where((d) => shopClients[i].id == d.clientId).toList(),
-          payments:
-              payments.where((p) => shopClients[i].id == p.clientId).toList()));
-    }
 
+    /// join each client to its debts payments and debts as a list of ShopClientsDeb
+    /// should prevent shopClients with no debts from being included in the list
+    for (final c in shopClients) {
+      final d = debts.where((de) => de.clientId == c.id).toList();
+      final p = payments.where((pa) => pa.clientId == c.id).toList();
+      if (d.isNotEmpty) {
+        list.add(ClientDebt(
+          shopClient: c,
+          debts: d,
+          payments: p,
+        ));
+      }
+    }
     return list;
   }
 

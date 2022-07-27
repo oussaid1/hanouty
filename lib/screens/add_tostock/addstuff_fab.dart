@@ -25,11 +25,7 @@ class AddStuffWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          buildExpandedFab(context,
-              title: "Client",
-              child: AddClient(
-                pContext: context,
-              )),
+          buildExpandedFab(context, title: "Client", child: AddClient()),
           const SizedBox(height: 10),
 
           /// commented this beacasue it's not yet implemented in the app , but it's here for future use
@@ -42,7 +38,7 @@ class AddStuffWidget extends StatelessWidget {
           buildExpandedFab(context,
               title: "Service", child: const AddService()),
           const SizedBox(height: 10),
-          buildExpandedFab(context, title: "Add Debt", child: const AddDebt()),
+          buildExpandedFab(context, title: "Add Debt", child: AddDebt()),
           const SizedBox(height: 10),
           buildExpandedFab(context,
               title: "Payment",
@@ -91,11 +87,7 @@ class AddStuffWidget extends StatelessWidget {
           children: [
             const Icon(Icons.add, size: 18),
             const SizedBox(width: 5),
-            Text(title ?? '',
-                style: Theme.of(context).textTheme.headline3!.copyWith(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    )),
+            Text(title ?? '', style: Theme.of(context).textTheme.bodySmall),
           ],
         ),
       ),

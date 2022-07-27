@@ -14,10 +14,9 @@ class AddClient extends StatefulWidget {
   const AddClient({
     Key? key,
     this.client,
-    required this.pContext,
   }) : super(key: key);
   final ShopClientModel? client;
-  final BuildContext pContext;
+
   @override
   AddClientState createState() => AddClientState();
 }
@@ -118,9 +117,9 @@ class AddClientState extends State<AddClient> {
                     );
                     log('added ${client.toString()}');
                     _isUpdate
-                        ? BlocProvider.of<ShopClientBloc>(widget.pContext)
+                        ? BlocProvider.of<ShopClientBloc>(context)
                             .add(UpdateShopClientEvent(client))
-                        : BlocProvider.of<ShopClientBloc>(widget.pContext)
+                        : BlocProvider.of<ShopClientBloc>(context)
                             .add(AddShopClientEvent(client));
                     clear();
                     Navigator.pop(context);

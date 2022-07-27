@@ -54,13 +54,13 @@ class RouteGenerator {
         case stock:
           return const HomeForAll(
             title: 'stock',
-            centreWidget: AddScreenTab(),
+            centreWidget: StockTab(),
           );
-        case orders:
-          return const HomeForAll(
-            title: 'orders',
-            centreWidget: SellTab(),
-          );
+        // case orders:
+        //   return const HomeForAll(
+        //     title: 'orders',
+        //     centreWidget: SellTab(),
+        //   );
         case sales:
           return const HomeForAll(
             title: 'sales',

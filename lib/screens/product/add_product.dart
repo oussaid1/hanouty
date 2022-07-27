@@ -6,7 +6,7 @@ import '../../database/database_operations.dart';
 import '../../models/product/product.dart';
 import '../../settings/themes.dart';
 import '../../utils/constents.dart';
-import '../../widgets/autocomplete/autocomlete_textfield.dart';
+import '../../widgets/autocomplete/autocomlete_textfields.dart';
 import '../../widgets/date_pickers.dart/date_picker.dart';
 import '../../widgets/number_incrementer.dart';
 
@@ -188,7 +188,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
   }
 
   _buildSuplier(BuildContext context) {
-    return SuplierAutocompleteField(onChanged: (suplier) {
+    return SuplierAutocompleteWidget(onChanged: (suplier) {
       setState(() {
         suplier = suplier;
       });

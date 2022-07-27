@@ -1,16 +1,32 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:hanouty/screens/client/add_client.dart';
 
 import '../../blocs/clientsbloc/clients_bloc.dart';
 import '../../blocs/productbloc/product_bloc.dart';
+import '../../blocs/suplierbloc/suplier_bloc.dart';
 import '../../components.dart';
+import '../../database/database_operations.dart';
 import '../../models/client/shop_client.dart';
 import '../../models/product/product.dart';
 import '../../models/suplier/suplier.dart';
+import '../../screens/client/add_client.dart';
 import '../../utils/constents.dart';
 import '../../utils/popup_dialogues.dart';
+
+class ProductsAutoCompleteWidget extends StatelessWidget {
+  const ProductsAutoCompleteWidget({Key? key, required this.onChanged})
+      : super(key: key);
+  final Function(ProductModel) onChanged;
+  @override
+  Widget build(BuildContext context) {
+    // return BlocProvider(
+    //   create: (context) =>
+    //       ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+    //         ..add(GetProductsEvent()),
+    //   child: ProductsAutocompleteField(onChanged: onChanged),
+    // );
+    return ProductsAutocompleteField(onChanged: onChanged);
+  }
+}
 
 class ProductsAutocompleteField extends StatelessWidget {
   final Function(ProductModel) onChanged;
@@ -29,7 +45,7 @@ class ProductsAutocompleteField extends StatelessWidget {
     return BlocBuilder<ProductBloc, ProductState>(
       builder: (context, state) {
         /// if there is no product in the list, show a progress indicator
-        if (state.status != ProductStatus.loaded) {
+        if (state.products.isEmpty) {
           return const Center(
             child: CircularProgressIndicator(),
           );
@@ -79,42 +95,73 @@ class ProductsAutocompleteField extends StatelessWidget {
   }
 }
 
-class ClientAutocompleteField extends StatefulWidget {
+// class ClientsAutocompleteWidget extends StatelessWidget {
+//   final Function(ShopClientModel) onChanged;
+//   const ClientsAutocompleteWidget({
+//     Key? key,
+//     required this.onChanged,
+//   }) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     // return BlocProvider(
+//     //   create: (context) =>
+//     //       ShopClientBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+//     //   child: ClientAutocompleteInputField(
+//     //     onChanged: onChanged,
+//     //   ),
+//     // );
+//     return ClientAutocompleteInputField(onChanged: onChanged);
+//   }
+// }
+
+class ClientsAutocompleteWidget extends StatefulWidget {
   final Function(ShopClientModel) onChanged;
-  //final String? Function(String?)? validator;
-  const ClientAutocompleteField({
+  final ShopClientModel? initialValue;
+  const ClientsAutocompleteWidget({
     Key? key,
     required this.onChanged,
+    this.initialValue,
     // required this.validator,
   }) : super(key: key);
 
 //  static String _displayStringForOption(User option) => option.name;
-  static String _displayStringForOption(ShopClientModel option) =>
-      option.clientName!;
 
   @override
-  State<ClientAutocompleteField> createState() =>
-      _ClientAutocompleteFieldState();
+  State<ClientsAutocompleteWidget> createState() =>
+      _ClientAutocompleteInputFieldState();
 }
 
-class _ClientAutocompleteFieldState extends State<ClientAutocompleteField> {
+class _ClientAutocompleteInputFieldState
+    extends State<ClientsAutocompleteWidget> {
   ShopClientModel? client;
+  @override
+  void initState() {
+    if (widget.initialValue != null) {
+      client = widget.initialValue!;
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // var list = <ShopClientModel>[];
     // list = [ShopClientModel.client, ...list];
     return BlocBuilder<ShopClientBloc, ShopClientState>(
-      builder: (context, state) {
+      builder: (mcontext, state) {
         var list = [ShopClientModel.client, ...state.clients];
-        log('_ClientAutocompleteFieldState ${list.length}');
+
         if (list.isEmpty) {
           return Center(
             child: Text('no clients'.tr()),
           );
         }
         return Autocomplete<ShopClientModel>(
-          displayStringForOption:
-              ClientAutocompleteField._displayStringForOption,
+          displayStringForOption: ((option) {
+            if (client != null) {
+              return client!.clientName!;
+            }
+            return option.clientName!;
+          }),
           optionsBuilder: (TextEditingValue textEditingValue) {
             if (textEditingValue.text == '') {
               return const [];
@@ -157,8 +204,8 @@ class _ClientAutocompleteFieldState extends State<ClientAutocompleteField> {
                               child: SingleChildScrollView(
                                   child: Column(
                                 mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  AddClient(pContext: context),
+                                children: const [
+                                  AddClient(),
                                 ],
                               )),
                             ),
@@ -202,6 +249,21 @@ class _ClientAutocompleteFieldState extends State<ClientAutocompleteField> {
   }
 }
 
+class SuplierAutocompleteWidget extends StatelessWidget {
+  final Function(SuplierModel) onChanged;
+  const SuplierAutocompleteWidget({Key? key, required this.onChanged})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) =>
+          SuplierBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+      child: SuplierAutocompleteField(onChanged: onChanged),
+    );
+  }
+}
+
 class SuplierAutocompleteField extends StatelessWidget {
   final Function(SuplierModel) onChanged;
   const SuplierAutocompleteField({
@@ -213,7 +275,6 @@ class SuplierAutocompleteField extends StatelessWidget {
   static String _displayStringForOption(SuplierModel option) => option.name!;
   @override
   Widget build(BuildContext context) {
-    /// TODO: implement provide a list of products to autocomplete from ProductsBloc
     var list = <SuplierModel>[];
     return Autocomplete<SuplierModel>(
       displayStringForOption: _displayStringForOption,
@@ -272,7 +333,6 @@ class CategoryAutocompleteField extends StatelessWidget {
   static String _displayStringForOption(String option) => option;
   @override
   Widget build(BuildContext context) {
-    /// TODO: implement provide a list of products to autocomplete from ProductsBloc
     var list = categories ?? ['Phone', 'Accessoir', 'Laptop', 'Tablet'];
     return Autocomplete<String>(
       displayStringForOption: _displayStringForOption,

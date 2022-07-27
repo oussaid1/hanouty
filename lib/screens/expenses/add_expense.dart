@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../blocs/expensesbloc/expenses_bloc.dart';
 import '../../models/expenses/expenses.dart';
 import '../../settings/themes.dart';
-import '../../widgets/autocomplete/autocomlete_textfield.dart';
+import '../../widgets/autocomplete/autocomlete_textfields.dart';
 import '../../widgets/date_pickers.dart/date_picker.dart';
 
 class AddExpense extends ConsumerStatefulWidget {

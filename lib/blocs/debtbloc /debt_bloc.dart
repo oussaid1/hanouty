@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,13 +55,23 @@ class DebtBloc extends Bloc<DebtEvent, DebtState> {
 
   /// on add debt event
   void _onAddDebt(AddDebtEvent event, Emitter<DebtState> emit) async {
-    _databaseOperations.addDebt(event.debt);
-    emit(DebtState(
-      status: DebtStatus.added,
-      debts: state.debts,
-      debt: event.debt,
-      error: null,
-    ));
+    var success = await _databaseOperations.addDebt(event.debt);
+    log('add debt success: $success');
+    if (success) {
+      emit(DebtState(
+        status: DebtStatus.added,
+        debts: state.debts,
+        debt: event.debt,
+        error: null,
+      ));
+    } else {
+      emit(DebtState(
+        status: DebtStatus.notAdded,
+        debts: state.debts,
+        debt: event.debt,
+        error: 'failed to add debt',
+      ));
+    }
     add(GetDebtEvent());
   }
 

@@ -17,7 +17,7 @@ import '../../../local_components.dart';
 import '../../../widgets/sidemenu/shared_menu_items.dart';
 import '../../../widgets/swithces/top_bar_widget.dart';
 
-class HomeForAll extends ConsumerWidget {
+class HomeForAll extends StatelessWidget {
   final Widget centreWidget;
   final String title;
   const HomeForAll({
@@ -26,84 +26,86 @@ class HomeForAll extends ConsumerWidget {
     required this.centreWidget,
   }) : super(key: key);
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) =>
-              ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                ..add(GetProductsEvent()),
-        ),
-        BlocProvider(
-          create: (context) => SellActionsBloc(GetIt.I<DatabaseOperations>()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              SalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                ..add(GetSalesEvent()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              FullSalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                ..add(GetFullSalesEvent()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              DebtBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                ..add(GetDebtEvent()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              ExpenseBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                ..add(GetExpensesEvent()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              IncomeBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                ..add(GetIncomeEvent()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              ShopClientBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                ..add(GetShopClientsEvent()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              SuplierBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                ..add(GetSupliersEvent()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              TechServiceBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                ..add(GetTechServiceEvent()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              PaymentsBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                ..add(GetPaymentsEvent()),
-        ),
-        BlocProvider(
-          create: (context) => DateFilterBloc()
-            ..add(const UpdateFilterEvent(filterType: DateFilter.all)),
-        ),
-      ],
-      child: Container(
-        decoration: BoxDecoration(
-          // image: DecorationImage(
-          //   colorFilter: ColorFilter.mode(
-          //       Colors.black.withOpacity(0.2), BlendMode.darken),
-          //   image: const AssetImage(
-          //     'assets/images/background.jpg',
-          //     // bundle: AssetBundle,/// TODO: fix this, read docs
-          //   ),
-          //   fit: BoxFit.cover,
-          // ),
-          gradient: MThemeData.gradient1,
-        ),
-        //  / color: Colors.transparent),
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        // image: DecorationImage(
+        //   colorFilter: ColorFilter.mode(
+        //       Colors.black.withOpacity(0.2), BlendMode.darken),
+        //   image: const AssetImage(
+        //     'assets/images/background.jpg',
+        //     // bundle: AssetBundle,/// TODO: fix this, read docs
+        //   ),
+        //   fit: BoxFit.cover,
+        // ),
+        gradient: MThemeData.gradient1,
+      ),
+      //  / color: Colors.transparent),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) =>
+                ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                  ..add(GetProductsEvent()),
+          ),
+          BlocProvider(
+            create: (context) => SellActionsBloc(GetIt.I<DatabaseOperations>()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                SalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                  ..add(GetSalesEvent()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                FullSalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                  ..add(GetFullSalesEvent()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                DebtBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                  ..add(GetDebtEvent()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                ExpenseBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                  ..add(GetExpensesEvent()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                IncomeBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                  ..add(GetIncomeEvent()),
+          ),
+          BlocProvider(
+            create: (context) => ShopClientBloc(
+                databaseOperations: GetIt.I<DatabaseOperations>())
+              ..add(GetShopClientsEvent()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                SuplierBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                  ..add(GetSupliersEvent()),
+          ),
+          BlocProvider(
+            create: (context) => TechServiceBloc(
+                databaseOperations: GetIt.I<DatabaseOperations>())
+              ..add(GetTechServiceEvent()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                PaymentsBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                  ..add(GetPaymentsEvent()),
+          ),
+          BlocProvider(
+            create: (context) => DateFilterBloc()
+              ..add(const UpdateFilterEvent(filterType: DateFilter.all)),
+          ),
+        ],
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          drawer: const SizedBox(width: 80, child: Drawer(child: NavMenu())),
+          drawer: SizedBox(
+              width: Responsive.isDesktop(context) ? 120 : 80,
+              child: const Drawer(child: NavMenu())),
           appBar: !Responsive.isDesktop(context)
               ? AppBar(
                   title: Text(
@@ -133,17 +135,6 @@ class HomeForAll extends ConsumerWidget {
                   ],
                 )
               : null,
-          // appBar: AppBar(
-          //   leading: Responsive.isDesktop(context) ? Container() : null,
-          //   elevation: 0,
-          //   actions: [
-          //     ref.watch(rangeFilterIsCustomProvider.state).state
-          //         ? const DateRangePicker()
-          //         : const SizedBox.shrink(),
-          //     const RangeFilterSpinner(),
-          //     const AppBarContentWidget(),
-          //   ],
-          // ),
           body: Responsive.isDesktop(context)
               ? Row(
                   children: [

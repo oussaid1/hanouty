@@ -1,9 +1,9 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-
 import 'package:hanouty/local_components.dart';
-
+import 'package:hanouty/screens/debt/add_debt.dart';
+import 'package:hanouty/screens/debt/add_payment.dart';
+import 'package:hanouty/utils/global_functions.dart';
 import '../../blocs/clientsbloc/clients_bloc.dart';
 import '../../blocs/debtbloc /debt_bloc.dart';
 import '../../blocs/paymentsbloc/payments_bloc.dart';
@@ -13,17 +13,57 @@ import '../../models/payment/payment.dart';
 import '../../utils/constents.dart';
 import '../../widgets/price_number_zone.dart';
 import '../../widgets/search_widget.dart';
+import 'debt_details_widget.dart';
+import 'debt_piechart.dart';
+import 'due_debts_card.dart';
+import 'line_chart.dart';
 
 class DebtsView extends StatelessWidget {
   const DebtsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        children: const [
-          TopWidgetDebtsView(),
-          _DebtList(),
-        ],
+      child: BlocListener<DebtBloc, DebtState>(
+        listener: (context, state) {
+          switch (state.status) {
+            case DebtStatus.initial:
+              GlobalFunctions.showSuccessSnackBar(context, "initial");
+              break;
+            case DebtStatus.loaded:
+              break;
+            case DebtStatus.added:
+              GlobalFunctions.showSuccessSnackBar(
+                  context, "successfully added");
+              break;
+            case DebtStatus.deleted:
+              GlobalFunctions.showSuccessSnackBar(
+                  context, "successfully deleted");
+              break;
+            case DebtStatus.updated:
+              GlobalFunctions.showSuccessSnackBar(
+                  context, "successfully updated");
+              break;
+            case DebtStatus.notAdded:
+              GlobalFunctions.showErrorSnackBar(context, state.error!);
+              break;
+            case DebtStatus.notDeleted:
+              GlobalFunctions.showErrorSnackBar(context, state.error!);
+              break;
+            case DebtStatus.notUpdated:
+              GlobalFunctions.showErrorSnackBar(context, state.error!);
+              break;
+            case DebtStatus.error:
+              GlobalFunctions.showErrorSnackBar(
+                  context, state.error.toString());
+              break;
+          }
+        },
+        child: Column(
+          children: const [
+            TopWidgetDebtsView(),
+            _DebtList(),
+          ],
+        ),
       ),
     );
   }
@@ -39,7 +79,7 @@ class _DebtList extends StatefulWidget {
 }
 
 class _DebtListState extends State<_DebtList> {
-  List<ClientDebt> clientDebts = [];
+  List<ClientDebt> _clientDebts = [];
   String filter = '';
   ClientDebt? selectedClientDebt;
   @override
@@ -54,10 +94,16 @@ class _DebtListState extends State<_DebtList> {
                     shopClients: shopsState.clients,
                     debts: debtsState.debts,
                     payments: paymentsState.payments);
-                DebtData debtData = DebtData(
-                  allDebts: debtsState.debts,
-                  allpayments: paymentsState.payments,
-                );
+                // DebtData debtData = DebtData(
+                //   allDebts: debtsState.debts,
+                //   allpayments: paymentsState.payments,
+                // );
+                _clientDebts = debtsStatsViewModel.clientDebts
+                    .where((e) => e.shopClient.clientName!
+                        .toLowerCase()
+                        .toString()
+                        .contains(filter.toLowerCase()))
+                    .toList();
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -80,21 +126,24 @@ class _DebtListState extends State<_DebtList> {
                         onChanged: (value) {},
                       ),
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Wrap(
+                      direction: Axis.horizontal,
+                      spacing: 15,
+                      runSpacing: 15,
                       children: [
                         Flexible(
                           child: ConstrainedBox(
                             constraints: const BoxConstraints(
                               minWidth: 420,
                               minHeight: 400,
+                              maxWidth: 720,
+                              maxHeight: 500,
                             ),
                             child: ListView.builder(
                               shrinkWrap: true,
-                              itemCount: clientDebts.length,
+                              itemCount: _clientDebts.length,
                               itemBuilder: (context, index) {
-                                final clientDebt = clientDebts[index];
+                                final clientDebt = _clientDebts[index];
                                 return Card(
                                   color:
                                       const Color.fromARGB(127, 255, 255, 255),
@@ -114,7 +163,7 @@ class _DebtListState extends State<_DebtList> {
                         ),
                         BluredContainer(
                           width: 420,
-                          height: 400,
+                          height: 500,
                           child: DebtDetailsWidget(
                             clientDebt: selectedClientDebt,
                           ),
@@ -129,185 +178,6 @@ class _DebtListState extends State<_DebtList> {
         );
       },
     );
-  }
-}
-
-class DebtDetailsWidget extends ConsumerWidget {
-  const DebtDetailsWidget({
-    Key? key,
-    required this.clientDebt,
-  }) : super(key: key);
-  final ClientDebt? clientDebt;
-
-  @override
-  Widget build(BuildContext context, ref) {
-    return clientDebt != null
-        ? Column(
-            children: [
-              /// title
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.person),
-                        const SizedBox(width: 5),
-                        Text(clientDebt!.shopClient.clientName!,
-                            style: Theme.of(context).textTheme.headline3),
-                      ],
-                    ),
-                    PriceNumberZone(
-                      withDollarSign: true,
-                      right: const SizedBox.shrink(), //const Text('left'),
-                      price: clientDebt!.debtData.totalDebtAmount,
-                      signSize: 14,
-                      priceStyle:
-                          Theme.of(context).textTheme.headline1!.copyWith(
-                                color: const Color.fromARGB(255, 255, 255, 255),
-                              ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 15),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color.fromARGB(108, 255, 255, 255),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 9.0),
-                child: Theme(
-                  data: Theme.of(context).copyWith(
-                    dividerColor: Colors.transparent,
-                  ),
-                  child: ExpansionTile(
-                    title: Text('Actions',
-                        style: Theme.of(context).textTheme.headline3),
-                    trailing: const Icon(Icons.account_tree_outlined),
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Pay'),
-                          const SizedBox(width: 10),
-                          IconButton(
-                            icon: Icon(Icons.payment),
-                            onPressed: () {},
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Add Debt'),
-                          const SizedBox(width: 10),
-                          IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: () {},
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text('Remove Debt'),
-                          IconButton(
-                            icon: Icon(Icons.remove),
-                            onPressed: () {},
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 15),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 15),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color.fromARGB(108, 255, 255, 255),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 9.0),
-                child: Theme(
-                  data: Theme.of(context).copyWith(
-                    dividerColor: Colors.transparent,
-                  ),
-                  child: ExpansionTile(
-                    title: Text('Debts',
-                        style: Theme.of(context).textTheme.headline3),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(clientDebt!.debtData.totalDebtAmount.toString(),
-                            style: Theme.of(context).textTheme.bodySmall),
-                        const Icon(Icons.keyboard_arrow_down),
-                      ],
-                    ),
-                    children: [
-                      SizedBox(
-                        height: 140,
-                        width: 400,
-                        child: ListView.builder(
-                            itemBuilder: (context, index) {
-                              final debt = clientDebt!.allDebts[index];
-                              return SimpleDebtCard(
-                                debt: debt,
-                              );
-                            },
-                            itemCount: clientDebt!.allDebts.length),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 15),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 15),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: const Color.fromARGB(108, 255, 255, 255),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 9.0),
-                child: Theme(
-                  data: Theme.of(context).copyWith(
-                    dividerColor: Colors.transparent,
-                  ),
-                  child: ExpansionTile(
-                    title: Text('Payments',
-                        style: Theme.of(context).textTheme.headline3),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(clientDebt!.debtData.totalPayments.toString(),
-                            style: Theme.of(context).textTheme.bodySmall),
-                        const Icon(Icons.keyboard_arrow_down),
-                      ],
-                    ),
-                    children: [
-                      SizedBox(
-                        height: 140,
-                        width: 400,
-                        child: ListView.builder(
-                            itemBuilder: (context, index) {
-                              final payment = clientDebt!.allPayments[index];
-                              return SimplePaymentListCard(
-                                payment: payment,
-                              );
-                            },
-                            itemCount: clientDebt!.allPayments.length),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          )
-        : const SizedBox.shrink();
   }
 }
 
@@ -340,14 +210,16 @@ class TopWidgetDebtsView extends StatelessWidget {
                     runSpacing: 15,
                     spacing: 15,
                     children: [
-                      buildLineChartChart(context, debtData),
-                      buildPieChart(context, debtsStatsViewModel),
-                      const BluredContainer(
+                      DebtLineChart(data: debtData),
+                      DebtPieChart(data: debtsStatsViewModel),
+                      BluredContainer(
                         width: 420,
                         height: 270,
-                        child: DueDebtsCard(),
+                        child: DueDebtsCard(
+                          debtsStatsViewModel: debtsStatsViewModel,
+                        ),
                       ),
-                      Group116Widget(
+                      OverallDebtsWidget(
                         debtdata: debtData,
                       ),
                     ],
@@ -374,10 +246,10 @@ class DebtListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => onTap(clientDebt),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 8),
+      child: InkWell(
+        onTap: () => onTap(clientDebt),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -402,9 +274,7 @@ class DebtListCard extends StatelessWidget {
                   children: [
                     Text(
                       '${clientDebt.shopClient.clientName}',
-                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                          color:
-                              Theme.of(context).colorScheme.primaryContainer),
+                      style: Theme.of(context).textTheme.bodyText2,
                     ),
                     Text(
                       clientDebt.debtData.nearestDeadlineDate.ddmmyyyy(),
@@ -424,7 +294,7 @@ class DebtListCard extends StatelessWidget {
                   PriceNumberZone(
                     withDollarSign: true,
                     // right: const SizedBox.shrink(), //const Text('left'),
-                    price: clientDebt.debtData.totalLeft,
+                    price: clientDebt.debtData.totalDebtAmountLeft,
                     priceStyle: Theme.of(context).textTheme.headline2!.copyWith(
                           color: MThemeData.serviceColor,
                         ),
@@ -458,328 +328,9 @@ class DebtListCard extends StatelessWidget {
   }
 }
 
-buildPieChart(BuildContext context, DebtsStatsViewModel data) {
-  //DebtsStatsViewModel productData = data;
-  return BluredContainer(
-      width: 420,
-      height: 270,
-      child: Column(
-        children: [
-          SizedBox(
-            height: 40,
-            width: 420,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Debts',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline3!
-                      .copyWith(color: context.theme.primary),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-              child: SfCircularChart(
-            backgroundColor: Colors.transparent,
-            legend: Legend(
-                isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
-            tooltipBehavior: TooltipBehavior(enable: true),
-            series: <DoughnutSeries<ChartData, String>>[
-              DoughnutSeries<ChartData, String>(
-                  radius: '80%',
-                  explode: true,
-                  explodeOffset: '20%',
-                  dataSource: data.clientDebtTotal.take(8).toList(),
-                  xValueMapper: (ChartData data, _) => data.label as String,
-                  yValueMapper: (ChartData data, _) => data.value,
-                  dataLabelMapper: (ChartData data, _) => data.label,
-                  dataLabelSettings: const DataLabelSettings(
-                    isVisible: false,
-                    alignment: ChartAlignment.far,
-                    angle: -45,
-                  ))
-            ],
-          )),
-        ],
-      ));
-}
-
-buildLineChartChart(BuildContext context, DebtData data) {
-  //DebtsStatsViewModel productData = data;
-  return BluredContainer(
-      width: 420,
-      height: 270,
-      child: Column(
-        children: [
-          Flexible(
-            flex: 2,
-            fit: FlexFit.tight,
-            child: SfCartesianChart(
-              backgroundColor: Colors.transparent,
-              borderWidth: 0,
-              legend: Legend(
-                isVisible: true,
-                overflowMode: LegendItemOverflowMode.wrap,
-                position: LegendPosition.top,
-                height: '50%',
-                legendItemBuilder: (legendText, series, point, seriesIndex) {
-                  return SizedBox(
-                      height: 16,
-                      width: 80,
-                      child: Row(children: <Widget>[
-                        Icon(Icons.bar_chart_rounded,
-                            size: 16, color: series.color),
-                        Text(
-                          legendText,
-                          style: Theme.of(context).textTheme.subtitle2!,
-                        ),
-                      ]));
-                },
-                alignment: ChartAlignment.center,
-                textStyle: Theme.of(context)
-                    .textTheme
-                    .subtitle2!
-                    .copyWith(fontSize: 12, color: MThemeData.secondaryColor),
-              ),
-              annotations: const <CartesianChartAnnotation>[
-                CartesianChartAnnotation(
-                    widget: SizedBox(child: Text('Empty data')),
-                    coordinateUnit: CoordinateUnit.point,
-                    region: AnnotationRegion.plotArea,
-                    x: 3.5,
-                    y: 60),
-              ],
-              primaryXAxis: DateTimeAxis(
-                majorGridLines: const MajorGridLines(width: 0),
-                intervalType: DateTimeIntervalType.days,
-                dateFormat: DateFormat.MMMd(),
-                interval: 1,
-                axisLine: const AxisLine(width: 0.5),
-                //labelFormat: 'dd/MM',
-                edgeLabelPlacement: EdgeLabelPlacement.shift,
-                labelStyle: Theme.of(context).textTheme.subtitle2!,
-              ),
-              enableAxisAnimation: true,
-              plotAreaBorderColor: Colors.transparent,
-              plotAreaBorderWidth: 0,
-              plotAreaBackgroundColor: Colors.transparent,
-              primaryYAxis: NumericAxis(
-                minimum: 0,
-                labelRotation: 0,
-                labelStyle: Theme.of(context).textTheme.subtitle2!,
-                majorGridLines: const MajorGridLines(width: 0),
-                majorTickLines: const MajorTickLines(width: 0),
-                minorGridLines: const MinorGridLines(width: 0),
-                minorTickLines: const MinorTickLines(width: 0),
-              ),
-              series: <ChartSeries>[
-                // Renders spline chart
-                SplineSeries<ChartData, DateTime>(
-                    name: 'Sales'.tr(),
-                    color: MThemeData.salesColor,
-                    dataSource: data.debtsChartDataMMYY,
-                    xValueMapper: (ChartData sales, _) => sales.date,
-                    yValueMapper: (ChartData sales, _) => sales.value),
-                SplineSeries<ChartData, DateTime>(
-                    name: 'Products'.tr(),
-                    color: MThemeData.productColor,
-                    dataSource: data.debtsChartDataMMYY,
-                    xValueMapper: (ChartData sales, _) => sales.date,
-                    yValueMapper: (ChartData sales, _) => sales.value),
-                // SplineSeries<ChartData, DateTime>(
-                //     name: 'Services'.tr(),
-                //     color: MThemeData.serviceColor,
-                //     dataSource: const [],
-                //     xValueMapper: (ChartData sales, _) => sales.date,
-                //     yValueMapper: (ChartData sales, _) => sales.value),
-              ],
-            ),
-          ),
-        ],
-      ));
-}
-
-class DueDebtsCard extends StatelessWidget {
-  const DueDebtsCard({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    FilteredDebts filteredDebts = FilteredDebts(debts: DebtModel.fakeDebts);
-    return SizedBox(
-      height: 400,
-      width: 420,
-      child: Column(
-        children: [
-          SizedBox(
-            width: 420,
-            height: 40,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Icon(FontAwesomeIcons.userClock),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 18.0, right: 18),
-                      child: Text(
-                        'Due Debts'.tr(),
-                        style: Theme.of(context).textTheme.headline3!.copyWith(
-                            color: Theme.of(context).colorScheme.primary),
-                      ),
-                    ),
-                  ],
-                ),
-                IconButton(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Icons.more_vert_outlined,
-                    ))
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: filteredDebts.overdueDebts().length,
-              itemBuilder: (context, index) {
-                filteredDebts
-                    .overdueDebts()
-                    .sort((a, b) => a.deadLine.compareTo(b.deadLine));
-                final debt = filteredDebts.overdueDebts()[index];
-                return SimpleDebtCard(
-                  debt: debt,
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SimpleDebtCard extends StatelessWidget {
-  const SimpleDebtCard({
-    Key? key,
-    required this.debt,
-  }) : super(key: key);
-
-  final DebtModel debt;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppConstants.radius),
-          color: const Color.fromARGB(54, 255, 255, 255),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 17,
-                  height: 40,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(AppConstants.radius),
-                      bottomLeft: Radius.circular(AppConstants.radius),
-                    ),
-                    color: MThemeData.productColor,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  '${debt.clientId}',
-                  style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                      color:
-                          Theme.of(context).colorScheme.onSecondaryContainer),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: PriceNumberZone(
-                withDollarSign: true,
-                right: const SizedBox.shrink(), //const Text('left'),
-                price: debt.amount,
-                priceStyle: Theme.of(context).textTheme.headline4!.copyWith(
-                      color: MThemeData.productColor,
-                    ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class SimplePaymentListCard extends StatelessWidget {
-  const SimplePaymentListCard({
-    Key? key,
-    required this.payment,
-  }) : super(key: key);
-
-  final PaymentModel payment;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(AppConstants.radius),
-          //   color: Theme.of(context).colorScheme.secondary,
-          color: const Color.fromARGB(54, 255, 255, 255),
-        ),
-        child: ListTile(
-          contentPadding: const EdgeInsets.all(0),
-          dense: true,
-          leading: const VerticalDivider(
-            width: 0,
-            thickness: 8,
-            indent: 0,
-            color: MThemeData.serviceColor,
-          ),
-          title: Text(
-            '${payment.clientName}',
-            style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                color: Theme.of(context).colorScheme.onSecondaryContainer),
-          ),
-          trailing: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: PriceNumberZone(
-              withDollarSign: true,
-              right: const SizedBox.shrink(), //const Text('left'),
-              price: payment.amount,
-              priceStyle: Theme.of(context).textTheme.headline4!.copyWith(
-                    color: MThemeData.serviceColor,
-                  ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class Group116Widget extends StatelessWidget {
+class OverallDebtsWidget extends StatelessWidget {
   final DebtData debtdata;
-  const Group116Widget({
+  const OverallDebtsWidget({
     Key? key,
     required this.debtdata,
   }) : super(key: key);
@@ -804,7 +355,7 @@ class Group116Widget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 18.0, right: 18),
                     child: Text(
-                      'Debts'.tr(),
+                      'Overall'.tr(),
                       style: Theme.of(context).textTheme.headline3!.copyWith(
                           color: Theme.of(context).colorScheme.primary),
                     ),

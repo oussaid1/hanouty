@@ -46,6 +46,15 @@ class ProductStockData {
     return mcount;
   }
 
+  /// totalCapitalInStock
+  double get totalCapitalInStock {
+    double mcount = 0;
+    for (var element in products) {
+      mcount += (element.priceIn);
+    }
+    return mcount;
+  }
+
 // get a list of distinct categories
   List<String> get distinctCategories {
     List<String> mcategories = [];

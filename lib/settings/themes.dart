@@ -34,48 +34,41 @@ class MThemeData {
   static const almostBlackColor = Color(0xFF22282F);
   static const white = Color(0xFFFFFFFF);
   static const almostWhiteColor = Color(0xFFF5F5F5);
-  static const hintColor = Color.fromARGB(255, 192, 192, 192);
+  static const hintColor = almostBlackColor;
   static const errorColor = Color.fromARGB(255, 255, 0, 0);
 
   /////////////////////
-  static ColorScheme lightColorScheme = ColorScheme(
+  static const ColorScheme lightColorScheme = ColorScheme(
     primary: primaryColor,
-    primaryContainer: primaryColor,
-    secondaryContainer: secondaryColor,
-    errorContainer: errorColor,
-    onErrorContainer: Colors.red.shade50,
+    primaryContainer: Color(0xFF023E62),
     secondary: secondaryColor,
-    onSecondaryContainer: almostBlackColor,
+    secondaryContainer: Color(0xFFFBFAFC),
+    background: almostWhiteColor,
     surface: white,
-    background: white,
-    error: errorColor,
-    onPrimary: white,
-    onSecondary: white,
-    onSurface: black,
-    onBackground: black,
-    onError: Colors.white,
+    onBackground: white,
+    error: _lightFillColor,
+    onError: _lightFillColor,
+    onPrimary: hintColor,
+    onSecondary: accentColor,
+    onSurface: _lightFillColor,
     brightness: Brightness.light,
   );
 
-  static ColorScheme darkColorScheme = ColorScheme(
+  static const ColorScheme darkColorScheme = ColorScheme(
     primary: primaryColor,
-    primaryContainer: primaryColor,
-    secondaryContainer: secondaryColor,
-    errorContainer: errorColor,
-    onErrorContainer: Colors.red.shade50,
+    primaryContainer: hintColor,
     secondary: secondaryColor,
-    onSecondaryContainer: almostWhiteColor,
-    surface: almostBlackColor,
-    background: black,
-    error: errorColor,
-    onPrimary: white,
-    onSecondary: almostWhiteColor,
-    onSurface: white,
-    onBackground: black,
-    onError: Colors.white,
+    secondaryContainer: Color(0xFF9BE9F2),
+    surface: Color(0xFF2C3035),
+    background: almostBlackColor,
+    onBackground: Color(0xFF262626),
+    error: _darkFillColor,
+    onError: _darkFillColor,
+    onPrimary: hintColor,
+    onSecondary: accentColor,
+    onSurface: _darkFillColor,
     brightness: Brightness.dark,
   );
-
   /////////////////////////
   static const hintTextColor = Colors.grey;
   static const revenuColor = Color(0xFFC8AF8A);
@@ -132,7 +125,22 @@ class MThemeData {
 
   static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
     return ThemeData(
+        dialogBackgroundColor: const Color(0xff61E3AF),
         // backgroundColor: Colors.transparent,
+        // dataTableTheme: DataTableThemeData(
+        //   checkboxHorizontalMargin: 0,
+        //   columnSpacing: 0,
+        //   dividerThickness: 0,
+        //   horizontalMargin: 0,
+        //   headingRowHeight: 40,
+        //   decoration: BoxDecoration(
+        //     color: Colors.transparent,
+        //     border: Border.all(
+        //       color: Colors.transparent,
+        //       width: 0,
+        //     ),
+        //   ),
+        // ),
         iconTheme: const IconThemeData(color: hintColor),
         colorScheme: colorScheme,
         textTheme: _textTheme,

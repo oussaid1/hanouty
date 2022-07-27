@@ -6,12 +6,13 @@ import '../../blocs/debtbloc /debt_bloc.dart';
 import '../../components.dart';
 import '../../models/debt/debt.dart';
 import '../../settings/themes.dart';
-import '../../widgets/autocomplete/autocomlete_textfield.dart';
+import '../../widgets/autocomplete/autocomlete_textfields.dart';
 import '../../widgets/date_pickers.dart/date_picker.dart';
 
 class AddDebt extends StatefulWidget {
   const AddDebt({Key? key, this.debt}) : super(key: key);
   final DebtModel? debt;
+
   @override
   AddProductState createState() => AddProductState();
 }
@@ -80,15 +81,13 @@ class AddProductState extends State<AddDebt> {
                 buildDueDate(),
                 const SizedBox(height: 20),
                 buildDueAmount(),
-                const SizedBox(height: 20),
-                buildProductId(
-                  context,
-                ),
+                // const SizedBox(height: 20),
+                // buildProductId(context),
                 const SizedBox(height: 20),
                 buildDate(),
                 const SizedBox(height: 20),
-                buildPaidAmount(),
-                const SizedBox(height: 40),
+                // buildPaidAmount(),
+                // const SizedBox(height: 40),
                 buildSaveButton(context),
                 const SizedBox(height: 40) //but
               ],
@@ -119,11 +118,12 @@ class AddProductState extends State<AddDebt> {
                         deadLine: deadline,
                         timeStamp: date,
                       );
-                      GetIt.I<DebtBloc>().add(_isUpdate
+                      context.read<DebtBloc>().add(_isUpdate
                           ? UpdateDebtEvent(debt)
                           : AddDebtEvent(debt));
-                      log("debt added ${debt.toJson()}");
-                      // Navigator.pop(context);
+                      log("debt: $debt");
+                      clear();
+                      Navigator.pop(context);
                     }
                   },
             child: Text(_isUpdate ? "Update" : "Save").tr()),
@@ -195,7 +195,7 @@ class AddProductState extends State<AddDebt> {
   }
 
   buildProductId(BuildContext context) {
-    return ProductsAutocompleteField(
+    return ProductsAutoCompleteWidget(
       onChanged: (product) {
         setState(() {
           productId = product.pId!;
@@ -236,7 +236,7 @@ class AddProductState extends State<AddDebt> {
   }
 
   buildClientName() {
-    return ClientAutocompleteField(
+    return ClientsAutocompleteWidget(
       // validator: (client) {
       //   if (client == null) {
       //     return "error".tr();
@@ -246,6 +246,7 @@ class AddProductState extends State<AddDebt> {
       onChanged: (client) {
         setState(() {
           clientId = client.id!;
+          _canSave = true;
         });
       },
     );

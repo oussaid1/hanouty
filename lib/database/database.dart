@@ -83,7 +83,7 @@ class Database {
   Future<bool> addClient(ShopClientModel client) {
     return _firestore
         .collection(DbTables.uzers)
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.clients)
         .add(client.toMap())
         .then((value) => true)
@@ -92,7 +92,7 @@ class Database {
 
   Future<bool> addProduct(ProductModel product) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.products)
         .add(product.toMap())
         .then((value) => true)
@@ -113,7 +113,7 @@ class Database {
 
   Future<bool> addDebt(DebtModel debt) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.debts)
         .add(debt.toMap())
         .then((value) => true)
@@ -123,7 +123,7 @@ class Database {
   // add DbTables.payments to FireStore
   Future<bool> addPayment(PaymentModel payment) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.payments)
         .add(payment.toMap())
         .then((value) => true)
@@ -132,7 +132,7 @@ class Database {
 
   Future<bool> addTechService(TechServiceModel techService) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.techServices)
         .add(techService.toMap())
         .then((value) => true)
@@ -141,7 +141,7 @@ class Database {
 
   Future<bool> addSuplier(SuplierModel suplier) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.supliers)
         .add(suplier.toMap())
         .then((value) => true)
@@ -150,7 +150,7 @@ class Database {
 
   Future<bool> addIncome(IncomeModel income) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.incomes)
         .add(income.toMap())
         .then((value) => true)
@@ -159,7 +159,7 @@ class Database {
 
   Future<bool> addExpense(ExpenseModel expense) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.expenses)
         .add(expense.toMap())
         .then((value) => true)
@@ -173,7 +173,7 @@ class Database {
 //get a single product by id as a future of bool
   Future<ProductModel> getProductById(String id) async {
     return await users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.products)
         .doc(id)
         .get()
@@ -184,7 +184,7 @@ class Database {
   /// get all DbTables.clients from firestore
   Stream<List<ShopClientModel>> clientsStream() {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.clients)
         .snapshots()
         .map((QuerySnapshot query) {
@@ -197,7 +197,7 @@ class Database {
   }
 
   Stream<List<SuplierModel>> supliersStream() {
-    return users.doc(uid!.trim()).collection(DbTables.supliers).snapshots().map(
+    return users.doc(uid).collection(DbTables.supliers).snapshots().map(
         (QuerySnapshot query) => query.docs
             .map((element) => SuplierModel.fromMap(element))
             .toList(growable: true));
@@ -213,7 +213,7 @@ class Database {
 
   Future<ProductModel> getOneproduct(String id) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.products)
         .doc(id)
         .get()
@@ -221,11 +221,8 @@ class Database {
   }
 
   Stream<List<TechServiceModel>> techServiceStream() {
-    return users
-        .doc(uid!.trim())
-        .collection(DbTables.techServices)
-        .snapshots()
-        .map((QuerySnapshot query) => query.docs
+    return users.doc(uid).collection(DbTables.techServices).snapshots().map(
+        (QuerySnapshot query) => query.docs
             .map((element) => TechServiceModel.fromMap(element))
             .toList(growable: true));
   }
@@ -238,7 +235,7 @@ class Database {
   }
 
   Stream<List<DebtModel>> debtStream() {
-    return users.doc(uid!.trim()).collection(DbTables.debts).snapshots().map(
+    return users.doc(uid).collection(DbTables.debts).snapshots().map(
         (QuerySnapshot query) => query.docs
             .map((element) => DebtModel.fromMap(element))
             .toList(growable: true));
@@ -246,21 +243,21 @@ class Database {
 
 // get a stream of List of DbTables.payments
   Stream<List<PaymentModel>> paymentStream() {
-    return users.doc(uid!.trim()).collection(DbTables.payments).snapshots().map(
+    return users.doc(uid).collection(DbTables.payments).snapshots().map(
         (QuerySnapshot query) => query.docs
             .map((element) => PaymentModel.fromMap(element))
             .toList(growable: true));
   }
 
   Stream<List<IncomeModel>> incomeStream() {
-    return users.doc(uid!.trim()).collection(DbTables.incomes).snapshots().map(
+    return users.doc(uid).collection(DbTables.incomes).snapshots().map(
         (QuerySnapshot query) => query.docs
             .map((element) => IncomeModel.fromMap(element))
             .toList(growable: true));
   }
 
   Stream<List<ExpenseModel>> expenseStream() {
-    return users.doc(uid!.trim()).collection(DbTables.expenses).snapshots().map(
+    return users.doc(uid).collection(DbTables.expenses).snapshots().map(
         (QuerySnapshot query) => query.docs
             .map((element) => ExpenseModel.fromMap(element))
             .toList(growable: true));
@@ -295,7 +292,7 @@ class Database {
     SaleModel sale,
   ) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.sales)
         .doc(sale.saleId)
         .update(sale.toMap())
@@ -307,7 +304,7 @@ class Database {
     TechServiceModel techService,
   ) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.techServices)
         .doc(techService.pId)
         .update(techService.toMap())
@@ -319,7 +316,7 @@ class Database {
     DebtModel debt,
   ) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.debts)
         .doc(debt.id)
         .update(debt.toMap())
@@ -332,7 +329,7 @@ class Database {
     PaymentModel payment,
   ) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.payments)
         .doc(payment.id)
         .update(payment.toMap())
@@ -344,7 +341,7 @@ class Database {
     ShopClientModel client,
   ) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.clients)
         .doc(client.id)
         .update(client.toMap())
@@ -356,7 +353,7 @@ class Database {
     SuplierModel suplier,
   ) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.supliers)
         .doc(suplier.id)
         .update(suplier.toMap())
@@ -368,7 +365,7 @@ class Database {
     IncomeModel income,
   ) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.incomes)
         .doc(income.id)
         .update(income.toMap())
@@ -380,7 +377,7 @@ class Database {
     ExpenseModel expense,
   ) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.expenses)
         .doc(expense.id)
         .update(expense.toMap())
@@ -395,7 +392,7 @@ class Database {
     ProductModel product,
   ) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.products)
         .doc(product.pId)
         .delete()
@@ -407,7 +404,7 @@ class Database {
     TechServiceModel techService,
   ) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.techServices)
         .doc(techService.pId)
         .delete()
@@ -419,7 +416,7 @@ class Database {
     SuplierModel suplier,
   ) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.supliers)
         .doc(suplier.id)
         .delete()
@@ -431,7 +428,7 @@ class Database {
     DebtModel debt,
   ) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.debts)
         .doc(debt.id)
         .delete()
@@ -444,7 +441,7 @@ class Database {
     PaymentModel payment,
   ) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.payments)
         .doc(payment.id)
         .delete()
@@ -456,7 +453,7 @@ class Database {
     ShopClientModel client,
   ) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.clients)
         .doc(client.id)
         .delete()
@@ -466,7 +463,7 @@ class Database {
 
   Future<bool> deleteSale(SaleModel sale) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.sales)
         .doc(sale.saleId)
         .delete()
@@ -476,7 +473,7 @@ class Database {
 
   Future<bool> deleteIncome(IncomeModel income) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.incomes)
         .doc(income.id)
         .delete()
@@ -486,7 +483,7 @@ class Database {
 
   Future<bool> deleteExpense(ExpenseModel expense) {
     return users
-        .doc(uid!.trim())
+        .doc(uid)
         .collection(DbTables.expenses)
         .doc(expense.id)
         .delete()

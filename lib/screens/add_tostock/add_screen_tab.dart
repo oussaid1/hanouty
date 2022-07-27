@@ -7,8 +7,8 @@ import '../product/products_listview.dart';
 import '../sales/services_list.dart';
 import '../suplier/suplier_list.dart';
 
-class AddScreenTab extends ConsumerWidget {
-  const AddScreenTab({Key? key}) : super(key: key);
+class StockTab extends ConsumerWidget {
+  const StockTab({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(

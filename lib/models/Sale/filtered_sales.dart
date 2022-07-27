@@ -14,45 +14,26 @@ class FilteredSales {
   /// get filtered sales
   /// @returns List<SaleModel>
 
-  List<SaleModel> get filteredSalesByFilterType {
+  List<SaleModel> filteredSalesByFilterType(List<SaleModel> _sales) {
     if (filterType == DateFilter.all) {
-      return sales;
+      return _sales;
     } else if (filterType == DateFilter.month) {
-      return sales
+      return _sales
           .where((sale) => sale.dateSold.month == DateTime.now().month)
           .toList();
     } else if (filterType == DateFilter.custom) {
-      return sales
+      return _sales
           .where((sale) =>
               sale.dateSold.isAfter(selectedDateRange!.start) &&
               sale.dateSold.isBefore(selectedDateRange!.end))
           .toList();
     } else {
-      return sales;
+      return _sales;
     }
   }
 
-  List<SaleModel> salesByType(SaleType saleType) {
-    switch (saleType) {
-      case SaleType.product:
-        return productSales;
-      case SaleType.service:
-        return techServiceSales;
-      case SaleType.all:
-        return sales;
-      default:
-        sales;
-    }
-
-    return sales;
-  }
-
-// get list of sales by date
-  List<SaleModel> salesByDate(DateTime date) {
-    return sales
-        .where((sale) => sale.dateSold.ddmmyyyy() == date.ddmmyyyy())
-        .toList();
-  }
+  /// get product sales only
+  /// @returns List<SaleModel>
 
   List<SaleModel> get productSales {
     List<SaleModel> mlist = [];
@@ -64,6 +45,28 @@ class FilteredSales {
     List<SaleModel> mlist = [];
     mlist = sales.where((element) => element.type == SaleType.service).toList();
     return mlist;
+  }
+
+//////////////////////////////////////////////////////////////////////////////////////
+  List<SaleModel> salesByType(SaleType saleType) {
+    switch (saleType) {
+      case SaleType.product:
+        return productSales;
+      case SaleType.service:
+        return techServiceSales;
+      case SaleType.all:
+        return sales;
+      default:
+        sales;
+    }
+    return sales;
+  }
+
+// get list of sales by date
+  List<SaleModel> salesByDate(DateTime date) {
+    return sales
+        .where((sale) => sale.dateSold.ddmmyyyy() == date.ddmmyyyy())
+        .toList();
   }
 
 /////////////////////////////////////////////////////////////////////////
