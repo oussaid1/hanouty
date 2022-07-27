@@ -13,8 +13,6 @@ class ShopClientModel {
   String? phone;
   String? email;
   double stars = 1;
-  List<SaleModel> sales = [];
-  List<DebtModel> debts = [];
   ShopClientModel(
       {this.id, this.clientName, this.phone, this.email, this.stars = 1});
   static ShopClientModel client = ShopClientModel(
@@ -43,6 +41,7 @@ class ShopClientModel {
 
   Map<String, dynamic> toMap() {
     return {
+      if (id != null) 'id': id,
       'clientName': clientName,
       'phone': phone,
       'email': email,
@@ -52,11 +51,12 @@ class ShopClientModel {
 
   factory ShopClientModel.fromMap(DocumentSnapshot map) {
     return ShopClientModel(
-        id: map.id,
-        clientName: map['clientName'],
-        phone: map['phone'],
-        email: map['email'],
-        stars: map['stars']);
+      id: map.id,
+      clientName: map['clientName'],
+      phone: map['phone'],
+      email: map['email'],
+      stars: map['stars'].toDouble(),
+    );
   }
 
   String toJson() => json.encode(toMap());
@@ -66,7 +66,7 @@ class ShopClientModel {
 
   @override
   String toString() {
-    return 'Client(id: $id, count: $count, clientName: $clientName, phone: $phone, email: $email, stars: $stars, sales: $sales, debts: $debts)';
+    return 'Client(id: $id, count: $count, clientName: $clientName, phone: $phone, email: $email, stars: $stars,)';
   }
 
   @override
@@ -79,9 +79,7 @@ class ShopClientModel {
         other.clientName == clientName &&
         other.phone == phone &&
         other.email == email &&
-        other.stars == stars &&
-        listEquals(other.sales, sales) &&
-        listEquals(other.debts, debts);
+        other.stars == stars;
   }
 
   @override
@@ -91,9 +89,7 @@ class ShopClientModel {
         clientName.hashCode ^
         phone.hashCode ^
         email.hashCode ^
-        stars.hashCode ^
-        sales.hashCode ^
-        debts.hashCode;
+        stars.hashCode;
   }
 
   /// list of fake clients

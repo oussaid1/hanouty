@@ -1,10 +1,10 @@
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../blocs/expensesbloc/expenses_bloc.dart';
 import '../../models/expenses/expenses.dart';
 import '../../settings/themes.dart';
 import '../../widgets/autocomplete/autocomlete_textfield.dart';
@@ -25,6 +25,8 @@ class AddExpenseState extends ConsumerState<AddExpense> {
   DateTime date = DateTime.now();
   DateTime dueDate = DateTime.now();
   String expenseCategory = 'other';
+  bool _isUpdate = false;
+  bool _canSave = false;
   void clear() {
     expenseNameController.clear();
     amuontPaidController.clear();
@@ -34,6 +36,7 @@ class AddExpenseState extends ConsumerState<AddExpense> {
   @override
   void initState() {
     if (widget.expense != null) {
+      _isUpdate = true;
       expenseNameController.text = widget.expense!.name;
       amuontPaidController.text = widget.expense!.amountPaid.toString();
       amountController.text = widget.expense!.amount.toString();
@@ -78,24 +81,33 @@ class AddExpenseState extends ConsumerState<AddExpense> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         ElevatedButton(
-            style: MThemeData.raisedButtonStyleSave,
-            child: Text(
-              widget.expense != null ? 'Update'.tr() : 'Add'.tr(),
-            ),
-            onPressed: () {
-              if (expenseformKey.currentState!.validate()) {
-                final ExpenseModel expense = ExpenseModel(
-                  id: widget.expense == null ? null : widget.expense!.id,
-                  date: date,
-                  name: expenseNameController.text.trim(),
-                  amount: double.parse(amountController.text.trim()),
-                  amountPaid: double.parse(amuontPaidController.text.trim()),
-                  deadLine: dueDate,
-                  expenseCategory: expenseCategory,
-                );
-                log('expense: $expense');
-              }
-            }),
+          onPressed: !_canSave
+              ? null
+              : () {
+                  if (expenseformKey.currentState!.validate()) {
+                    setState(() {
+                      _canSave = false;
+                    });
+                    final ExpenseModel expense = ExpenseModel(
+                      id: widget.expense == null ? null : widget.expense!.id,
+                      date: date,
+                      name: expenseNameController.text.trim(),
+                      amount: double.parse(amountController.text.trim()),
+                      amountPaid:
+                          double.parse(amuontPaidController.text.trim()),
+                      deadLine: dueDate,
+                      expenseCategory: expenseCategory,
+                    );
+                    context.read<ExpenseBloc>().add(_isUpdate
+                        ? UpdateExpenseEvent(expense)
+                        : AddExpenseEvent(expense));
+                  }
+                },
+          style: MThemeData.raisedButtonStyleSave,
+          child: Text(
+            _isUpdate ? 'Update'.tr() : 'Add'.tr(),
+          ),
+        ),
         ElevatedButton(
           style: MThemeData.raisedButtonStyleCancel,
           child: Text(

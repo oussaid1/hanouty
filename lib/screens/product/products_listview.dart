@@ -356,6 +356,7 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
           child: SellProductDialoge(
             clientNames: distinctSaleClients,
             product: product,
+            pContext: context,
           ),
         ),
       ),

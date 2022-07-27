@@ -43,6 +43,17 @@ class AuthPageState extends State<AuthPage> {
   final _pageController = PageController(initialPage: 0);
 
   @override
+  void initState() {
+    Future.delayed(Duration(seconds: 1), () {
+      BlocProvider.of<LoginBloc>(context).add(LoginRequestedEvent(
+          loginCredentials: LoginCredentials(
+              email: emailController.text.trim(),
+              password: passController.text.trim())));
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,

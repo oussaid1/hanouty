@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hanouty/components.dart';
+import '../../blocs/clientsbloc/clients_bloc.dart';
+import '../../database/database_operations.dart';
 import '../../utils/popup_dialogues.dart';
 import '../client/add_client.dart';
 import '../debt/add_debt.dart';
@@ -16,35 +19,41 @@ class AddStuffWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        buildExpandedFab(context,
-            title: "Client",
-            child: AddClient(
-              pContext: context,
-            )),
-        const SizedBox(height: 10),
+    return BlocProvider(
+      create: (context) =>
+          ShopClientBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          buildExpandedFab(context,
+              title: "Client",
+              child: AddClient(
+                pContext: context,
+              )),
+          const SizedBox(height: 10),
 
-        /// commented this beacasue it's not yet implemented in the app , but it's here for future use
-        /// don't forget to uncomment it when it's ready
-        // buildExpandedFab(context,title: "Add Supplier",child: const AddSuplier()),
-        // const SizedBox(height: 10),
-        buildExpandedFab(context,
-            title: "Product", child: const AddOrEditProduct()),
-        const SizedBox(height: 10),
-        buildExpandedFab(context, title: "Service", child: const AddService()),
-        const SizedBox(height: 10),
-        buildExpandedFab(context, title: "Add Debt", child: const AddDebt()),
-        const SizedBox(height: 10),
-        buildExpandedFab(context,
-            title: "Payment",
-            child: const AddPayment(payingStatus: PayingStatus.adding)),
-        const SizedBox(height: 10),
-        buildExpandedFab(context, title: "Expense", child: const AddExpense()),
-        const SizedBox(height: 10),
-        buildExpandedFab(context, title: "Income", child: const AddIncome()),
-      ],
+          /// commented this beacasue it's not yet implemented in the app , but it's here for future use
+          /// don't forget to uncomment it when it's ready
+          // buildExpandedFab(context,title: "Add Supplier",child: const AddSuplier()),
+          // const SizedBox(height: 10),
+          buildExpandedFab(context,
+              title: "Product", child: const AddOrEditProduct()),
+          const SizedBox(height: 10),
+          buildExpandedFab(context,
+              title: "Service", child: const AddService()),
+          const SizedBox(height: 10),
+          buildExpandedFab(context, title: "Add Debt", child: const AddDebt()),
+          const SizedBox(height: 10),
+          buildExpandedFab(context,
+              title: "Payment",
+              child: const AddPayment(payingStatus: PayingStatus.adding)),
+          const SizedBox(height: 10),
+          buildExpandedFab(context,
+              title: "Expense", child: const AddExpense()),
+          const SizedBox(height: 10),
+          buildExpandedFab(context, title: "Income", child: const AddIncome()),
+        ],
+      ),
     );
   }
 

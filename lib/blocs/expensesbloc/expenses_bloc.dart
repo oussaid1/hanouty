@@ -27,7 +27,7 @@ class ExpenseBloc extends Bloc<ExpensesEvent, ExpensesState> {
 
     on<LoadExpensessEvent>(_onLoadExpensess);
 
-    on<AddExpensesEvent>(_onAddExpenses);
+    on<AddExpenseEvent>(_onAddExpenses);
   }
 
   /// onloadproducts event
@@ -54,7 +54,7 @@ class ExpenseBloc extends Bloc<ExpensesEvent, ExpensesState> {
 
   /// on add Client event
   void _onAddExpenses(
-      AddExpensesEvent event, Emitter<ExpensesState> emit) async {
+      AddExpenseEvent event, Emitter<ExpensesState> emit) async {
     _databaseOperations.addExpense(event.expense);
     emit(ExpensesState(
       status: ExpensesStatus.added,

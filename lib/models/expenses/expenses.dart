@@ -48,6 +48,7 @@ class ExpenseModel {
 
   Map<String, dynamic> toMap() {
     return {
+      if (id != null) 'id': id,
       'name': name,
       'timeStamp': date,
       'deadLine': deadLine,

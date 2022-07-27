@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hanouty/local_components.dart';
+import '../../blocs/clientsbloc/clients_bloc.dart';
 import '../../blocs/debtbloc /debt_bloc.dart';
 import '../../blocs/expensesbloc/expenses_bloc.dart';
 import '../../blocs/fullsalesbloc/fullsales_bloc.dart';
@@ -17,6 +18,8 @@ class DashBoardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var clientbloc = context.watch<ShopClientBloc>().state;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
@@ -38,11 +41,12 @@ class DashBoardPage extends StatelessWidget {
                 direction: Axis.horizontal,
                 alignment: WrapAlignment.spaceBetween,
                 runSpacing: 20,
-                children: const [
+                children: [
                   SalesOverAllWidget(),
                   StockInventory(),
                   SizedBox(height: 20),
                   RevenuWidget(),
+                  Text(' ${clientbloc.clients.length}'),
                 ],
               ),
               const SizedBox(height: 40),

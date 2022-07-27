@@ -33,10 +33,7 @@ class SalesOverAllWidget extends StatelessWidget {
               withDollarSign: withDollarSign,
               right: const SizedBox.shrink(),
               price: value1.toPrecision(2),
-              priceStyle: cellStyle ??
-                  Theme.of(context).textTheme.caption!.copyWith(
-                        color: AppConstants.whiteOpacity,
-                      ),
+              priceStyle: cellStyle ?? Theme.of(context).textTheme.caption!,
               // style: Theme.of(context)
               //     .textTheme
               //     .headline5!

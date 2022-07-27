@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,6 +53,7 @@ class ShopClientBloc extends Bloc<ShopClientEvent, ShopClientState> {
   void _onAddShopClient(
       AddShopClientEvent event, Emitter<ShopClientState> emit) async {
     await _databaseOperations.addClient(event.client);
+    log('added ${event.client.toString()}');
     emit(state.copyWith(status: ShopClientsStatus.added, client: event.client));
     //add(GetShopClientsEvent());
   }

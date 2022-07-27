@@ -2,8 +2,11 @@ import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+import '../../blocs/clientsbloc/clients_bloc.dart';
 import '../../models/client/shop_client.dart';
 import '../../settings/themes.dart';
 
@@ -29,6 +32,7 @@ class AddClientState extends State<AddClient> {
   final TextEditingController emailController =
       TextEditingController(text: 'oussaid.abdellatif@gmail.com');
   double _rating = 3.5;
+  bool _isUpdate = false;
 
   void clear() {
     titleController.clear();
@@ -39,6 +43,7 @@ class AddClientState extends State<AddClient> {
   @override
   void initState() {
     if (widget.client != null) {
+      _isUpdate = true;
       titleController.text = widget.client!.clientName.toString();
       phoneController.text = widget.client!.phone.toString();
       emailController.text = widget.client!.email.toString();
@@ -55,8 +60,6 @@ class AddClientState extends State<AddClient> {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable
-    log('add stuff ${context.widget}');
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -66,10 +69,10 @@ class AddClientState extends State<AddClient> {
   }
 
   buildFlexible(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Form(
+        key: formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -94,77 +97,49 @@ class AddClientState extends State<AddClient> {
   }
 
   Row buildSaveButton(BuildContext context) {
-    return widget.client != null
-        ? Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                style: MThemeData.raisedButtonStyleSave,
-                child: Text(
-                  'Update'.tr(),
-                ),
-                onPressed: () {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        ElevatedButton(
+          style: MThemeData.raisedButtonStyleSave,
+          onPressed: !_canSave
+              ? null
+              : () {
                   if (formKey.currentState!.validate()) {
+                    setState(() {
+                      _canSave = false;
+                    });
                     final client = ShopClientModel(
-                      id: widget.client!.id,
+                      id: _isUpdate ? widget.client!.id : null,
                       clientName: titleController.text.trim(),
                       phone: phoneController.text.trim(),
                       email: emailController.text.trim(),
                       stars: _rating,
                     );
-                    // context
-                    //     .read<ShopClientBloc>()
-                    //     .add(AddShopClientEvent(client));
+                    log('added ${client.toString()}');
+                    _isUpdate
+                        ? BlocProvider.of<ShopClientBloc>(widget.pContext)
+                            .add(UpdateShopClientEvent(client))
+                        : BlocProvider.of<ShopClientBloc>(widget.pContext)
+                            .add(AddShopClientEvent(client));
+                    clear();
+                    Navigator.pop(context);
                     // Navigator.pop(context);
                   }
                 },
-              ),
-              ElevatedButton(
-                style: MThemeData.raisedButtonStyleCancel,
-                child: Text(
-                  'Cancel'.tr(),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          )
-        : Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                style: MThemeData.raisedButtonStyleSave,
-                child: Text(
-                  'Save'.tr(),
-                ),
-                onPressed: () {
-                  if (formKey.currentState!.validate()) {
-                    final client = ShopClientModel(
-                      clientName: titleController.text.trim(),
-                      phone: phoneController.text.trim(),
-                      email: emailController.text.trim(),
-                      stars: _rating,
-                    );
-                    // widget.pContext
-                    //     .read<ShopClientBloc>()
-                    //     .add(AddShopClientEvent(client));
-                    // Navigator.pop(context);
-
-                  }
-                },
-              ),
-              ElevatedButton(
-                style: MThemeData.raisedButtonStyleCancel,
-                child: Text(
-                  'Cancel'.tr(),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
+          child: Text(_isUpdate ? 'update'.tr() : 'save'.tr()),
+        ),
+        ElevatedButton(
+          style: MThemeData.raisedButtonStyleCancel,
+          child: Text(
+            'Cancel'.tr(),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
   }
 
   TextFormField buildClientName() {
@@ -207,6 +182,10 @@ class AddClientState extends State<AddClient> {
         }
         return null;
       },
+      inputFormatters: [
+        /// only numbers and +
+        FilteringTextInputFormatter(RegExp('[0-9.]+'), allow: true)
+      ],
       maxLength: 10,
       decoration: InputDecoration(
         counterText: '',

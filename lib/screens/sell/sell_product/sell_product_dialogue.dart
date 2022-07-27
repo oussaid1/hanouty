@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:hanouty/widgets/autocomplete/autocomlete_textfield.dart';
 import 'package:hanouty/widgets/number_incrementer.dart';
 import 'package:flutter/services.dart';
 import '../../../blocs/clientsbloc/clients_bloc.dart';
@@ -17,9 +18,11 @@ class SellProductDialoge extends StatefulWidget {
     Key? key,
     required this.product,
     required this.clientNames,
+    required this.pContext,
   }) : super(key: key);
   final ProductModel product;
   final List<String> clientNames;
+  final BuildContext pContext;
 
   //final SaleModel? sale;
   @override
@@ -32,7 +35,7 @@ class AddProductState extends State<SellProductDialoge> {
   int quantity = 1;
   double priceSoldFor = 0;
   int reducedProdutQuantity = 0;
-  String client = 'client';
+  String clientId = 'client';
   DateTime date = DateTime.now();
   bool canSell = false;
   final TextEditingController priceOutController = TextEditingController();
@@ -61,54 +64,45 @@ class AddProductState extends State<SellProductDialoge> {
   @override
   Widget build(BuildContext context) {
     //var clientsBloc = context.watch<ShopClientBloc>().state;
-    return SingleChildScrollView(
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6),
-          //color: Theme.of(context).colorScheme.onBackground,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 10),
+          Column(
             children: [
-              const SizedBox(height: 10),
-              Column(
-                children: [
-                  Center(
-                      child: Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: widget.product.quantity == 0
-                              ? Text('Product is out of stock',
-                                  style: Theme.of(context).textTheme.bodyText1)
-                              : Text(
-                                  'Product quantity: ${widget.product.quantity}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .copyWith(
-                                        color:
-                                            Theme.of(context).colorScheme.error,
-                                      )))),
-                  buildClientName(widget.clientNames),
-                  const SizedBox(height: 8),
-                  buildQuantity(context),
-                  const SizedBox(height: 8),
-                  buildPriceIn(context),
-                  const SizedBox(height: 8),
-                  buildDate(),
-                  const SizedBox(height: 40),
-                ],
-              ),
-
-              buildSaveButton(context),
-              const SizedBox(
-                height: 100,
-              ) //but
+              Center(
+                  child: Padding(
+                      padding: const EdgeInsets.only(bottom: 15.0),
+                      child: widget.product.quantity == 0
+                          ? Text('Product is out of stock',
+                              style: Theme.of(context).textTheme.bodyText1)
+                          : Text('Product quantity: ${widget.product.quantity}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(
+                                    color: Theme.of(context).colorScheme.error,
+                                  )))),
+              buildClientName(widget.clientNames),
+              const SizedBox(height: 15),
+              buildQuantity(context),
+              const SizedBox(height: 15),
+              buildPriceIn(context),
+              const SizedBox(height: 15),
+              buildDate(),
+              const SizedBox(height: 40),
             ],
           ),
-        ),
+
+          buildSaveButton(context),
+          const SizedBox(
+            height: 40,
+          ) //but
+        ],
       ),
     );
   }
@@ -135,7 +129,7 @@ class AddProductState extends State<SellProductDialoge> {
                     SaleModel sale = SaleModel(
                       product: widget.product,
                       saleDescription: 'dummy Sale',
-                      shopClientId: client,
+                      shopClientId: clientId,
                       priceSoldFor: double.parse(priceOutController.text),
                       type: SaleType.product,
                       quantitySold: quantity,
@@ -172,34 +166,28 @@ class AddProductState extends State<SellProductDialoge> {
   }
 
   buildDate() {
-    return SizedBox(
-      width: 400,
-      child: SelectDate(
-        initialDate: DateTime.now(),
-        onDateSelected: (pickedDate) {
-          setState(() {
-            date = pickedDate;
-          });
-        },
-      ),
+    return SelectDate(
+      initialDate: DateTime.now(),
+      onDateSelected: (pickedDate) {
+        setState(() {
+          date = pickedDate;
+        });
+      },
     );
   }
 
   Widget buildQuantity(BuildContext context) {
-    return SizedBox(
-      width: 400,
-      child: NumberIncrementerWidget(
-        limitUp: widget.product.quantity,
-        initialValue: quantity,
-        labelText: 'Quantity'.tr(),
-        fraction: 1,
-        limitDown: 1,
-        onChanged: (value) {
-          setState(() {
-            quantity = value.toInt();
-          });
-        },
-      ),
+    return NumberIncrementerWidget(
+      limitUp: widget.product.quantity,
+      initialValue: quantity,
+      labelText: 'Quantity'.tr(),
+      fraction: 1,
+      limitDown: 1,
+      onChanged: (value) {
+        setState(() {
+          quantity = value.toInt();
+        });
+      },
     );
   }
 
@@ -238,75 +226,12 @@ class AddProductState extends State<SellProductDialoge> {
 
   buildClientName(List<String> list) {
     log('buildClientName ${list.length}');
-    return SizedBox(
-      width: 400,
-      child: Autocomplete<String>(
-        optionsBuilder: (TextEditingValue textEditingValue) {
-          if (textEditingValue.text == '') {
-            return const Iterable<String>.empty();
-          }
-          return list.where((String option) {
-            return option
-                .toString()
-                .contains(textEditingValue.text.toLowerCase());
-          });
-        },
-        fieldViewBuilder: (BuildContext context,
-            TextEditingController textEditingController,
-            FocusNode focusNode,
-            VoidCallback onFieldSubmitted) {
-          return TextFormField(
-            controller: textEditingController,
-            onChanged: (String value) {
-              setState(() {
-                canSell = true;
-                client = value;
-              });
-            },
-            decoration: InputDecoration(
-              prefixIcon: Tooltip(
-                message: 'Add new suplier'.tr(),
-                child: IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () {
-                    /// TODO: add new suplier Dialog
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => AddSuplierPage(),
-                    //   ),
-                    // );
-                  },
-                ),
-              ),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: () {
-                  textEditingController.clear();
-                },
-              ),
-              labelText: 'Client'.tr(),
-              border: OutlineInputBorder(
-                /// TODO: globalize this
-                borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-                borderSide: BorderSide(color: AppConstants.whiteOpacity),
-              ),
-              //border: InputBorder.none,
-              hintText: 'client'.tr(),
-              // label: const Text('suplier').tr(),
-              hintStyle: Theme.of(context).textTheme.subtitle2!,
-              filled: true,
-            ),
-            focusNode: focusNode,
-          );
-        },
-        onSelected: (String selection) {
-          setState(() {
-            client = selection;
-          });
-          log('Selected: $selection');
-        },
-      ),
+    return ClientAutocompleteField(
+      onChanged: (value) {
+        setState(() {
+          clientId = value.id!;
+        });
+      },
     );
   }
 }

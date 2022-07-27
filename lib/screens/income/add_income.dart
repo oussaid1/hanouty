@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 
+import '../../blocs/incomebloc/income_bloc.dart';
+import '../../components.dart';
 import '../../models/income/income.dart';
 import '../../settings/themes.dart';
 import '../../widgets/date_pickers.dart/date_picker.dart';
@@ -22,7 +24,7 @@ class AddIncomeState extends State<AddIncome> {
   final TextEditingController sourceNameController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
   DateTime date = DateTime.now();
-  bool canSave = false, isUpdate = false;
+  bool _canSave = false, isUpdate = false;
   void clear() {
     expenseNameController.clear();
     sourceNameController.clear();
@@ -71,14 +73,14 @@ class AddIncomeState extends State<AddIncome> {
       children: [
         ElevatedButton(
             style: MThemeData.raisedButtonStyleSave,
-            onPressed: !canSave
+            onPressed: !_canSave
                 ? null
                 : () {
                     if (incomeformKey.currentState!.validate()) {
                       setState(() {
-                        canSave = false;
+                        _canSave = false;
                       });
-                      canSave = false;
+
                       final IncomeModel income = IncomeModel(
                         id: isUpdate ? widget.income!.id : null,
                         source: sourceNameController.text.trim(),
@@ -87,10 +89,12 @@ class AddIncomeState extends State<AddIncome> {
                         amount: double.parse(amountController.text.trim()),
                       );
                       log(income.toString());
-                      //GetIt.I<IncomeBloc>().add(widget.income != null? UpdateIncomeEvent(income): AddIncomeEvent(income));
-                      //Navigator.pop(context);
+                      GetIt.I<IncomeBloc>().add(widget.income != null
+                          ? UpdateIncomeEvent(income)
+                          : AddIncomeEvent(income));
+                      Navigator.pop(context);
                       setState(() {
-                        canSave = true;
+                        _canSave = true;
                       });
                     }
                   },
@@ -191,7 +195,7 @@ class AddIncomeState extends State<AddIncome> {
         setState(() {
           if (text.trim().isNotEmpty &&
               expenseNameController.text.trim().isNotEmpty) {
-            canSave = true;
+            _canSave = true;
           }
         });
       },

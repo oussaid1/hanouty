@@ -1,11 +1,10 @@
 import 'dart:developer';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import '../../blocs/debtbloc /debt_bloc.dart';
+import '../../components.dart';
 import '../../models/debt/debt.dart';
-import '../../models/product/product.dart';
 import '../../settings/themes.dart';
 import '../../widgets/autocomplete/autocomlete_textfield.dart';
 import '../../widgets/date_pickers.dart/date_picker.dart';
@@ -120,10 +119,11 @@ class AddProductState extends State<AddDebt> {
                         deadLine: deadline,
                         timeStamp: date,
                       );
-                      // GetIt.I<DebtBloc>().add(_isUpdate
-                      //     ? UpdateDebtEvent(debt)
-                      //     : AddDebtEvent(debt));
-                      // // Navigator.pop(context);
+                      GetIt.I<DebtBloc>().add(_isUpdate
+                          ? UpdateDebtEvent(debt)
+                          : AddDebtEvent(debt));
+                      log("debt added ${debt.toJson()}");
+                      // Navigator.pop(context);
                     }
                   },
             child: Text(_isUpdate ? "Update" : "Save").tr()),

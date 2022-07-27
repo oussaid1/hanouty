@@ -19,10 +19,10 @@ class LoadExpensessEvent extends ExpensesEvent {
 }
 
 /// add expense to database
-class AddExpensesEvent extends ExpensesEvent {
+class AddExpenseEvent extends ExpensesEvent {
   final ExpenseModel expense;
 
-  const AddExpensesEvent(this.expense);
+  const AddExpenseEvent(this.expense);
 
   @override
   List<Object> get props => [expense];
@@ -39,10 +39,10 @@ class DeleteExpensesEvent extends ExpensesEvent {
 }
 
 /// Update expense in database
-class UpdateExpensesEvent extends ExpensesEvent {
+class UpdateExpenseEvent extends ExpensesEvent {
   final ExpenseModel expense;
 
-  const UpdateExpensesEvent(this.expense);
+  const UpdateExpenseEvent(this.expense);
 
   @override
   List<Object> get props => [expense];

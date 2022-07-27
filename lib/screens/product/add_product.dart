@@ -1,8 +1,8 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:overlay_support/overlay_support.dart';
-
+import '../../blocs/productbloc/product_bloc.dart';
+import '../../components.dart';
+import '../../database/database_operations.dart';
 import '../../models/product/product.dart';
 import '../../settings/themes.dart';
 import '../../utils/constents.dart';
@@ -39,7 +39,8 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
   String suplier = 'Other';
   DateTime _pickedDateTime = DateTime.now();
   num quantity = 1;
-  bool canSave = false;
+  bool _canSave = false;
+  bool _isUpdate = false;
 
   /// this method clears all the controllers
   void clear() {
@@ -52,6 +53,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
 
   void initializeFields() {
     if (widget.product != null) {
+      _isUpdate = true;
       barcodeController.text = widget.product!.barcode!;
       productNameController.text = widget.product!.productName;
       priceInController.text = widget.product!.priceIn.toString();
@@ -89,13 +91,14 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
       children: [
         buildFields(
           context,
-          [],
         ),
       ],
     );
   }
 
-  buildFields(BuildContext context, List<String> suplierList) {
+  buildFields(
+    BuildContext context,
+  ) {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Column(
@@ -134,100 +137,54 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
   }
 
   _buildSaveButton(BuildContext context) {
-    // var prdBloc =
-    //     ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>());
-    return widget.product == null
-        ? Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                style: MThemeData.raisedButtonStyleSave,
-                onPressed: !canSave
-                    ? null
-                    : () {
-                        final product = ProductModel(
-                          barcode: barcodeController.text.trim(),
-                          dateIn: _pickedDateTime,
-                          description: descrController.text.trim(),
-                          category: productCat,
-                          productName: productNameController.text.trim(),
-                          priceIn:
-                              double.tryParse(priceInController.text.trim())!,
-                          priceOut:
-                              double.tryParse(priceOutController.text.trim())!,
-                          quantity: quantity.toInt(),
-                          suplier: suplier,
-                        );
+    var prdBloc =
+        ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>());
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        ElevatedButton(
+          style: MThemeData.raisedButtonStyleSave,
+          onPressed: !_canSave
+              ? null
+              : () {
+                  final product = ProductModel(
+                    pId: _isUpdate ? widget.product!.pId : null,
+                    barcode: barcodeController.text.trim(),
+                    dateIn: _pickedDateTime,
+                    description: descrController.text.trim(),
+                    category: productCat,
+                    productName: productNameController.text.trim(),
+                    priceIn: double.tryParse(priceInController.text.trim())!,
+                    priceOut: double.tryParse(priceOutController.text.trim())!,
+                    quantity: quantity.toInt(),
+                    suplier: suplier,
+                  );
 
-                        if (formKey.currentState!.validate()) {
-                          setState(() {
-                            canSave = false;
-                          });
-                          //prdBloc.add(AddProductEvent(product));
-                        }
-                      },
-                child: Text(
-                  'Save'.tr(),
-                ),
-              ),
-              ElevatedButton(
-                style: MThemeData.raisedButtonStyleCancel,
-                child: Text(
-                  'Cancel'.tr(),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
+                  if (formKey.currentState!.validate()) {
+                    setState(() {
+                      _canSave = false;
+                    });
+                    prdBloc.add(_isUpdate
+                        ? UpdateProductEvent(product)
+                        : AddProductEvent(product));
+                    clear();
+                  }
                 },
-              ),
-            ],
-          )
-        : Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                style: MThemeData.raisedButtonStyleSave,
-                child: Text(
-                  'Update'.tr(),
-                ),
-                onPressed: !canSave
-                    ? null
-                    : () {
-                        final product = ProductModel(
-                          pId: widget.product!.pId,
-                          barcode: barcodeController.text.trim(),
-                          dateIn: _pickedDateTime,
-                          description: descrController.text.trim(),
-                          category: productCat,
-                          productName: productNameController.text.trim(),
-                          priceIn:
-                              double.tryParse(priceInController.text.trim())!,
-                          priceOut:
-                              double.tryParse(priceOutController.text.trim())!,
-                          quantity: quantity.toInt(),
-                          suplier: suplier,
-                        );
-
-                        if (formKey.currentState!.validate()) {
-                          setState(() {
-                            canSave = false;
-                          });
-                          // prdBloc.add(
-                          //   UpdateProductEvent(product),
-                          // );
-                        }
-                      },
-              ),
-              ElevatedButton(
-                style: MThemeData.raisedButtonStyleCancel,
-                child: Text(
-                  'Cancel'.tr(),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
+          child: Text(
+            _isUpdate ? 'Update'.tr() : 'Save'.tr(),
+          ),
+        ),
+        ElevatedButton(
+          style: MThemeData.raisedButtonStyleCancel,
+          child: Text(
+            'Cancel'.tr(),
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ],
+    );
   }
 
   _buildSuplier(BuildContext context) {
@@ -374,7 +331,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
       },
       onChanged: (String value) {
         setState(() {
-          canSave = value.isNotEmpty;
+          _canSave = value.isNotEmpty;
         });
       },
       maxLength: 40,
