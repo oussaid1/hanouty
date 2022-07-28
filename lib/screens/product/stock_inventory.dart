@@ -104,7 +104,7 @@ class StockInventory extends StatelessWidget {
                                     .subtitle2!
                                     .copyWith(
                                         fontSize: 10,
-                                        color: Color.fromARGB(
+                                        color: const Color.fromARGB(
                                             131, 255, 255, 255))),
                           ],
                         ),

@@ -14,21 +14,21 @@ class FilteredSales {
   /// get filtered sales
   /// @returns List<SaleModel>
 
-  List<SaleModel> filteredSalesByFilterType(List<SaleModel> _sales) {
+  List<SaleModel> filteredSalesByFilterType(List<SaleModel> sales) {
     if (filterType == DateFilter.all) {
-      return _sales;
+      return sales;
     } else if (filterType == DateFilter.month) {
-      return _sales
+      return sales
           .where((sale) => sale.dateSold.month == DateTime.now().month)
           .toList();
     } else if (filterType == DateFilter.custom) {
-      return _sales
+      return sales
           .where((sale) =>
               sale.dateSold.isAfter(selectedDateRange!.start) &&
               sale.dateSold.isBefore(selectedDateRange!.end))
           .toList();
     } else {
-      return _sales;
+      return sales;
     }
   }
 

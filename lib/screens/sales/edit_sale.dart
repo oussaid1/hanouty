@@ -31,7 +31,7 @@ class UpdateSaleState extends State<AddOrEditSaleWidget> {
   bool isUpdating = false;
   bool canSave = false;
 
-  var quantitySold;
+  var quantitySold = 1;
 
 //////////////////////////////////////////////////////////////////////////////////////////////
   void clear() {

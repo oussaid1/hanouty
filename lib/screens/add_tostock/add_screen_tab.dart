@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../components.dart';
-import '../../local_components.dart';
 import '../client/client_list.dart';
 import '../product/products_listview.dart';
 import '../sales/services_list.dart';

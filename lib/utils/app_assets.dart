@@ -13,11 +13,11 @@ class AppAssets {
     color: MThemeData.primaryColor,
     semanticsLabel: 'Corp Logo',
   );
-  static final String assetName = 'assets/images/logo.svg';
-  static final String google = 'assets/images/google.svg';
-  static final String pinkCircle = 'assets/images/pinkball.png';
-  static final String purpleCircle = 'assets/images/purpleball.png';
-  static final String blueCircle = 'assets/images/blueball.png';
+  static const String assetName = 'assets/images/logo.svg';
+  static const String google = 'assets/images/google.svg';
+  static const String pinkCircle = 'assets/images/pinkball.png';
+  static const String purpleCircle = 'assets/images/purpleball.png';
+  static const String blueCircle = 'assets/images/blueball.png';
   ////////////////////////////////////////////////////////////////////////////////
   static final Widget svgIcon = SvgPicture.asset(assetName,
       semanticsLabel: 'app logo', width: 100, height: 100);

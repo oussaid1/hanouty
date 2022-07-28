@@ -44,7 +44,7 @@ class ExpenseData {
 
   List<ExpenseModel> getExpensesByCategory(ExpenseCategory category) {
     return expenses
-        .where((expense) => expense.expenseCategory == category)
+        .where((expense) => expense.expenseCategory == category.name)
         .toList();
   }
 

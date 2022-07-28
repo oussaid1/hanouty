@@ -47,15 +47,18 @@ class TechServicesData {
 // get chartData of category counts in stock
   List<ChartData> get serviceCategorySumCounts {
     List<ChartData> mchartData = [];
+
     for (var element in distinctCategories) {
-      // mchartData.add(ChartData(
-      //   //count: products.where((product) => product.category == element).length,
-      //   label: element,
-      //   value: techServices.where((product) => product.type == element).fold(
-      //       0, (previousValue, element) => previousValue! + element.priceIn),
-      //   count: techServices.where((product) => product.type == element).fold(
-      //       0, (previousValue, element) => previousValue! + element.count),
-      // ));
+      int mcount = 0;
+      for (var element2 in techServices) {
+        if (element2.category == element) {
+          mcount += (element2.count);
+        }
+      }
+      mchartData.add(ChartData(
+        label: element,
+        count: mcount,
+      ));
     }
     return mchartData;
   }

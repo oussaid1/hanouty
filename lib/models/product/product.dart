@@ -315,7 +315,7 @@ class ProductModel {
   });
 
   ProductModel copyWith({
-    String? id,
+    String? pId,
     String? barcode,
     String? name,
     String? description,
@@ -329,7 +329,7 @@ class ProductModel {
     String? availability,
   }) {
     return ProductModel(
-      pId: id ?? this.pId,
+      pId: pId ?? this.pId,
       barcode: barcode ?? this.barcode,
       productName: name ?? productName,
       description: description ?? this.description,

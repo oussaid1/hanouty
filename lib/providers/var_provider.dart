@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hanouty/local_components.dart';
 import 'package:hanouty/components.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

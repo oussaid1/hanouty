@@ -1,16 +1,15 @@
-import 'package:hanouty/screens/dashboard/dashboard_tab.dart';
 
-import 'package:hanouty/screens/splash/splash_login_signup.dart';
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 
 import '../screens/add_tostock/add_screen_tab.dart';
+import '../screens/dashboard/dashboard_tab.dart';
 import '../screens/debt/deb_list.dart';
 import '../screens/device_specific/homeforweb/home_for_web.dart';
 import '../screens/expenses/expenses_tab.dart';
 import '../screens/income/income_tab.dart';
 import '../screens/sales/sales_tab.dart';
-import '../screens/sell/sell_tab.dart';
+import '../screens/splash/splash_login_signup.dart';
 import '../settings/settings.dart';
 
 class RouteGenerator {

@@ -1,16 +1,16 @@
-import 'package:hanouty/models/income/income.dart';
-import 'package:hanouty/providers/var_provider.dart';
-import 'package:hanouty/screens/income/add_income.dart';
-import 'package:hanouty/settings/themes.dart';
-import 'package:hanouty/utils/popup_dialogues.dart';
 import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
 
-class IncomeListWidget extends ConsumerWidget {
+import '../../models/income/income.dart';
+import '../../settings/themes.dart';
+import '../../utils/popup_dialogues.dart';
+import 'add_income.dart';
+
+class IncomeListWidget extends StatelessWidget {
   const IncomeListWidget({Key? key, required this.incomes}) : super(key: key);
   final List<IncomeModel> incomes;
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(

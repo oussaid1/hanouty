@@ -13,7 +13,6 @@ import '../../../blocs/clientsbloc/clients_bloc.dart';
 import '../../../blocs/datefilterbloc/date_filter_bloc.dart';
 import '../../../blocs/debtbloc /debt_bloc.dart';
 import '../../../blocs/expensesbloc/expenses_bloc.dart';
-import '../../../blocs/fullsalesbloc/fullsales_bloc.dart';
 import '../../../blocs/incomebloc/income_bloc.dart';
 import '../../../blocs/paymentsbloc/payments_bloc.dart';
 import '../../../blocs/productbloc/product_bloc.dart';
@@ -97,7 +96,7 @@ class AddStuffWidget extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        buildExpandedFab(context, title: "Client", child: AddClient()),
+        buildExpandedFab(context, title: "Client", child: const AddClient()),
         const SizedBox(height: 10),
 
         /// commented this beacasue it's not yet implemented in the app , but it's here for future use
@@ -109,7 +108,7 @@ class AddStuffWidget extends StatelessWidget {
         const SizedBox(height: 10),
         buildExpandedFab(context, title: "Service", child: const AddService()),
         const SizedBox(height: 10),
-        buildExpandedFab(context, title: "Add Debt", child: AddDebt()),
+        buildExpandedFab(context, title: "Add Debt", child: const AddDebt()),
         const SizedBox(height: 10),
         buildExpandedFab(context,
             title: "Payment",
