@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../blocs/debtbloc /debt_bloc.dart';
 import '../../components.dart';
+import '../../database/database_operations.dart';
 import '../../models/debt/debt.dart';
 import '../../settings/themes.dart';
 import '../../widgets/autocomplete/autocomlete_textfields.dart';
@@ -97,6 +98,7 @@ class AddProductState extends State<AddDebt> {
   }
 
   buildSaveButton(BuildContext context) {
+    var debtBloc = DebtBloc(databaseOperations: GetIt.I<DatabaseOperations>());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -116,7 +118,7 @@ class AddProductState extends State<AddDebt> {
                         deadLine: deadline,
                         timeStamp: date,
                       );
-                      context.read<DebtBloc>().add(_isUpdate
+                      debtBloc.add(_isUpdate
                           ? UpdateDebtEvent(debt)
                           : AddDebtEvent(debt));
                       log("debt: $debt");

@@ -51,8 +51,8 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
               context, product, context.read<SalesBloc>().state.sales),
           onEditPressed: (ProductModel product) =>
               editProduct(context, product),
-          onDeletePressed: (ProductModel product) =>
-              deleteProduct(context, product),
+          // onDeletePressed: (ProductModel product) =>
+          //     deleteProduct(context, product),
         );
         return SingleChildScrollView(
           child: Column(
@@ -68,72 +68,80 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
                 },
               ),
               BluredContainer(
-                child: PaginatedDataTable(
-                  sortColumnIndex: _sortColumnIndex,
-                  sortAscending: _sortAscending,
-                  showCheckboxColumn: false,
-                  columnSpacing: 10,
-                  checkboxHorizontalMargin: 0,
-                  horizontalMargin: 4,
-                  rowsPerPage: 10,
-                  columns: [
-                    const DataColumn(
-                      label: Text('ID'),
-                      tooltip: 'ID',
-                    ),
-                    const DataColumn(
-                      label: Text('Sell'),
-                      tooltip: 'Sell',
-                    ),
-                    // DataColumn(
-                    //   label: Text('Barcode'),
-                    //   tooltip: 'Barcode',
-                    // ),
-                    DataColumn(
-                        label: const Text('Product Name'),
-                        tooltip: 'Product Name',
-                        onSort: (int columnIndex, bool ascending) {
-                          sort<String>((ProductModel d) => d.productName,
-                              columnIndex, ascending);
-                        }),
-                    const DataColumn(
-                      label: Text('Quantity'),
-                      tooltip: 'Quantity',
-                    ),
-                    const DataColumn(
-                      label: Text('Price In'),
-                      tooltip: 'Price In',
-                    ),
-                    const DataColumn(
-                      label: Text('Price Out'),
-                      tooltip: 'Price Out',
-                    ),
-                    const DataColumn(
-                      label: Text('Suplier'),
-                      tooltip: 'Suplier',
-                    ),
-                    const DataColumn(
-                      label: Text('Date In'),
-                      tooltip: 'Date In',
-                    ),
-                    const DataColumn(
-                      label: Text('Category'),
-                      tooltip: 'Category',
-                    ),
-                    const DataColumn(
-                      label: Text('Description'),
-                      tooltip: 'Description',
-                    ),
-                    const DataColumn(
-                      label: Text('Edit'),
-                      tooltip: 'Edit',
-                    ),
-                    const DataColumn(
-                      label: Text('Delete'),
-                      tooltip: 'Delete',
-                    ),
-                  ],
-                  source: _data!,
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                      dividerColor: const Color.fromARGB(54, 0, 0, 0),
+                      cardColor: const Color.fromARGB(42, 0, 240, 172)),
+                  child: PaginatedDataTable(
+                    sortColumnIndex: _sortColumnIndex,
+                    sortAscending: _sortAscending,
+                    showCheckboxColumn: false,
+                    columnSpacing: 10,
+                    checkboxHorizontalMargin: 0,
+                    horizontalMargin: 4,
+                    rowsPerPage: 10,
+                    columns: [
+                      const DataColumn(
+                        label: Text('ID'),
+                        tooltip: 'ID',
+                      ),
+                      const DataColumn(
+                        label: Text('Sell'),
+                        tooltip: 'Sell',
+                      ),
+                      // DataColumn(
+                      //   label: Text('Barcode'),
+                      //   tooltip: 'Barcode',
+                      // ),
+                      DataColumn(
+                          label: const Text('Product Name'),
+                          tooltip: 'Product Name',
+                          onSort: (int columnIndex, bool ascending) {
+                            sort<String>((ProductModel d) => d.productName,
+                                columnIndex, ascending);
+                          }),
+                      DataColumn(
+                          label: const Text('Qnt'),
+                          tooltip: 'Quantity',
+                          onSort: (int columnIndex, bool ascending) {
+                            sort<String>((ProductModel d) => d.productName,
+                                columnIndex, ascending);
+                          }),
+                      const DataColumn(
+                        label: Text('Price In'),
+                        tooltip: 'Price In',
+                      ),
+                      const DataColumn(
+                        label: Text('Price Out'),
+                        tooltip: 'Price Out',
+                      ),
+                      const DataColumn(
+                        label: Text('Suplier'),
+                        tooltip: 'Suplier',
+                      ),
+                      const DataColumn(
+                        label: Text('Date In'),
+                        tooltip: 'Date In',
+                      ),
+                      const DataColumn(
+                        label: Text('Category'),
+                        tooltip: 'Category',
+                      ),
+                      const DataColumn(
+                        label: Text('Description'),
+                        tooltip: 'Description',
+                      ),
+                      const DataColumn(
+                        label: Text('Edit'),
+                        tooltip: 'Edit',
+                      ),
+                      // const DataColumn(
+                      //   label: Text('Delete'),
+                      //   tooltip: 'Delete',
+                      // ),
+                    ],
+                    source: _data!,
+                  ),
                 ),
               ),
             ],
@@ -146,8 +154,8 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
   /// /////////////////////////////////////////////////////////////////////////////
   /// sell product dialog
   void sellProduct(context, ProductModel product, List<SaleModel> sales) {
-    List<String> distinctSaleClients =
-        FilteredSales(sales: sales).distinctCilentNames;
+    // List<String> distinctSaleClients =
+    //     FilteredSales(sales: sales).distinctCilentNames;
     MDialogs.dialogSimple(
       context,
       title: Text(
@@ -165,9 +173,8 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
           create: (context) => ShopClientBloc(
               databaseOperations: GetIt.I.get<DatabaseOperations>()),
           child: SellProductDialoge(
-            clientNames: distinctSaleClients,
             product: product,
-            pContext: context,
+            saleType: SaleType.product,
           ),
         ),
       ),
@@ -183,54 +190,50 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
         "Edit product".tr(),
         style: Theme.of(context).textTheme.headline3!,
       ),
-      contentWidget: SizedBox(
-        height: 400,
-        width: 400,
-        child: AddOrEditProduct(
-          product: product,
-          initialDateTime: product.dateIn,
-          initialValue: product.quantity,
-        ),
+      contentWidget: AddOrEditProduct(
+        product: product,
+        initialDateTime: product.dateIn,
+        initialValue: product.quantity,
       ),
     );
   }
 
-  /// /////////////////////////////////////////////////////////////////////////////
-  /// delete product dialog
-  void deleteProduct(context, ProductModel product) {
-    MDialogs.dialogSimple(
-      context,
-      title: Text(
-        " ${product.productName}",
-        style: Theme.of(context).textTheme.headline3!,
-      ),
-      contentWidget: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          ElevatedButton(
-            style: MThemeData.raisedButtonStyleSave,
-            child: Text(
-              'Delete'.tr(),
-              style: Theme.of(context).textTheme.bodyText1!,
-            ),
-            onPressed: () {
-              BlocProvider.of<ProductBloc>(context)
-                  .add(DeleteProductEvent(product));
-              Navigator.pop(context);
-            },
-          ),
-          ElevatedButton(
-            style: MThemeData.raisedButtonStyleCancel,
-            child: Text(
-              'Cancel'.tr(),
-              style: Theme.of(context).textTheme.bodyText1!,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
-  }
+  // /// /////////////////////////////////////////////////////////////////////////////
+  // /// delete product dialog
+  // void deleteProduct(context, ProductModel product) {
+  //   MDialogs.dialogSimple(
+  //     context,
+  //     title: Text(
+  //       " ${product.productName}",
+  //       style: Theme.of(context).textTheme.headline3!,
+  //     ),
+  //     contentWidget: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //       children: [
+  //         ElevatedButton(
+  //           style: MThemeData.raisedButtonStyleSave,
+  //           child: Text(
+  //             'Delete'.tr(),
+  //             style: Theme.of(context).textTheme.bodyText1!,
+  //           ),
+  //           onPressed: () {
+  //             BlocProvider.of<ProductBloc>(context)
+  //                 .add(DeleteProductEvent(product));
+  //             Navigator.pop(context);
+  //           },
+  //         ),
+  //         ElevatedButton(
+  //           style: MThemeData.raisedButtonStyleCancel,
+  //           child: Text(
+  //             'Cancel'.tr(),
+  //             style: Theme.of(context).textTheme.bodyText1!,
+  //           ),
+  //           onPressed: () {
+  //             Navigator.pop(context);
+  //           },
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

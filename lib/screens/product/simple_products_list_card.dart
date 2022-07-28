@@ -11,10 +11,9 @@ class SimpleProductListCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding:
-          const EdgeInsets.only(top: 2.0, bottom: 2.0, left: 8.0, right: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: BluredContainer(
-        height: 40,
+        height: 48,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -23,7 +22,7 @@ class SimpleProductListCard extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  margin: const EdgeInsets.only(right: 2.0),
+                  margin: const EdgeInsets.symmetric(horizontal: 8.0),
                   width: 30,
                   height: 30,
                   decoration: BoxDecoration(
@@ -41,6 +40,8 @@ class SimpleProductListCard extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       product.productName,

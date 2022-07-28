@@ -1,8 +1,8 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../blocs/expensesbloc/expenses_bloc.dart';
+import '../../components.dart';
+import '../../database/database_operations.dart';
 import '../../models/expenses/expenses.dart';
 import '../../settings/themes.dart';
 import '../../widgets/autocomplete/autocomlete_textfields.dart';
@@ -77,6 +77,8 @@ class AddExpenseState extends State<AddExpense> {
   }
 
   buildSaveButton(BuildContext context) {
+    var expnsBloc =
+        ExpenseBloc(databaseOperations: GetIt.I<DatabaseOperations>());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -98,7 +100,7 @@ class AddExpenseState extends State<AddExpense> {
                       deadLine: dueDate,
                       expenseCategory: expenseCategory,
                     );
-                    context.read<ExpenseBloc>().add(_isUpdate
+                    expnsBloc.add(_isUpdate
                         ? UpdateExpenseEvent(expense)
                         : AddExpenseEvent(expense));
                   }

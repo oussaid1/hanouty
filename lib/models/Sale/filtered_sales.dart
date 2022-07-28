@@ -14,7 +14,7 @@ class FilteredSales {
   /// get filtered sales
   /// @returns List<SaleModel>
 
-  List<SaleModel> filteredSalesByFilterType(List<SaleModel> sales) {
+  List<SaleModel> slzByFltrTp(List<SaleModel> sales) {
     if (filterType == DateFilter.all) {
       return sales;
     } else if (filterType == DateFilter.month) {

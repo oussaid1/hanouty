@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:hanouty/widgets/autocomplete/autocomlete_textfields.dart';
 import 'package:hanouty/widgets/number_incrementer.dart';
 import 'package:flutter/services.dart';
@@ -14,12 +12,12 @@ class SellProductDialoge extends StatefulWidget {
   const SellProductDialoge({
     Key? key,
     required this.product,
-    required this.clientNames,
-    required this.pContext,
+    // required this.clientNames,
+    required this.saleType,
   }) : super(key: key);
   final ProductModel product;
-  final List<String> clientNames;
-  final BuildContext pContext;
+  //final List<String> clientNames;
+  final SaleType saleType;
 
   //final SaleModel? sale;
   @override
@@ -31,19 +29,19 @@ class AddProductState extends State<SellProductDialoge> {
   // bool isProduct = true;
   int quantity = 1;
   double priceSoldFor = 0;
-  int reducedProdutQuantity = 0;
+  int rducedQnt = 0;
   String clientId = 'client';
   DateTime date = DateTime.now();
-  bool canSell = false;
-  final TextEditingController priceOutController = TextEditingController();
+  bool _canSell = false;
+  final TextEditingController priceCntlr = TextEditingController();
   void clear() {
-    priceOutController.clear();
+    priceCntlr.clear();
   }
 
   initializeProperties() {
     priceSoldFor = widget.product.priceOut;
-    priceOutController.text = widget.product.priceOut.toString();
-    reducedProdutQuantity = quantity = widget.product.quantity;
+    priceCntlr.text = widget.product.priceOut.toString();
+    rducedQnt = quantity = widget.product.quantity;
   }
 
   @override
@@ -87,7 +85,7 @@ class AddProductState extends State<SellProductDialoge> {
                                       color:
                                           Theme.of(context).colorScheme.error,
                                     )))),
-                buildClientName(widget.clientNames),
+                buildClientName(),
                 const SizedBox(height: 15),
                 buildQuantity(context),
                 const SizedBox(height: 15),
@@ -117,22 +115,22 @@ class AddProductState extends State<SellProductDialoge> {
       children: [
         ElevatedButton(
           style: MThemeData.raisedButtonStyleSave,
-          onPressed: !canSell
+          onPressed: !_canSell
               ? null
               : () {
                   //check the form is valid
 
                   if (formKey.currentState!.validate()) {
                     setState(() {
-                      canSell = false;
+                      _canSell = false;
                     });
                     //save the product
                     SaleModel sale = SaleModel(
                       product: widget.product,
                       saleDescription: 'dummy Sale',
                       shopClientId: clientId,
-                      priceSoldFor: double.parse(priceOutController.text),
-                      type: SaleType.product,
+                      priceSoldFor: double.parse(priceCntlr.text),
+                      type: widget.saleType,
                       quantitySold: quantity,
                       dateSold: date,
                       productId: widget.product.pId!,
@@ -186,7 +184,7 @@ class AddProductState extends State<SellProductDialoge> {
       limitDown: 1,
       onChanged: (value) {
         setState(() {
-          canSell = true;
+          _canSell = true;
           quantity = value.toInt();
         });
       },
@@ -197,8 +195,12 @@ class AddProductState extends State<SellProductDialoge> {
     return Form(
       key: formKey,
       child: TextFormField(
-        controller: priceOutController,
-        onChanged: (value) {},
+        controller: priceCntlr,
+        onChanged: (value) {
+          setState(() {
+            _canSell = true;
+          });
+        },
         validator: (text) {
           if (text!.trim().isEmpty) {
             return "error".tr();
@@ -226,12 +228,11 @@ class AddProductState extends State<SellProductDialoge> {
     );
   }
 
-  buildClientName(List<String> list) {
-    log('buildClientName ${list.length}');
+  buildClientName() {
     return ClientsAutocompleteWidget(
       onChanged: (value) {
         setState(() {
-          canSell = true;
+          _canSell = true;
           clientId = value.id!;
         });
       },

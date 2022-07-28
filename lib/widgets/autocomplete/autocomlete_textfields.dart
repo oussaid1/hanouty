@@ -214,17 +214,7 @@ class _ClientAutocompleteInputFieldState
                               'add client'.tr(),
                               style: Theme.of(context).textTheme.headline3!,
                             ),
-                            contentWidget: SizedBox(
-                              // height: 400,
-                              width: 410,
-                              child: SingleChildScrollView(
-                                  child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: const [
-                                  AddClient(),
-                                ],
-                              )),
-                            ),
+                            contentWidget: const AddClient(),
                           );
                         },
                       )

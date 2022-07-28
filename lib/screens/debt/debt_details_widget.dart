@@ -61,7 +61,7 @@ class DebtDetailsWidget extends StatelessWidget {
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(clientDebt!.debtData.totalDebtAmount.toString(),
+                          Text(clientDebt!.allDebts.length.toString(),
                               style: Theme.of(context).textTheme.bodySmall),
                           const Icon(Icons.keyboard_arrow_down),
                         ],
@@ -74,6 +74,7 @@ class DebtDetailsWidget extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 final debt = clientDebt!.allDebts[index];
                                 return SimpleDebtCard(
+                                  client: clientDebt!.shopClient,
                                   debt: debt,
                                 );
                               },
@@ -101,7 +102,7 @@ class DebtDetailsWidget extends StatelessWidget {
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(clientDebt!.debtData.totalPayments.toString(),
+                          Text(clientDebt!.allPayments.length.toString(),
                               style: Theme.of(context).textTheme.bodySmall),
                           const Icon(Icons.keyboard_arrow_down),
                         ],
@@ -114,6 +115,7 @@ class DebtDetailsWidget extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 final payment = clientDebt!.allPayments[index];
                                 return SimplePaymentListCard(
+                                  client: clientDebt!.shopClient,
                                   payment: payment,
                                 );
                               },

@@ -95,9 +95,9 @@ class AuthPageState extends State<AuthPage> {
       // width: MediaQuery.of(context).size.width * 0.4,
       height: MediaQuery.of(context).size.height,
       alignment: Alignment.center,
-      decoration: const BoxDecoration(
-        gradient: MThemeData.gradient1,
-        //  color: MThemeData.secondaryColor,
+      decoration: BoxDecoration(
+        //gradient: MThemeData.gradient1,
+        color: Theme.of(context).colorScheme.secondary,
       ),
       //color: Theme.of(context).scaffoldBackgroundColor,
       child: Column(
@@ -249,9 +249,9 @@ class AuthPageState extends State<AuthPage> {
 
   buildLefttSide(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        color: Colors.transparent,
-        gradient: MThemeData.gradient2,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.primary,
+        //gradient: MThemeData.gradient2,
       ),
       height: MediaQuery.of(context).size.height,
       child: Column(
@@ -261,7 +261,7 @@ class AuthPageState extends State<AuthPage> {
             children: [
               Text('Welcome To Smart Tech-Store ',
                   style: Theme.of(context).textTheme.headline3!.copyWith(
-                        color: Theme.of(context).colorScheme.secondary,
+                        color: Theme.of(context).colorScheme.onPrimary,
                       )),
               Text('Manage Your Sales Wisely & Smart',
                   style: Theme.of(context).textTheme.subtitle2!),

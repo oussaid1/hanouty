@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../components.dart';
 import '../client/client_list.dart';
 import '../product/products_listview.dart';
-import '../sales/services_list.dart';
+import '../techservice/services_list.dart';
 import '../suplier/suplier_list.dart';
 
 class StockTab extends ConsumerWidget {

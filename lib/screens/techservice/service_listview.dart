@@ -13,6 +13,16 @@ class TechServiceListView extends StatefulWidget {
 }
 
 class TechServiceListViewState extends State<TechServiceListView> {
+  String fltr = '';
+
+  /// filter the list of tech services by category nd name
+  List<TechServiceModel> filteredTechServicesList() {
+    return widget.techServiceList
+        .where((e) =>
+            e.toString().toLowerCase().contains(fltr.toLowerCase().trim()))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -21,20 +31,24 @@ class TechServiceListViewState extends State<TechServiceListView> {
           child: SearchByWidget(
             listOfCategories: Category.categoriesStrings,
             withCategory: true,
-            onSearchTextChanged: (value) {},
+            onSearchTextChanged: (value) {
+              setState(() {
+                fltr = value;
+              });
+            },
             onBothChanged: (value, category) {},
           ),
         ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              TechServiceModel techService = widget.techServiceList[index];
+              TechServiceModel techService = filteredTechServicesList()[index];
 
               return TechServiceListCard(
                 techService: techService,
               );
             },
-            childCount: widget.techServiceList.length,
+            childCount: filteredTechServicesList().length,
           ),
         ),
       ],

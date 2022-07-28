@@ -1,12 +1,12 @@
 import 'dart:developer';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../../blocs/clientsbloc/clients_bloc.dart';
+import '../../components.dart';
+import '../../database/database_operations.dart';
 import '../../models/client/shop_client.dart';
 import '../../settings/themes.dart';
 
@@ -14,8 +14,11 @@ class AddClient extends StatefulWidget {
   const AddClient({
     Key? key,
     this.client,
+    // required this.blocContext,
   }) : super(key: key);
   final ShopClientModel? client;
+
+  ///final BuildContext blocContext;
 
   @override
   AddClientState createState() => AddClientState();
@@ -90,6 +93,8 @@ class AddClientState extends State<AddClient> {
   }
 
   Row buildSaveButton(BuildContext context) {
+    var clntBloc =
+        ShopClientBloc(databaseOperations: GetIt.I<DatabaseOperations>());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -111,10 +116,8 @@ class AddClientState extends State<AddClient> {
                     );
                     log('added ${client.toString()}');
                     _isUpdate
-                        ? BlocProvider.of<ShopClientBloc>(context)
-                            .add(UpdateShopClientEvent(client))
-                        : BlocProvider.of<ShopClientBloc>(context)
-                            .add(AddShopClientEvent(client));
+                        ? clntBloc.add(UpdateShopClientEvent(client))
+                        : clntBloc.add(AddShopClientEvent(client));
                     clear();
                     Navigator.pop(context);
                     // Navigator.pop(context);

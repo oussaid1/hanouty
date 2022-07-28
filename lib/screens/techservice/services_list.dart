@@ -7,8 +7,8 @@ import '../../models/techservice/techservice.dart';
 
 import '../../utils/popup_dialogues.dart';
 
-import '../techservice/add_service.dart';
-import '../techservice/service_listview.dart';
+import 'add_service.dart';
+import 'service_listview.dart';
 
 class TechServiceList extends ConsumerWidget {
   const TechServiceList({
@@ -35,11 +35,7 @@ class TechServiceList extends ConsumerWidget {
                   "Add Service",
                   style: Theme.of(context).textTheme.headline3!,
                 ),
-                contentWidget: const SizedBox(
-                  height: 400,
-                  width: 400,
-                  child: AddService(),
-                ),
+                contentWidget: const AddService(),
               );
             },
             label: const Text("Add").tr(),
@@ -51,9 +47,12 @@ class TechServiceList extends ConsumerWidget {
             if (state.status == TechServiceStatus.loaded) {
               var techServicesList = state.techservices;
 
-              return SizedBox(
-                width: 700,
-                height: 700,
+              return ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxHeight: 600,
+                  maxWidth: 600,
+                  minWidth: 420,
+                ),
                 child: TechServiceListView(
                   techServiceList: techServicesList,
                 ),

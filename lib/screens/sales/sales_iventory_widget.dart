@@ -63,15 +63,13 @@ class SalesOverAllWidget extends StatelessWidget {
                 sales: state.fullSales,
                 selectedDateRange: filterState.dateRange,
                 filterType: filterState.filterType);
-            SalesData salesData = SalesData(
-                sales:
-                    filteredSales.filteredSalesByFilterType(state.fullSales));
+            SalesData salesData =
+                SalesData(sales: filteredSales.slzByFltrTp(state.fullSales));
             SalesData productSalesData = SalesData(
-                sales: filteredSales
-                    .filteredSalesByFilterType(filteredSales.productSales));
+                sales: filteredSales.slzByFltrTp(filteredSales.productSales));
             SalesData serviceSalesData = SalesData(
-                sales: filteredSales
-                    .filteredSalesByFilterType(filteredSales.techServiceSales));
+                sales:
+                    filteredSales.slzByFltrTp(filteredSales.techServiceSales));
 
             return BluredContainer(
               width: 420,

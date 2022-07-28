@@ -1,9 +1,9 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hanouty/blocs/paymentsbloc/payments_bloc.dart';
 
+import '../../components.dart';
+import '../../database/database_operations.dart';
 import '../../models/client/shop_client.dart';
 import '../../models/debt/debt.dart';
 import '../../models/payment/payment.dart';
@@ -25,11 +25,13 @@ class AddPayment extends StatefulWidget {
     Key? key,
     this.payment,
     this.debt,
+    this.client,
     required this.payingStatus,
   }) : super(key: key);
   final PaymentModel? payment;
   final PayingStatus payingStatus;
   final DebtModel? debt;
+  final ShopClientModel? client;
   @override
   AddPaymentState createState() => AddPaymentState();
 }
@@ -40,11 +42,10 @@ class AddPaymentState extends State<AddPayment> {
   // final TextEditingController productNameController = TextEditingController();
   final TextEditingController amuontamountController = TextEditingController();
   // final TextEditingController dueAmountController = TextEditingController();
-  String clientId = '';
   ShopClientModel? client;
   String description = '';
   DateTime date = DateTime.now();
-  bool canSave = false;
+  bool _canSave = false;
   void clear() {
     // productNameController.clear();
     amuontamountController.clear();
@@ -56,13 +57,11 @@ class AddPaymentState extends State<AddPayment> {
     if (widget.payingStatus == PayingStatus.editing) {
       amuontamountController.text = widget.payment!.amount.toString();
       date = widget.payment!.date;
-      clientId = widget.payment!.clientId;
-
       description = widget.payment!.description!;
     }
     if (widget.payingStatus == PayingStatus.paying) {
+      client = widget.client;
       amuontamountController.text = widget.debt!.amount.toString();
-      clientId = widget.debt!.clientId!;
     }
     super.initState();
   }
@@ -119,53 +118,54 @@ class AddPaymentState extends State<AddPayment> {
       onChanged: (selectedClient) {
         setState(() {
           client = selectedClient;
-          canSave = true;
-          clientId = selectedClient.id!;
+          _canSave = true;
         });
       },
     );
   }
 
   Widget buildSaveButton(BuildContext context) {
+    var pymntBloc =
+        PaymentsBloc(databaseOperations: GetIt.I<DatabaseOperations>());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         ElevatedButton(
             style: MThemeData.raisedButtonStyleSave,
-            onPressed: !canSave
+            onPressed: !_canSave
                 ? null
                 : () {
                     // var selectedShopClient = ref.watch(selectedShopClient);
                     if (dformKey.currentState!.validate()) {
                       setState(() {
-                        canSave = false;
+                        _canSave = false;
                       });
                       if (widget.payingStatus == PayingStatus.editing) {
                         widget.payment!.amount =
                             double.parse(amuontamountController.text);
                         widget.payment!.date = date;
-                        widget.payment!.clientId = clientId;
+                        widget.payment!.clientId =
+                            client?.id ?? widget.payment!.clientId;
                         widget.payment!.description = description;
-                        context
-                            .read<PaymentsBloc>()
-                            .add(AddPaymentEvent(widget.payment!));
+                        pymntBloc.add(AddPaymentEvent(widget.payment!));
                       } else if (widget.payingStatus == PayingStatus.paying) {
-                        widget.debt!.amount =
-                            double.parse(amuontamountController.text);
-                        widget.debt!.clientId = clientId;
-                        context
-                            .read<PaymentsBloc>()
-                            .add(UpdatePaymentEvent(widget.payment!));
+                        PaymentModel payment = PaymentModel(
+                          clientName: client!.clientName,
+                          amount: double.parse(amuontamountController.text),
+                          date: date,
+                          clientId: widget.debt!.clientId!,
+                          description: description,
+                        );
+                        pymntBloc.add(AddPaymentEvent(payment));
                       } else {
                         PaymentModel payment = PaymentModel(
                           amount: double.parse(amuontamountController.text),
                           date: date,
-                          clientId: clientId,
+                          clientId: client!.id!,
+                          clientName: client!.clientName,
                           description: description,
                         );
-                        context
-                            .read<PaymentsBloc>()
-                            .add(AddPaymentEvent(payment));
+                        pymntBloc.add(AddPaymentEvent(payment));
                       }
                       Navigator.pop(context);
                     }
@@ -188,6 +188,7 @@ class AddPaymentState extends State<AddPayment> {
     return SelectDate(
       onDateSelected: (date) {
         setState(() {
+          _canSave = true;
           date = date;
         });
       },
@@ -202,6 +203,11 @@ class AddPaymentState extends State<AddPayment> {
           return "error".tr();
         }
         return null;
+      },
+      onChanged: (text) {
+        setState(() {
+          _canSave = true;
+        });
       },
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       inputFormatters: [

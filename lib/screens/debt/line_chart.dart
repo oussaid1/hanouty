@@ -20,9 +20,7 @@ class DebtLineChart extends StatelessWidget {
         height: 270,
         child: Column(
           children: [
-            Flexible(
-              flex: 2,
-              fit: FlexFit.tight,
+            Expanded(
               child: SfCartesianChart(
                 backgroundColor: Colors.transparent,
                 borderWidth: 0,

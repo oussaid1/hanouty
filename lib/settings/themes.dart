@@ -34,7 +34,7 @@ class MThemeData {
   static const almostBlackColor = Color(0xFF22282F);
   static const white = Color(0xFFFFFFFF);
   static const almostWhiteColor = Color(0xFFF5F5F5);
-  static const hintColor = almostBlackColor;
+  static const hintColor = Color.fromARGB(144, 233, 233, 233);
   static const errorColor = Color.fromARGB(255, 255, 0, 0);
 
   /////////////////////
@@ -48,7 +48,7 @@ class MThemeData {
     onBackground: white,
     error: _lightFillColor,
     onError: _lightFillColor,
-    onPrimary: hintColor,
+    onPrimary: _lightFillColor,
     onSecondary: accentColor,
     onSurface: _lightFillColor,
     brightness: Brightness.light,

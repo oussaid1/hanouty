@@ -58,7 +58,7 @@ class SaleTableDataSource extends DataTableSource {
         // DataCell(Text(rowIndex.toString())),
         DataCell(
           Container(
-            margin: const EdgeInsets.only(right: 2.0),
+            margin: const EdgeInsets.symmetric(horizontal: 8),
             width: 24,
             height: 24,
             decoration: BoxDecoration(
@@ -115,13 +115,13 @@ class SaleTableDataSource extends DataTableSource {
             ), onTap: () {
           onEditPressed?.call(row);
         }),
-        DataCell(
-            const Icon(
-              Icons.delete_rounded,
-              color: Colors.red,
-            ), onTap: () {
-          onDeletePressed?.call(row);
-        }),
+        // DataCell(
+        //     const Icon(
+        //       Icons.delete_rounded,
+        //       color: Colors.red,
+        //     ), onTap: () {
+        //   onDeletePressed?.call(row);
+        // }),
         // DataCell(Text(row.suplier.toString())),
         // DataCell(Text(row.description.toString())),
       ],

@@ -1,14 +1,17 @@
+import 'dart:developer';
+
 import 'package:hanouty/blocs/techservicebloc/techservice_bloc.dart';
 import 'package:hanouty/local_components.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import '../../utils/constents.dart';
+import 'package:hanouty/widgets/autocomplete/autocomlete_textfields.dart';
+import '../../database/database_operations.dart';
 import '/../components.dart';
 import 'package:flutter/material.dart';
 
 class AddService extends StatefulWidget {
   const AddService({Key? key, this.techService}) : super(key: key);
   final TechServiceModel? techService;
+
   @override
   AddServiceState createState() => AddServiceState();
 }
@@ -85,9 +88,7 @@ class AddServiceState extends State<AddService> {
               _buildDescription(),
               const SizedBox(height: 40),
               _buildSaveButton(context),
-              const SizedBox(
-                height: 50,
-              ) //but
+              const SizedBox(height: 50) //but
             ],
           ),
         ),
@@ -96,6 +97,8 @@ class AddServiceState extends State<AddService> {
   }
 
   Row _buildSaveButton(BuildContext context) {
+    var srvBloc =
+        TechServiceBloc(databaseOperations: GetIt.I<DatabaseOperations>());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -113,20 +116,20 @@ class AddServiceState extends State<AddService> {
                       description: descrController.text.trim(),
                       createdAt: DateTime.now(),
                       available: _available,
-                      category: serviceCat,
+                      category: serviceCat.trim(),
                       title: titleController.text.trim(),
-                      priceIn: double.tryParse(priceInController.text.trim())!,
-                      priceOut:
-                          double.tryParse(priceOutController.text.trim())!,
+                      priceIn: double.tryParse(priceInController.text),
+                      priceOut: double.tryParse(priceOutController.text),
                       serviceDescription: description,
                     );
-                    GetIt.I<TechServiceBloc>().add(_isUpdate
+                    srvBloc.add(_isUpdate
                         ? UpdateTechServiceEvent(techService)
                         : AddTechServiceEvent(techService));
-                    // Navigator.pop(context);
+                    log('save button pressed $techService');
+                    Navigator.pop(context);
                   }
                 },
-          child: Text(_isUpdate ? 'Save' : 'Update').tr(),
+          child: Text(!_isUpdate ? 'Save' : 'Update').tr(),
         ),
         ElevatedButton(
           style: MThemeData.raisedButtonStyleCancel,
@@ -142,54 +145,14 @@ class AddServiceState extends State<AddService> {
   }
 
   _buildCategory(BuildContext context, List<String> list) {
-    return SizedBox(
-      width: context.width,
-      child: Autocomplete<String>(
-        optionsBuilder: (TextEditingValue textEditingValue) {
-          if (textEditingValue.text == '') {
-            return const Iterable<String>.empty();
-          }
-          return Category.categoriesStrings.where((String option) {
-            return option
-                .toString()
-                .contains(textEditingValue.text.toLowerCase());
-          });
-        },
-        fieldViewBuilder: (BuildContext context,
-            TextEditingController textEditingController,
-            FocusNode focusNode,
-            VoidCallback onFieldSubmitted) {
-          return TextFormField(
-            controller: textEditingController,
-            onChanged: (text) {
-              setState(() {
-                serviceCat = text.trim();
-              });
-            },
-            decoration: InputDecoration(
-              labelText: 'Category'.tr(),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(6.0),
-                borderSide: BorderSide(color: AppConstants.whiteOpacity),
-              ),
-              //border: InputBorder.none,
-              hintText: 'category_hint'.tr(),
-              hintStyle: Theme.of(context).textTheme.subtitle2!,
-              filled: true,
-            ),
-            focusNode: focusNode,
-            onFieldSubmitted: (String value) {
-              onFieldSubmitted();
-            },
-          );
-        },
-        onSelected: (String selection) {
+    return CategoryAutocompleteField(
+        onChanged: (value) {
           setState(() {
-            serviceCat = selection;
+            _canSave = true;
+            serviceCat = value;
           });
         },
-      ),
-    );
+        categories: const ['Software', 'Service', 'Repair', 'Other']);
   }
 
   Widget _buildDescription() {
@@ -211,6 +174,7 @@ class AddServiceState extends State<AddService> {
           hintText: 'description_hint'.tr(),
           hintStyle: Theme.of(context).textTheme.subtitle2!,
           filled: true,
+          contentPadding: const EdgeInsets.all(12.0),
         ),
       ),
     );
@@ -230,12 +194,14 @@ class AddServiceState extends State<AddService> {
           FilteringTextInputFormatter.allow(RegExp('[0-9.]+')),
         ],
         textAlign: TextAlign.center,
+        maxLength: 10,
         decoration: InputDecoration(
+          counterText: '',
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6.0),
             borderSide: const BorderSide(),
           ),
-          hintText: '1434 dh',
+          hintText: '\$1234',
           hintStyle: Theme.of(context).textTheme.subtitle2!,
           contentPadding: const EdgeInsets.only(top: 4),
           filled: true,
@@ -258,12 +224,14 @@ class AddServiceState extends State<AddService> {
           FilteringTextInputFormatter.allow(RegExp('[0-9.]+')),
         ],
         textAlign: TextAlign.center,
+        maxLength: 10,
         decoration: InputDecoration(
+          counterText: '',
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(6.0),
             borderSide: const BorderSide(),
           ),
-          hintText: '1234 \$',
+          hintText: '\$1224',
           hintStyle: Theme.of(context).textTheme.subtitle2!,
           contentPadding: const EdgeInsets.only(top: 4),
           filled: true,
@@ -286,7 +254,9 @@ class AddServiceState extends State<AddService> {
           _canSave = text.trim().isNotEmpty;
         });
       },
+      maxLength: 30,
       decoration: InputDecoration(
+        counterText: '',
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6.0),
           borderSide: const BorderSide(),
@@ -301,24 +271,18 @@ class AddServiceState extends State<AddService> {
     );
   }
 
-  Row _buildAvailability(BuildContext context) {
+  _buildAvailability(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 8.0,
-            top: 8,
-          ),
-          child: Text(
-            'Availibility'.tr(),
-            style: Theme.of(context).textTheme.subtitle2!,
-          ),
+        Text(
+          'Availibility'.tr(),
+          style: Theme.of(context).textTheme.subtitle2!,
         ),
-        CupertinoSwitch(
+        Switch(
             activeColor: MThemeData.accentColor,
-            value: false,
+            value: _available,
             onChanged: (value) {
               setState(() {
                 _available = value;

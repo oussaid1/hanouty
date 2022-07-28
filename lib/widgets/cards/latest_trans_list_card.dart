@@ -16,8 +16,8 @@ class LatestTransactionsListCard extends ConsumerWidget {
     return BlocBuilder<FullSalesBloc, FullSalesState>(
       builder: (context, state) {
         return BluredContainer(
-          height: 300,
-          width: 300,
+          height: 400,
+          width: 420,
           child: Column(
             children: [
               SizedBox(
@@ -50,6 +50,7 @@ class LatestTransactionsListCard extends ConsumerWidget {
                   ],
                 ),
               ),
+              const SizedBox(height: 15),
               Expanded(
                 child: ListView.builder(
                   shrinkWrap: true,
@@ -63,7 +64,8 @@ class LatestTransactionsListCard extends ConsumerWidget {
                         .sort((b, a) => a.dateSold.compareTo(b.dateSold));
                     final sale = state.fullSales[index];
                     return Padding(
-                      padding: const EdgeInsets.all(2.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 4.0),
                       child: BluredContainer(
                         height: 48,
                         child: Row(
@@ -118,30 +120,21 @@ class LatestTransactionsListCard extends ConsumerWidget {
                                 ),
                               ],
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                PriceNumberZone(
-                                  withDollarSign: true,
-                                  right: Padding(
-                                    padding: const EdgeInsets.only(left: 2.0),
-                                    child: getIcon(
-                                      context,
-                                      priceSoldFor: sale.priceSoldFor,
-                                      priceOut: sale.priceOut,
-                                    ),
-                                  ),
-                                  price: sale.priceSoldFor,
-                                  // style: Theme.of(context)
-                                  //     .textTheme
-                                  //     .headline3!
-                                  //     .copyWith(
-                                  //         color: Theme.of(context)
-                                  //             .colorScheme
-                                  //             .primary),
-                                ),
-                              ],
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: PriceNumberZone(
+                                withDollarSign: true,
+                                // right: Padding(
+                                //   padding: const EdgeInsets.symmetric(horizontal: 8),
+                                //   child: getIcon(
+                                //     context,
+                                //     priceSoldFor: sale.priceSoldFor,
+                                //     priceOut: sale.priceOut,
+                                //   ),
+                                // ),
+                                price: sale.priceSoldFor,
+                              ),
                             ),
                           ],
                         ),
@@ -163,7 +156,7 @@ Icon getIcon(BuildContext context,
     {required double priceSoldFor, required double priceOut}) {
   if (priceSoldFor >= priceOut) {
     return Icon(FontAwesomeIcons.arrowUp,
-        size: 16, color: Colors.green.shade300);
+        size: 16, color: Colors.green.shade400);
   } else if (priceSoldFor < priceOut) {
     return Icon(FontAwesomeIcons.arrowDown,
         size: 16, color: Colors.red.shade300);

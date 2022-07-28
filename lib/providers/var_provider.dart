@@ -3,7 +3,7 @@ import 'package:hanouty/components.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //number of scares products variables
-final scareceValueProvider = StateProvider<int>((ref) {
+final scareceVaflueProvider = StateProvider<int>((ref) {
   return 4;
 });
 // select or add product variables

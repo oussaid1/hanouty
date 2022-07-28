@@ -105,15 +105,13 @@ class ProductTableDataSource extends DataTableSource {
             ), onTap: () {
           onEditPressed?.call(row);
         }),
-        DataCell(
-            const Icon(
-              Icons.delete_rounded,
-              color: Colors.red,
-            ), onTap: () {
-          onDeletePressed?.call(row);
-        }),
-        // DataCell(Text(row.suplier.toString())),
-        // DataCell(Text(row.description.toString())),
+        // DataCell(
+        //     const Icon(
+        //       Icons.delete_rounded,
+        //       color: Colors.red,
+        //     ), onTap: () {
+        //   onDeletePressed?.call(row);
+        // }),
       ],
     );
   }

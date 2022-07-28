@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hanouty/local_components.dart';
 
 import '../../blocs/debtbloc /debt_bloc.dart';
 import '../../components.dart';
-import '../../models/debt/debt.dart';
-import '../../settings/themes.dart';
 import '../../utils/constents.dart';
-import '../../utils/popup_dialogues.dart';
 import '../../widgets/price_number_zone.dart';
 import 'add_debt.dart';
 import 'add_payment.dart';
@@ -14,9 +12,11 @@ class SimpleDebtCard extends StatelessWidget {
   const SimpleDebtCard({
     Key? key,
     required this.debt,
+    this.client,
   }) : super(key: key);
 
   final DebtModel debt;
+  final ShopClientModel? client;
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +34,10 @@ class SimpleDebtCard extends StatelessWidget {
                     "Pay".tr(),
                     style: Theme.of(context).textTheme.headline3!,
                   ),
-                  contentWidget: SizedBox(
-                    height: 400,
-                    width: 400,
-                    child: AddPayment(
-                      payingStatus: PayingStatus.paying,
-                      debt: debt,
-                    ),
+                  contentWidget: AddPayment(
+                    payingStatus: PayingStatus.paying,
+                    debt: debt,
+                    client: client,
                   ),
                 );
               },
@@ -61,12 +58,8 @@ class SimpleDebtCard extends StatelessWidget {
                     "Edit".tr(),
                     style: Theme.of(context).textTheme.headline3!,
                   ),
-                  contentWidget: SizedBox(
-                    height: 400,
-                    width: 400,
-                    child: AddDebt(
-                      debt: debt,
-                    ),
+                  contentWidget: AddDebt(
+                    debt: debt,
                   ),
                 );
               },
@@ -140,7 +133,7 @@ class SimpleDebtCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    '${debt.clientId}',
+                    debt.timeStamp.ddmmyyyy(),
                     style: Theme.of(context).textTheme.bodyText2!.copyWith(
                         color:
                             Theme.of(context).colorScheme.onSecondaryContainer),

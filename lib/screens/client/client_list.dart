@@ -31,11 +31,7 @@ class _ShopClientsListState extends State<ShopClientsList> {
                 "Add Client",
                 style: Theme.of(context).textTheme.headline3!,
               ),
-              contentWidget: const SizedBox(
-                height: 400,
-                width: 400,
-                child: AddClient(),
-              ),
+              contentWidget: const AddClient(),
             );
           },
           label: const Text("Add").tr(),
@@ -76,6 +72,7 @@ class _ShopClientsListState extends State<ShopClientsList> {
                     ),
                     child: BluredContainer(
                       child: ListView.builder(
+                        shrinkWrap: true,
                         itemCount: clientsList.length,
                         itemBuilder: (context, index) {
                           final ShopClientModel shopClient = clientsList[index];

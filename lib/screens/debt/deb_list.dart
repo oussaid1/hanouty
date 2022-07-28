@@ -128,34 +128,31 @@ class _DebtListState extends State<_DebtList> {
                       spacing: 15,
                       runSpacing: 15,
                       children: [
-                        Flexible(
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(
-                              minWidth: 420,
-                              minHeight: 400,
-                              maxWidth: 720,
-                              maxHeight: 500,
-                            ),
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: _clientDebts.length,
-                              itemBuilder: (context, index) {
-                                final clientDebt = _clientDebts[index];
-                                return Card(
-                                  color:
-                                      const Color.fromARGB(127, 255, 255, 255),
-                                  elevation: 0,
-                                  child: DebtListCard(
-                                    clientDebt: clientDebt,
-                                    onTap: (value) {
-                                      setState(() {
-                                        selectedClientDebt = value;
-                                      });
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(
+                            minWidth: 420,
+                            minHeight: 400,
+                            maxWidth: 720,
+                            maxHeight: 500,
+                          ),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: _clientDebts.length,
+                            itemBuilder: (context, index) {
+                              final clientDebt = _clientDebts[index];
+                              return Card(
+                                color: const Color.fromARGB(127, 255, 255, 255),
+                                elevation: 0,
+                                child: DebtListCard(
+                                  clientDebt: clientDebt,
+                                  onTap: (value) {
+                                    setState(() {
+                                      selectedClientDebt = value;
+                                    });
+                                  },
+                                ),
+                              );
+                            },
                           ),
                         ),
                         BluredContainer(
