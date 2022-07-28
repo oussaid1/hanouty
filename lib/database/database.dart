@@ -278,11 +278,12 @@ class Database {
   }
 
   /// update Product Quantity in firestore
-  Future<bool> updateProductQuantity(ProductModel product, int quantity) {
+  Future<bool> updateProductQuantity(
+      {required String productId, required int quantity}) {
     return users
         .doc(uid!)
         .collection(DbTables.products)
-        .doc(product.pId)
+        .doc(productId.trim())
         .set({'quantity': quantity}, SetOptions(merge: true))
         .then((value) => true)
         .catchError((error) => false);

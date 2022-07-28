@@ -1,16 +1,14 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hanouty/local_components.dart';
-import 'package:hanouty/screens/debt/add_debt.dart';
-import 'package:hanouty/screens/debt/add_payment.dart';
+
 import 'package:hanouty/utils/global_functions.dart';
 import '../../blocs/clientsbloc/clients_bloc.dart';
 import '../../blocs/debtbloc /debt_bloc.dart';
 import '../../blocs/paymentsbloc/payments_bloc.dart';
 import '../../components.dart';
 import '../../models/debt/debtsviewmodel.dart';
-import '../../models/payment/payment.dart';
-import '../../utils/constents.dart';
+
 import '../../widgets/price_number_zone.dart';
 import '../../widgets/search_widget.dart';
 import 'debt_details_widget.dart';
@@ -123,7 +121,6 @@ class _DebtListState extends State<_DebtList> {
                           log('both: , ');
                           //_data!.filterByCategory(category, text);
                         },
-                        onChanged: (value) {},
                       ),
                     ),
                     Wrap(

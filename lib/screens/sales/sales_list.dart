@@ -8,7 +8,7 @@ import '../../blocs/sellactionsbloc/sellactions_bloc.dart';
 import '../../components.dart';
 import '../../local_components.dart';
 import '../../utils/global_functions.dart';
-import '../../widgets/charts/inventory_widget.dart';
+import 'sales_iventory_widget.dart';
 import '../../widgets/search_widget.dart';
 import 'edit_sale.dart';
 
@@ -72,12 +72,12 @@ class SalesList extends StatelessWidget {
           child: BlocBuilder<FullSalesBloc, FullSalesState>(
             builder: (context, fullSalesState) {
               if (fullSalesState.status == FullSalesStatus.loaded) {
-                var productList = fullSalesState.products;
-                var dbSalesList = fullSalesState.dbSales;
+                //  var productList = fullSalesState.products;
+                //var dbSalesList = fullSalesState.dbSales;
                 var fullSales = fullSalesState.fullSales;
-                FilteredSales filteredSales = FilteredSales(
-                  sales: fullSales,
-                );
+                // FilteredSales filteredSales = FilteredSales(
+                //   sales: fullSales,
+                // );
                 SalesData salesData = SalesData(sales: fullSales);
 
                 return Builder(builder: (context) {
@@ -372,7 +372,6 @@ class _SalesDataTableState extends State<SalesDataTable> {
                 listOfCategories: ProductModel.fieldStrings,
                 withCategory: true,
                 onSearchTextChanged: (String text) {},
-                onChanged: (String category) {},
                 onBothChanged: (String category, String text) {
                   _data!.filterByCategory(category, text);
                 },

@@ -1,7 +1,7 @@
 import 'package:hanouty/models/product/product.dart';
 import 'package:hanouty/providers/var_provider.dart';
 import 'package:hanouty/utils/glasswidgets.dart';
-import 'package:hanouty/widgets/list_cards/simple_products_list_card.dart';
+import 'package:hanouty/screens/product/simple_products_list_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
 

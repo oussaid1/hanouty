@@ -1,23 +1,17 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hanouty/extensions/extensions.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import '../../blocs/suplierbloc/suplier_bloc.dart';
 import '../../components.dart';
 import '../../models/suplier/suplier.dart';
-import '../../responsive/responsive.dart';
 import '../../settings/themes.dart';
 
-class AddSuplier extends ConsumerStatefulWidget {
+class AddSuplier extends StatefulWidget {
   const AddSuplier({Key? key, this.suplier}) : super(key: key);
   final SuplierModel? suplier;
   @override
   AddSuplierState createState() => AddSuplierState();
 }
 
-class AddSuplierState extends ConsumerState<AddSuplier> {
+class AddSuplierState extends State<AddSuplier> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
@@ -57,58 +51,32 @@ class AddSuplierState extends ConsumerState<AddSuplier> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: context.width,
-      height: context.height,
-      child: Column(
-        children: [
-          //InStockWidget(dBSupliers: dBSupliers),
-          buildFlexible(context, ref),
-        ],
-      ),
-    );
-  }
-
-  Flexible buildFlexible(BuildContext context, WidgetRef ref) {
-    return Flexible(
-      fit: FlexFit.tight,
-      flex: 2,
-      child: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(8),
-          width: Responsive.isDesktop(context) ? 600 : context.width - 10,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            //color: Theme.of(context).colorScheme.onBackground,
-          ),
-          child: Form(
-            key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 50,
-                ),
-                buildSuplierName(ref),
-                const SizedBox(height: 20),
-                buildSuplierPhone(ref),
-                const SizedBox(height: 20),
-                buildSuplierEmail(ref),
-                const SizedBox(height: 20),
-                buildLocation(ref, context),
-                const SizedBox(height: 40),
-                buildSaveButton(ref, context),
-                const SizedBox(height: 100) //but
-              ],
-            ),
-          ),
+    return SingleChildScrollView(
+      child: Form(
+        key: formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(height: 50),
+            buildSuplierName(),
+            const SizedBox(height: 20),
+            buildSuplierPhone(),
+            const SizedBox(height: 20),
+            buildSuplierEmail(),
+            const SizedBox(height: 20),
+            buildLocation(context),
+            const SizedBox(height: 40),
+            buildSaveButton(context),
+            const SizedBox(height: 100) //but
+          ],
         ),
       ),
     );
   }
 
-  Row buildSaveButton(WidgetRef ref, BuildContext context) {
+  Row buildSaveButton(BuildContext context) {
     return widget.suplier != null
         ? Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -158,7 +126,7 @@ class AddSuplierState extends ConsumerState<AddSuplier> {
                       email: emailController.text.trim(),
                       location: SuplierModel.laayoune,
                     );
-                    // GetIt.I<SuplierBloc>().add(AddSupliersEvent(suplier));
+                    GetIt.I<SuplierBloc>().add(AddSupliersEvent(suplier));
                   }
                 },
               ),
@@ -175,7 +143,7 @@ class AddSuplierState extends ConsumerState<AddSuplier> {
           );
   }
 
-  TextFormField buildSuplierName(WidgetRef ref) {
+  TextFormField buildSuplierName() {
     return TextFormField(
       controller: titleController,
       validator: (text) {
@@ -199,7 +167,7 @@ class AddSuplierState extends ConsumerState<AddSuplier> {
     );
   }
 
-  TextFormField buildSuplierPhone(WidgetRef ref) {
+  TextFormField buildSuplierPhone() {
     return TextFormField(
       controller: phoneController,
       validator: (text) {
@@ -223,7 +191,7 @@ class AddSuplierState extends ConsumerState<AddSuplier> {
     );
   }
 
-  TextFormField buildSuplierEmail(WidgetRef ref) {
+  TextFormField buildSuplierEmail() {
     return TextFormField(
       controller: emailController,
       validator: (text) {
@@ -247,7 +215,7 @@ class AddSuplierState extends ConsumerState<AddSuplier> {
     );
   }
 
-  Row buildLocation(WidgetRef ref, BuildContext context) {
+  Row buildLocation(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,

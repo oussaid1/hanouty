@@ -1,6 +1,5 @@
 import 'package:hanouty/local_components.dart';
 import 'package:hanouty/utils/constents.dart';
-import 'package:hanouty/utils/glasswidgets.dart';
 import 'package:flutter/material.dart';
 
 import '../components.dart';
@@ -9,19 +8,19 @@ import 'spinners/search_spinner.dart';
 class SearchByWidget extends StatefulWidget {
   final bool withCategory;
   final List<String> listOfCategories;
-  final void Function(String)? onChanged;
   final String? initialCategoryValue;
   final void Function(String) onSearchTextChanged;
-  final void Function(String, String) onBothChanged;
+
+  /// the first returned value is the selected category, the second is the text
+  final void Function(String, String)? onBothChanged;
 
   //final String searchText;
   const SearchByWidget({
     Key? key,
     this.withCategory = false,
     required this.listOfCategories,
-    this.onChanged,
     required this.onSearchTextChanged,
-    required this.onBothChanged,
+    this.onBothChanged,
 
     /// required this.searchText,
     this.initialCategoryValue,
@@ -52,8 +51,6 @@ class _SearchByWidgetState extends State<SearchByWidget> {
                           setState(() {
                             selectedCategory = value;
                           });
-                          //if (widget.onChanged != null)
-                          widget.onChanged!(value);
                         },
                         list: widget.listOfCategories,
                       ),
@@ -69,10 +66,9 @@ class _SearchByWidgetState extends State<SearchByWidget> {
                 child: TextField(
                   onChanged: (fillterText) {
                     widget.onSearchTextChanged(fillterText);
-                    widget.onBothChanged(
-                      selectedCategory,
-                      fillterText,
-                    );
+                    if (widget.onBothChanged != null) {
+                      widget.onBothChanged!(selectedCategory, fillterText);
+                    }
                   },
                   style: Theme.of(context)
                       .textTheme

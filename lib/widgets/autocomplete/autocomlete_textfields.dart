@@ -18,13 +18,12 @@ class ProductsAutoCompleteWidget extends StatelessWidget {
   final Function(ProductModel) onChanged;
   @override
   Widget build(BuildContext context) {
-    // return BlocProvider(
-    //   create: (context) =>
-    //       ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-    //         ..add(GetProductsEvent()),
-    //   child: ProductsAutocompleteField(onChanged: onChanged),
-    // );
-    return ProductsAutocompleteField(onChanged: onChanged);
+    return BlocProvider(
+        create: (context) =>
+            ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+              ..add(GetProductsEvent()),
+        child: ProductsAutocompleteField(onChanged: onChanged));
+    //return ProductsAutocompleteField(onChanged: onChanged);
   }
 }
 
@@ -95,29 +94,32 @@ class ProductsAutocompleteField extends StatelessWidget {
   }
 }
 
-// class ClientsAutocompleteWidget extends StatelessWidget {
-//   final Function(ShopClientModel) onChanged;
-//   const ClientsAutocompleteWidget({
-//     Key? key,
-//     required this.onChanged,
-//   }) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     // return BlocProvider(
-//     //   create: (context) =>
-//     //       ShopClientBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
-//     //   child: ClientAutocompleteInputField(
-//     //     onChanged: onChanged,
-//     //   ),
-//     // );
-//     return ClientAutocompleteInputField(onChanged: onChanged);
-//   }
-// }
+class ClientsAutocompleteWidget extends StatelessWidget {
+  final Function(ShopClientModel) onChanged;
+  const ClientsAutocompleteWidget({
+    Key? key,
+    required this.onChanged,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) =>
+          ShopClientBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+            ..add(
+              GetShopClientsEvent(),
+            ),
+      child: ClientAutocompleteInputField(
+        onChanged: onChanged,
+      ),
+    );
+    // return ClientAutocompleteInputField(onChanged: onChanged);
+  }
+}
 
-class ClientsAutocompleteWidget extends StatefulWidget {
+class ClientAutocompleteInputField extends StatefulWidget {
   final Function(ShopClientModel) onChanged;
   final ShopClientModel? initialValue;
-  const ClientsAutocompleteWidget({
+  const ClientAutocompleteInputField({
     Key? key,
     required this.onChanged,
     this.initialValue,
@@ -127,12 +129,12 @@ class ClientsAutocompleteWidget extends StatefulWidget {
 //  static String _displayStringForOption(User option) => option.name;
 
   @override
-  State<ClientsAutocompleteWidget> createState() =>
+  State<ClientAutocompleteInputField> createState() =>
       _ClientAutocompleteInputFieldState();
 }
 
 class _ClientAutocompleteInputFieldState
-    extends State<ClientsAutocompleteWidget> {
+    extends State<ClientAutocompleteInputField> {
   ShopClientModel? client;
   @override
   void initState() {
@@ -150,7 +152,7 @@ class _ClientAutocompleteInputFieldState
       builder: (mcontext, state) {
         var list = [ShopClientModel.client, ...state.clients];
 
-        if (list.isEmpty) {
+        if (state.status != ShopClientsStatus.loaded) {
           return Center(
             child: Text('no clients'.tr()),
           );
@@ -173,6 +175,20 @@ class _ClientAutocompleteInputFieldState
                   .contains(textEditingValue.text.toLowerCase());
             });
           },
+          // optionsViewBuilder: (context, onSelected, options) {
+          //   return ListView.builder(
+          //     itemCount: options.length,
+          //     itemBuilder: (context, index) {
+          //       var option = options.toList()[index];
+          //       return ListTile(
+          //         title: Text(option.clientName!),
+          //         onTap: () {
+          //           onSelected(option);
+          //         },
+          //       );
+          //     },
+          //   );
+          // },
           fieldViewBuilder: (BuildContext context,
               TextEditingController textEditingController,
               FocusNode focusNode,

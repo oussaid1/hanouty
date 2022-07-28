@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -45,23 +44,25 @@ class AddIncomeState extends State<AddIncome> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: incomeformKey,
+    return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            buildProductName(),
-            const SizedBox(height: 20),
-            buildAmount(),
-            const SizedBox(height: 20),
-            buildDate(),
-            const SizedBox(height: 20),
-            buildSourceName(),
-            const SizedBox(height: 40),
-            buildSaveButton(context),
-          ],
+        child: Form(
+          key: incomeformKey,
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              buildProductName(),
+              const SizedBox(height: 20),
+              buildAmount(),
+              const SizedBox(height: 20),
+              buildDate(),
+              const SizedBox(height: 20),
+              buildSourceName(),
+              const SizedBox(height: 40),
+              buildSaveButton(context),
+            ],
+          ),
         ),
       ),
     );

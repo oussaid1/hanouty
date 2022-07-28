@@ -2,22 +2,20 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../blocs/expensesbloc/expenses_bloc.dart';
 import '../../models/expenses/expenses.dart';
 import '../../settings/themes.dart';
 import '../../widgets/autocomplete/autocomlete_textfields.dart';
 import '../../widgets/date_pickers.dart/date_picker.dart';
 
-class AddExpense extends ConsumerStatefulWidget {
+class AddExpense extends StatefulWidget {
   const AddExpense({Key? key, this.expense}) : super(key: key);
   final ExpenseModel? expense;
   @override
-  ConsumerState<AddExpense> createState() => AddExpenseState();
+  State<AddExpense> createState() => AddExpenseState();
 }
 
-class AddExpenseState extends ConsumerState<AddExpense> {
+class AddExpenseState extends State<AddExpense> {
   final expenseformKey = GlobalKey<FormState>();
   final TextEditingController expenseNameController = TextEditingController();
   final TextEditingController amuontPaidController = TextEditingController();
@@ -50,33 +48,35 @@ class AddExpenseState extends ConsumerState<AddExpense> {
   @override
   Widget build(BuildContext context) {
     final List<String> categoriesList = [];
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Form(
-        key: expenseformKey,
-        child: Column(
-          children: [
-            //  const SizedBox(height: 20),
-            buildCategory(context, categoriesList),
-            const SizedBox(height: 20),
-            buildProductName(),
-            const SizedBox(height: 20),
-            buildDueAmount(),
-            const SizedBox(height: 20),
-            buildDate(),
-            const SizedBox(height: 20),
-            buildPaidAmount(),
-            const SizedBox(height: 20),
-            buildDueDate(),
-            const SizedBox(height: 40),
-            buildSaveButton(ref, context),
-          ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Form(
+          key: expenseformKey,
+          child: Column(
+            children: [
+              //  const SizedBox(height: 20),
+              buildCategory(context, categoriesList),
+              const SizedBox(height: 20),
+              buildProductName(),
+              const SizedBox(height: 20),
+              buildDueAmount(),
+              const SizedBox(height: 20),
+              buildDate(),
+              const SizedBox(height: 20),
+              buildPaidAmount(),
+              const SizedBox(height: 20),
+              buildDueDate(),
+              const SizedBox(height: 40),
+              buildSaveButton(context),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  buildSaveButton(WidgetRef ref, BuildContext context) {
+  buildSaveButton(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [

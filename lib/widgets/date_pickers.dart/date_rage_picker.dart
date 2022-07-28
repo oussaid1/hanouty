@@ -21,11 +21,13 @@ class DateRangePicker extends StatelessWidget {
             children: [
               Text(
                 (state.dateRange ?? MDateRange.empty).start.ddmmyyyy(),
+                style: Theme.of(context).textTheme.caption,
               ),
               const Text(
                 '-',
               ),
-              Text((state.dateRange ?? MDateRange.empty).end.ddmmyyyy()),
+              Text((state.dateRange ?? MDateRange.empty).end.ddmmyyyy(),
+                  style: Theme.of(context).textTheme.caption),
             ],
           );
         }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
 import '../../blocs/clientsbloc/clients_bloc.dart';
 import '../../database/database_operations.dart';
-import '../../utils/popup_dialogues.dart';
 import '../client/add_client.dart';
 import '../debt/add_debt.dart';
 import '../debt/add_payment.dart';
@@ -10,7 +9,83 @@ import '../expenses/add_expense.dart';
 import '../income/add_income.dart';
 import '../product/add_product.dart';
 import '../techservice/add_service.dart';
-import '../sales/edit_sale.dart';
+import '../../../blocs/clientsbloc/clients_bloc.dart';
+import '../../../blocs/datefilterbloc/date_filter_bloc.dart';
+import '../../../blocs/debtbloc /debt_bloc.dart';
+import '../../../blocs/expensesbloc/expenses_bloc.dart';
+import '../../../blocs/fullsalesbloc/fullsales_bloc.dart';
+import '../../../blocs/incomebloc/income_bloc.dart';
+import '../../../blocs/paymentsbloc/payments_bloc.dart';
+import '../../../blocs/productbloc/product_bloc.dart';
+import '../../../blocs/salesbloc/sales_bloc.dart';
+import '../../../blocs/sellactionsbloc/sellactions_bloc.dart';
+import '../../../blocs/suplierbloc/suplier_bloc.dart';
+import '../../../blocs/techservicebloc/techservice_bloc.dart';
+import '../../../components.dart';
+import '../../../database/database_operations.dart';
+import '../../../local_components.dart';
+
+class AddFabWidget extends StatelessWidget {
+  const AddFabWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+        ),
+        BlocProvider(
+          create: (context) => SellActionsBloc(GetIt.I<DatabaseOperations>()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              SalesBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+        ),
+        // BlocProvider(
+        //   create: (context) =>
+        //       FullSalesBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+        // ),
+        BlocProvider(
+          create: (context) =>
+              DebtBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              ExpenseBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              IncomeBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              ShopClientBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              SuplierBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+        ),
+        BlocProvider(
+          create: (context) => TechServiceBloc(
+              databaseOperations: GetIt.I<DatabaseOperations>()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              PaymentsBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+        ),
+        BlocProvider(
+          create: (context) => DateFilterBloc(),
+        ),
+        BlocProvider(
+            create: (context) => ShopClientBloc(
+                databaseOperations: GetIt.I<DatabaseOperations>())),
+      ],
+      child: const AddStuffWidget(),
+    );
+  }
+}
 
 class AddStuffWidget extends StatelessWidget {
   const AddStuffWidget({
@@ -19,37 +94,31 @@ class AddStuffWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          ShopClientBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          buildExpandedFab(context, title: "Client", child: AddClient()),
-          const SizedBox(height: 10),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        buildExpandedFab(context, title: "Client", child: AddClient()),
+        const SizedBox(height: 10),
 
-          /// commented this beacasue it's not yet implemented in the app , but it's here for future use
-          /// don't forget to uncomment it when it's ready
-          // buildExpandedFab(context,title: "Add Supplier",child: const AddSuplier()),
-          // const SizedBox(height: 10),
-          buildExpandedFab(context,
-              title: "Product", child: const AddOrEditProduct()),
-          const SizedBox(height: 10),
-          buildExpandedFab(context,
-              title: "Service", child: const AddService()),
-          const SizedBox(height: 10),
-          buildExpandedFab(context, title: "Add Debt", child: AddDebt()),
-          const SizedBox(height: 10),
-          buildExpandedFab(context,
-              title: "Payment",
-              child: const AddPayment(payingStatus: PayingStatus.adding)),
-          const SizedBox(height: 10),
-          buildExpandedFab(context,
-              title: "Expense", child: const AddExpense()),
-          const SizedBox(height: 10),
-          buildExpandedFab(context, title: "Income", child: const AddIncome()),
-        ],
-      ),
+        /// commented this beacasue it's not yet implemented in the app , but it's here for future use
+        /// don't forget to uncomment it when it's ready
+        // buildExpandedFab(context,title: "Add Supplier",child: const AddSuplier()),
+        // const SizedBox(height: 10),
+        buildExpandedFab(context,
+            title: "Product", child: const AddOrEditProduct()),
+        const SizedBox(height: 10),
+        buildExpandedFab(context, title: "Service", child: const AddService()),
+        const SizedBox(height: 10),
+        buildExpandedFab(context, title: "Add Debt", child: AddDebt()),
+        const SizedBox(height: 10),
+        buildExpandedFab(context,
+            title: "Payment",
+            child: const AddPayment(payingStatus: PayingStatus.adding)),
+        const SizedBox(height: 10),
+        buildExpandedFab(context, title: "Expense", child: const AddExpense()),
+        const SizedBox(height: 10),
+        buildExpandedFab(context, title: "Income", child: const AddIncome()),
+      ],
     );
   }
 
@@ -70,13 +139,7 @@ class AddStuffWidget extends StatelessWidget {
           contentWidget: SizedBox(
             // height: 400,
             width: 410,
-            child: SingleChildScrollView(
-                child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                child ?? const SizedBox.shrink(),
-              ],
-            )),
+            child: child ?? const SizedBox.shrink(),
           ),
         );
       },

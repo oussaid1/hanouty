@@ -11,8 +11,9 @@ import '../../blocs/salesbloc/sales_bloc.dart';
 import '../../components.dart';
 import '../../widgets/cards/latest_trans_list_card.dart';
 import '../../widgets/cards/scares_products_instock.dart';
-import '../../widgets/charts/inventory_widget.dart';
+import '../sales/sales_iventory_widget.dart';
 import '../add_tostock/addstuff_fab.dart';
+import '../product/stock_inventory.dart';
 
 class DashBoardPage extends StatelessWidget {
   const DashBoardPage({Key? key}) : super(key: key);

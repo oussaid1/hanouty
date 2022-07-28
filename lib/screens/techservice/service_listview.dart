@@ -1,6 +1,6 @@
 import 'package:hanouty/models/catrgory/category.dart';
 import 'package:hanouty/models/techservice/techservice.dart';
-import 'package:hanouty/widgets/list_cards/techservice_card.dart';
+import 'package:hanouty/screens/techservice/techservice_card.dart';
 import 'package:hanouty/widgets/search_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +21,6 @@ class TechServiceListViewState extends State<TechServiceListView> {
           child: SearchByWidget(
             listOfCategories: Category.categoriesStrings,
             withCategory: true,
-            onChanged: (value) {},
             onSearchTextChanged: (value) {},
             onBothChanged: (value, category) {},
           ),

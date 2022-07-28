@@ -64,63 +64,63 @@ class App extends StatelessWidget {
           BlocProvider<UserModelCubit>(
             create: (context) => UserModelCubit()..loadUser(),
           ),
-          BlocProvider(
-            create: (context) =>
-                ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetProductsEvent()),
-          ),
-          BlocProvider(
-            create: (context) => SellActionsBloc(GetIt.I<DatabaseOperations>()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                SalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetSalesEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                FullSalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetFullSalesEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                DebtBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetDebtEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                ExpenseBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetExpensesEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                IncomeBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetIncomeEvent()),
-          ),
-          BlocProvider(
-            create: (context) => ShopClientBloc(
-                databaseOperations: GetIt.I<DatabaseOperations>())
-              ..add(GetShopClientsEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                SuplierBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetSupliersEvent()),
-          ),
-          BlocProvider(
-            create: (context) => TechServiceBloc(
-                databaseOperations: GetIt.I<DatabaseOperations>())
-              ..add(GetTechServiceEvent()),
-          ),
-          BlocProvider(
-            create: (context) =>
-                PaymentsBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-                  ..add(GetPaymentsEvent()),
-          ),
-          BlocProvider(
-            create: (context) => DateFilterBloc()
-              ..add(const UpdateFilterEvent(filterType: DateFilter.all)),
-          ),
+          // BlocProvider(
+          //   create: (context) =>
+          //       ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+          //         ..add(GetProductsEvent()),
+          // ),
+          // BlocProvider(
+          //   create: (context) => SellActionsBloc(GetIt.I<DatabaseOperations>()),
+          // ),
+          // BlocProvider(
+          //   create: (context) =>
+          //       SalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+          //         ..add(GetSalesEvent()),
+          // ),
+          // BlocProvider(
+          //   create: (context) =>
+          //       FullSalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+          //         ..add(GetFullSalesEvent()),
+          // ),
+          // BlocProvider(
+          //   create: (context) =>
+          //       DebtBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+          //         ..add(GetDebtEvent()),
+          // ),
+          // BlocProvider(
+          //   create: (context) =>
+          //       ExpenseBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+          //         ..add(GetExpensesEvent()),
+          // ),
+          // BlocProvider(
+          //   create: (context) =>
+          //       IncomeBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+          //         ..add(GetIncomeEvent()),
+          // ),
+          // BlocProvider(
+          //   create: (context) => ShopClientBloc(
+          //       databaseOperations: GetIt.I<DatabaseOperations>())
+          //     ..add(GetShopClientsEvent()),
+          // ),
+          // BlocProvider(
+          //   create: (context) =>
+          //       SuplierBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+          //         ..add(GetSupliersEvent()),
+          // ),
+          // BlocProvider(
+          //   create: (context) => TechServiceBloc(
+          //       databaseOperations: GetIt.I<DatabaseOperations>())
+          //     ..add(GetTechServiceEvent()),
+          // ),
+          // BlocProvider(
+          //   create: (context) =>
+          //       PaymentsBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+          //         ..add(GetPaymentsEvent()),
+          // ),
+          // BlocProvider(
+          //   create: (context) => DateFilterBloc()
+          //     ..add(const UpdateFilterEvent(filterType: DateFilter.all)),
+          // ),
         ],
         child: Hanouty(initialization: initialization),
       ),

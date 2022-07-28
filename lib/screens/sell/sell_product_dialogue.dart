@@ -3,13 +3,10 @@ import 'dart:developer';
 import 'package:hanouty/widgets/autocomplete/autocomlete_textfields.dart';
 import 'package:hanouty/widgets/number_incrementer.dart';
 import 'package:flutter/services.dart';
-import '../../../blocs/clientsbloc/clients_bloc.dart';
-import '../../../blocs/sellactionsbloc/sellactions_bloc.dart';
-import '../../../database/database_operations.dart';
-import '../../../local_components.dart';
-import '../../../utils/constents.dart';
-import '../../../widgets/date_pickers.dart/date_picker.dart';
-import '../../../widgets/spinners/client_spinner.dart';
+import '../../blocs/sellactionsbloc/sellactions_bloc.dart';
+import '../../database/database_operations.dart';
+import '../../local_components.dart';
+import '../../widgets/date_pickers.dart/date_picker.dart';
 import '/../components.dart';
 import 'package:flutter/material.dart';
 
@@ -64,45 +61,49 @@ class AddProductState extends State<SellProductDialoge> {
   @override
   Widget build(BuildContext context) {
     //var clientsBloc = context.watch<ShopClientBloc>().state;
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const SizedBox(height: 10),
-          Column(
-            children: [
-              Center(
-                  child: Padding(
-                      padding: const EdgeInsets.only(bottom: 15.0),
-                      child: widget.product.quantity == 0
-                          ? Text('Product is out of stock',
-                              style: Theme.of(context).textTheme.bodyText1)
-                          : Text('Product quantity: ${widget.product.quantity}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(
-                                    color: Theme.of(context).colorScheme.error,
-                                  )))),
-              buildClientName(widget.clientNames),
-              const SizedBox(height: 15),
-              buildQuantity(context),
-              const SizedBox(height: 15),
-              buildPriceIn(context),
-              const SizedBox(height: 15),
-              buildDate(),
-              const SizedBox(height: 40),
-            ],
-          ),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 10),
+            Column(
+              children: [
+                Center(
+                    child: Padding(
+                        padding: const EdgeInsets.only(bottom: 15.0),
+                        child: widget.product.quantity == 0
+                            ? Text('Product is out of stock',
+                                style: Theme.of(context).textTheme.bodyText1)
+                            : Text(
+                                'Product quantity: ${widget.product.quantity}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(
+                                      color:
+                                          Theme.of(context).colorScheme.error,
+                                    )))),
+                buildClientName(widget.clientNames),
+                const SizedBox(height: 15),
+                buildQuantity(context),
+                const SizedBox(height: 15),
+                buildPriceIn(context),
+                const SizedBox(height: 15),
+                buildDate(),
+                const SizedBox(height: 40),
+              ],
+            ),
 
-          buildSaveButton(context),
-          const SizedBox(
-            height: 40,
-          ) //but
-        ],
+            buildSaveButton(context),
+            const SizedBox(
+              height: 40,
+            ) //but
+          ],
+        ),
       ),
     );
   }
@@ -185,6 +186,7 @@ class AddProductState extends State<SellProductDialoge> {
       limitDown: 1,
       onChanged: (value) {
         setState(() {
+          canSell = true;
           quantity = value.toInt();
         });
       },
@@ -229,6 +231,7 @@ class AddProductState extends State<SellProductDialoge> {
     return ClientsAutocompleteWidget(
       onChanged: (value) {
         setState(() {
+          canSell = true;
           clientId = value.id!;
         });
       },

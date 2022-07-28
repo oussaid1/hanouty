@@ -59,37 +59,31 @@ class AddClientState extends State<AddClient> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        buildFlexible(context),
-      ],
-    );
-  }
-
-  buildFlexible(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Form(
-        key: formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(height: 50),
-            buildClientName(),
-            const SizedBox(height: 20),
-            buildClientPhone(),
-            const SizedBox(height: 20),
-            buildClientEmail(),
-            const SizedBox(height: 20),
-            buildRating(context),
-            const SizedBox(height: 20),
-            buildSaveButton(context),
-            const SizedBox(
-              height: 100,
-            ) //but
-          ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 50),
+              buildClientName(),
+              const SizedBox(height: 20),
+              buildClientPhone(),
+              const SizedBox(height: 20),
+              buildClientEmail(),
+              const SizedBox(height: 20),
+              buildRating(context),
+              const SizedBox(height: 20),
+              buildSaveButton(context),
+              const SizedBox(
+                height: 100,
+              ) //but
+            ],
+          ),
         ),
       ),
     );

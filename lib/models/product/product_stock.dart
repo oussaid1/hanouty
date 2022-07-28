@@ -55,30 +55,32 @@ class ProductStockData {
     return mcount;
   }
 
-// get a list of distinct categories
-  List<String> get distinctCategories {
-    List<String> mcategories = [];
+// get a map of distinct categories and their respective products
+  Map<String, List<ProductModel>> get distinctCategories {
+    Map<String, List<ProductModel>> m = {};
     for (var element in products) {
-      if (!mcategories.contains(element.category)) {
-        mcategories.add(element.category.toString());
+      if (m[element.category] == null) {
+        m[element.category!] = [];
       }
+      m[element.category]!.add(element);
     }
-    return mcategories;
+    return m;
   }
 
 // get chartData of category counts in stock
-  List<ChartData> get productCategorySumCounts {
-    List<ChartData> mchartData = [];
-    // for (var element in distinctCategories) {
-    //   mchartData.add(ChartData(
-    //     //count: products.where((product) => product.category == element).length,
-    //     label: element,
-    //     value: products.where((product) => product.category == element).fold(
-    //         0, (previousValue, element) => previousValue! + element.priceIn),
-    //     count: products.where((product) => product.category == element).fold(
-    //         0, (previousValue, element) => previousValue! + element.quantity),
-    //   ));
-    // }
-    return mchartData;
+  List<ChartData> get prdCatSumCnt {
+    List<ChartData> chrtDta = [];
+    for (var element in distinctCategories.entries) {
+      chrtDta.add(ChartData(
+        label: element.key,
+        value:
+            element.value.fold((0), (sum, element) => sum! + element.priceIn),
+        count:
+            element.value.fold(0, (pVal, element) => pVal! + element.quantity),
+        date: DateTime.now(),
+        color: Colors.lightGreen,
+      ));
+    }
+    return chrtDta;
   }
 }

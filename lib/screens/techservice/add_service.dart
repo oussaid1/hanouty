@@ -64,40 +64,32 @@ class AddServiceState extends State<AddService> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const SizedBox(height: 50),
-        _buildFlexible(context, []),
-      ],
-    );
-  }
-
-  _buildFlexible(BuildContext context, List<String> techServiceList) {
-    return Form(
-      key: mformKey,
+    return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildCategory(context, []),
-            const SizedBox(height: 20),
-            _buildTechServiceName(),
-            const SizedBox(height: 20),
-            _buildPriceIn(),
-            const SizedBox(height: 20),
-            _buildPriceOut(),
-            const SizedBox(height: 20),
-            _buildAvailability(context),
-            const SizedBox(height: 20),
-            _buildDescription(),
-            const SizedBox(height: 40),
-            _buildSaveButton(context),
-            const SizedBox(
-              height: 100,
-            ) //but
-          ],
+        padding: const EdgeInsets.all(15.0),
+        child: Form(
+          key: mformKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildCategory(context, []),
+              const SizedBox(height: 20),
+              _buildTechServiceName(),
+              const SizedBox(height: 20),
+              _buildPriceIn(),
+              const SizedBox(height: 20),
+              _buildPriceOut(),
+              const SizedBox(height: 20),
+              _buildAvailability(context),
+              const SizedBox(height: 20),
+              _buildDescription(),
+              const SizedBox(height: 40),
+              _buildSaveButton(context),
+              const SizedBox(
+                height: 50,
+              ) //but
+            ],
+          ),
         ),
       ),
     );

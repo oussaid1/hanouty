@@ -86,52 +86,41 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        buildFields(
-          context,
-        ),
-      ],
-    );
-  }
-
-  buildFields(
-    BuildContext context,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.all(15.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Form(
-            key: formKey,
-            child: Column(
-              children: [
-                _buildProductName(),
-                const SizedBox(height: 20),
-                _buildPriceIn(),
-                const SizedBox(height: 20),
-                _buildPriceOut(),
-                const SizedBox(height: 20),
-                _buildQuantity(context),
-                const SizedBox(height: 20),
-                _buildCategory(context, []),
-                const SizedBox(height: 20),
-                _buildDate(),
-                const SizedBox(height: 20),
-                _buildSuplier(context),
-                const SizedBox(height: 20),
-                _buildDescription(),
-                const SizedBox(height: 20),
-              ],
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  _buildProductName(),
+                  const SizedBox(height: 20),
+                  _buildPriceIn(),
+                  const SizedBox(height: 20),
+                  _buildPriceOut(),
+                  const SizedBox(height: 20),
+                  _buildQuantity(context),
+                  const SizedBox(height: 20),
+                  _buildCategory(context, []),
+                  const SizedBox(height: 20),
+                  _buildDate(),
+                  const SizedBox(height: 20),
+                  _buildSuplier(context),
+                  const SizedBox(height: 20),
+                  _buildDescription(),
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
-          ),
 
-          _buildSaveButton(context),
-          const SizedBox(height: 40) //but
-        ],
+            _buildSaveButton(context),
+            const SizedBox(height: 40) //but
+          ],
+        ),
       ),
     );
   }

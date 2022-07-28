@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hanouty/blocs/filteredsalesbloc/filteredsales_bloc.dart';
 import 'package:hanouty/components.dart';
 import '../../local_components.dart';
 import '../../localization/language.dart';

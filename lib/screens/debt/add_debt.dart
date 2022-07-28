@@ -65,36 +65,34 @@ class AddProductState extends State<AddDebt> {
     // var clientNamesLis = ref.watch(shopClientsProvider.state).state;
     // var productCatList = ref.watch(productCategoryListProvider.state).state;
     // var productsList = context.read<ProductBloc>().state;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Form(
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Form(
           key: dformKey,
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                buildClientName(),
-                const SizedBox(height: 20),
-                buildDueDate(),
-                const SizedBox(height: 20),
-                buildDueAmount(),
-                // const SizedBox(height: 20),
-                // buildProductId(context),
-                const SizedBox(height: 20),
-                buildDate(),
-                const SizedBox(height: 20),
-                // buildPaidAmount(),
-                // const SizedBox(height: 40),
-                buildSaveButton(context),
-                const SizedBox(height: 40) //but
-              ],
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              buildClientName(),
+              const SizedBox(height: 20),
+              buildDueDate(),
+              const SizedBox(height: 20),
+              buildDueAmount(),
+              // const SizedBox(height: 20),
+              // buildProductId(context),
+              const SizedBox(height: 20),
+              buildDate(),
+              const SizedBox(height: 20),
+              // buildPaidAmount(),
+              // const SizedBox(height: 40),
+              buildSaveButton(context),
+              const SizedBox(height: 40) //but
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 

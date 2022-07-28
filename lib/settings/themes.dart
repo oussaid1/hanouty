@@ -82,26 +82,26 @@ class MThemeData {
 //////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////
   static final ButtonStyle raisedButtonStyleCancel = TextButton.styleFrom(
-    textStyle: _textTheme.button!
-        .copyWith(color: const Color.fromARGB(255, 0, 82, 206)),
+    textStyle: _textTheme.button!,
+    //.copyWith(color: const Color.fromARGB(255, 0, 82, 206)),
     minimumSize: const Size(88, 36),
     elevation: 0,
     backgroundColor: Colors.transparent,
     //  foregroundColor: Colors.white.withOpacity(0.5),
     padding: const EdgeInsets.symmetric(horizontal: 8),
     shape: const RoundedRectangleBorder(
-      side: BorderSide(color: Color.fromARGB(195, 3, 187, 162)),
+      side: BorderSide(color: primaryColor),
       borderRadius: BorderRadius.all(Radius.circular(6)),
     ),
   );
 
 //////////////////////////////////////////////////////////////////////////////////////
   static final ButtonStyle raisedButtonStyleSave = TextButton.styleFrom(
-    textStyle: _textTheme.button!
-        .copyWith(color: const Color.fromARGB(255, 0, 82, 206)),
+    textStyle: _textTheme.button!,
+    //.copyWith(color: const Color.fromARGB(255, 0, 82, 206)),
     minimumSize: const Size(88, 36),
     elevation: 0,
-    backgroundColor: const Color.fromARGB(195, 3, 187, 162),
+    backgroundColor: primaryColor,
     // foregroundColor: MThemeData.white,
     padding: const EdgeInsets.symmetric(horizontal: 8),
     shape: const RoundedRectangleBorder(
@@ -125,22 +125,7 @@ class MThemeData {
 
   static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
     return ThemeData(
-        dialogBackgroundColor: const Color(0xff61E3AF),
-        // backgroundColor: Colors.transparent,
-        // dataTableTheme: DataTableThemeData(
-        //   checkboxHorizontalMargin: 0,
-        //   columnSpacing: 0,
-        //   dividerThickness: 0,
-        //   horizontalMargin: 0,
-        //   headingRowHeight: 40,
-        //   decoration: BoxDecoration(
-        //     color: Colors.transparent,
-        //     border: Border.all(
-        //       color: Colors.transparent,
-        //       width: 0,
-        //     ),
-        //   ),
-        // ),
+        dialogBackgroundColor: secondaryColor,
         iconTheme: const IconThemeData(color: hintColor),
         colorScheme: colorScheme,
         textTheme: _textTheme,

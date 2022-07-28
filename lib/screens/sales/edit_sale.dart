@@ -1,14 +1,12 @@
-import 'package:hanouty/blocs/salesbloc/sales_bloc.dart';
-import 'package:hanouty/providers/var_provider.dart';
-import 'package:hanouty/settings/themes.dart';
-import 'package:hanouty/widgets/date_pickers.dart/date_picker.dart';
-import 'package:hanouty/widgets/spinners/client_spinner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../blocs/salesbloc/sales_bloc.dart';
 import '../../components.dart';
 import '../../models/models.dart';
+import '../../widgets/autocomplete/autocomlete_textfields.dart';
+import '../../widgets/date_pickers.dart/date_picker.dart';
 
-class AddOrEditSaleWidget extends ConsumerStatefulWidget {
+class AddOrEditSaleWidget extends StatefulWidget {
   final SaleModel? sale;
   final ProductModel? product;
   final DateTime? initialDate;
@@ -25,10 +23,16 @@ class AddOrEditSaleWidget extends ConsumerStatefulWidget {
   UpdateSaleState createState() => UpdateSaleState();
 }
 
-class UpdateSaleState extends ConsumerState<AddOrEditSaleWidget> {
+class UpdateSaleState extends State<AddOrEditSaleWidget> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController priceController = TextEditingController();
   DateTime pickedDate = DateTime.now();
+  ShopClientModel? client;
+  bool isUpdating = false;
+  bool canSave = false;
+
+  var quantitySold;
+
 //////////////////////////////////////////////////////////////////////////////////////////////
   void clear() {
     priceController.clear();
@@ -44,8 +48,10 @@ class UpdateSaleState extends ConsumerState<AddOrEditSaleWidget> {
 //////////////////////////////////////////////////////////////////////////////////////////////
   void initialize() {
     if (widget.sale != null) {
+      isUpdating = true;
       priceController.text = widget.sale!.priceSoldFor.toString();
       pickedDate = widget.sale!.dateSold;
+      quantitySold = widget.sale!.quantitySold;
     }
   }
 
@@ -66,16 +72,15 @@ class UpdateSaleState extends ConsumerState<AddOrEditSaleWidget> {
     return SizedBox(
       child: Column(
         children: [
-          const SizedBox(height: 20),
+          const SizedBox(height: 15),
           buildClientName([]),
-          const SizedBox(height: 10),
-          //buildQuantity(context, ref),
-          Form(key: formKey, child: buildPrice(ref, priceController)),
-          const SizedBox(height: 10),
+          const SizedBox(height: 15),
+          Form(key: formKey, child: buildPrice(priceController)),
+          const SizedBox(height: 15),
           buildDate(widget.initialDate ?? pickedDate),
-          const SizedBox(height: 30),
-          buildSaveButton(context, ref),
-          const SizedBox(height: 20),
+          const SizedBox(height: 15),
+          buildSaveButton(context),
+          const SizedBox(height: 50),
         ],
       ),
     );
@@ -83,98 +88,60 @@ class UpdateSaleState extends ConsumerState<AddOrEditSaleWidget> {
 
   buildSaveButton(
     BuildContext context,
-    WidgetRef ref,
   ) {
-    return widget.sale != null
-        ? Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              ElevatedButton(
-                child: Text(
-                  'Cancel'.tr(),
-                  style: Theme.of(context).textTheme.bodyText1!,
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              ElevatedButton(
-                child: Text(
-                  'Save'.tr(),
-                  style: Theme.of(context).textTheme.bodyText1!,
-                ),
-                onPressed: () {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ElevatedButton(
+          child: Text(
+            'Cancel'.tr(),
+            style: Theme.of(context).textTheme.bodyText1!,
+          ),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        ElevatedButton(
+          onPressed: !canSave
+              ? null
+              : () {
                   SaleModel sale = SaleModel(
-                    shopClientId: widget.sale!.shopClientId,
+                    saleId: isUpdating ? widget.sale!.saleId : null,
+                    shopClientId: client!.id ?? widget.sale!.shopClientId,
                     priceSoldFor: double.parse(priceController.text),
                     type: widget.sale!.type,
-                    quantitySold: widget.sale!.quantitySold,
+                    quantitySold: quantitySold,
                     dateSold: pickedDate,
                     productId: widget.sale!.productId,
                   );
                   if (formKey.currentState!.validate()) {
-                    GetIt.I.get<SalesBloc>().add(UpdateSalesEvent(sale));
+                    setState(() {
+                      canSave = false;
+                    });
+                    if (isUpdating) {
+                      GetIt.I.get<SalesBloc>().add(UpdateSalesEvent(sale));
+                    } else {
+                      GetIt.I.get<SalesBloc>().add(AddSalesEvent(sale));
+                    }
                   }
                 },
-              ),
-            ],
-          )
-        : Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                style: MThemeData.raisedButtonStyleSave,
-                child: Text(
-                  'Update'.tr(),
-                ),
-                onPressed: () {
-                  //check the form is valid
-                  SaleModel sale = SaleModel(
-                    shopClientId: widget.sale!.shopClientId,
-                    priceSoldFor: double.parse(priceController.text),
-                    type: widget.sale!.type,
-                    quantitySold: widget.sale!.quantitySold,
-                    dateSold: pickedDate,
-                    productId: widget.sale!.productId,
-                  );
-                  if (formKey.currentState!.validate()) {
-                    GetIt.I.get<SalesBloc>().add(UpdateSalesEvent(sale));
-                  }
-                },
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              ElevatedButton(
-                style: MThemeData.raisedButtonStyleCancel,
-                child: Text(
-                  'Cancel'.tr(),
-                ),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-  }
-
-  Container buildDate(DateTime initialDate) {
-    return Container(
-      margin: const EdgeInsets.only(left: 4, right: 4),
-      decoration: BoxDecoration(
-          border: Border.all(color: MThemeData.hintTextColor),
-          borderRadius: BorderRadius.circular(6)),
-      height: 50,
-      width: 220,
-      child: SelectDate(
-        initialDate: initialDate,
-        onDateSelected: (date) {
-          _handleDatePicked(date);
-        },
-      ),
+          child: Text(
+            isUpdating ? 'Update'.tr() : 'Save'.tr(),
+            style: Theme.of(context).textTheme.bodyText1!,
+          ),
+        ),
+      ],
     );
   }
 
-  TextFormField buildPrice(
-      WidgetRef ref, TextEditingController textEditingController) {
+  buildDate(DateTime initialDate) {
+    return SelectDate(
+      initialDate: initialDate,
+      onDateSelected: (date) {
+        _handleDatePicked(date);
+      },
+    );
+  }
+
+  TextFormField buildPrice(TextEditingController textEditingController) {
     return TextFormField(
       controller: textEditingController,
       onChanged: (value) {},
@@ -208,10 +175,12 @@ class UpdateSaleState extends ConsumerState<AddOrEditSaleWidget> {
     List<ShopClientModel> list,
   ) {
     return SizedBox(
-      child: ClientSpinnerWidget(
-        list: list,
+      child: ClientsAutocompleteWidget(
         onChanged: (value) {
-          //ref.read(selectedShopClient.state).state = value;
+          setState(() {
+            canSave = true;
+            client = value;
+          });
         },
       ),
     );

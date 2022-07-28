@@ -26,25 +26,32 @@ class SellActionsBloc extends Bloc<SellingactionsEvent, SellActionsState> {
       var success = await _databaseOperations.addSale(event.saleModel);
       log('Selling Requested Success: $success');
       if (success) {
-        await _databaseOperations.updateProduct(event.productModel.copyWith(
-          quantity: event.reducedQuantity,
-        ));
-      }
+        await _databaseOperations.updateProductQuantity(
+            productId: event.productModel.pId!,
+            quantity: event.saleModel.reducedQuantity);
 
-      emit(SellingSuccessfulState(event.productModel));
-      //log('Selling Requested Success');
+        emit(SellingSuccessfulState(event.productModel));
+      }
     } catch (e) {
-      emit(SellingFailedState(e.toString(), event.saleModel));
+      log('Selling Requested Error: $e');
+      emit(SellingFailedState(e.toString(), event.productModel));
     }
+    //log('Selling Requested Success');
   }
 
   /// on unsell requested
   Future<void> _onUnsellRequested(
       UnsellingRequested event, Emitter<SellActionsState> emit) async {
     try {
-      await _databaseOperations.deleteSale(event.saleModel);
-      await _databaseOperations.updateProduct(event.saleModel);
-      emit(UnsellingSuccessfulState(event.saleModel));
+      bool success = await _databaseOperations.deleteSale(event.saleModel);
+      if (success) {
+        await _databaseOperations.updateProductQuantity(
+            productId: event.saleModel.pId!,
+            quantity: event.saleModel.totalQuantity);
+        emit(UnsellingSuccessfulState(event.saleModel));
+      } else {
+        emit(UnsellingFailedState('Unselling Failed', event.saleModel));
+      }
     } catch (e) {
       emit(UnsellingFailedState(e.toString(), event.saleModel));
     }
