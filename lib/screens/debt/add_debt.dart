@@ -123,7 +123,7 @@ class AddProductState extends State<AddDebt> {
                           : AddDebtEvent(debt));
                       log("debt: $debt");
                       clear();
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
                     }
                   },
             child: Text(_isUpdate ? "Update" : "Save").tr()),

@@ -12,9 +12,15 @@ class SalesData {
   List<SaleModel> get productSalesList =>
       sales.where((element) => element.type == SaleType.product).toList();
 
+  /// count of product sales
+  int get productSalesCount => productSalesList.length;
+
   /// all sales where type is service
   List<SaleModel> get serviceSalesList =>
       sales.where((element) => element.type == SaleType.service).toList();
+
+  /// count of service sales
+  int get serviceSalesCount => serviceSalesList.length;
 //////////////////////////////////////
   // get filtered sales
   // @returns List<SaleModel>

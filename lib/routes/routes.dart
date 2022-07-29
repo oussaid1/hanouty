@@ -3,7 +3,7 @@ import 'package:animations/animations.dart';
 
 import '../screens/add_tostock/stock_screen_tab.dart';
 import '../screens/client/people_tab.dart';
-import '../screens/dashboard/dashboard_tab.dart';
+import '../screens/dashboard/dashboard.dart';
 import '../screens/debt/deb_list.dart';
 import '../screens/device_specific/homeforweb/home_for_web.dart';
 import '../screens/expenses/expenses_tab.dart';

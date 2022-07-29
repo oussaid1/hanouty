@@ -74,8 +74,8 @@ class BluredContainer extends StatelessWidget {
     this.width,
     this.height,
     this.margin,
-    this.blurSygmaX = 43,
-    this.blurSygmaY = 43,
+    this.blurSygmaX = 80,
+    this.blurSygmaY = 80,
     this.borderColorOpacity = 0.3,
     this.borderRadius =
         const BorderRadius.all(Radius.circular(AppConstants.radius)),
@@ -87,7 +87,7 @@ class BluredContainer extends StatelessWidget {
       borderRadius: BorderRadius.zero,
       child: BackdropFilter(
         filter: ImageFilter.blur(
-            sigmaX: blurSygmaX ?? 43, sigmaY: blurSygmaY ?? 43),
+            sigmaX: blurSygmaX ?? 80, sigmaY: blurSygmaY ?? 80),
         child: Container(
           // margin: margin,
           width: width ?? 420, // MediaQuery.of(context).size.width,
@@ -164,51 +164,6 @@ class GlassMaterial extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class FrostedContainer extends StatelessWidget {
-  const FrostedContainer({
-    Key? key,
-    required this.child,
-    required this.color,
-    required this.blurSygmaX,
-    required this.blurSygmaY,
-    required this.borderOpacity,
-  }) : super(key: key);
-
-  final Widget child;
-  final Color color;
-  final double blurSygmaX;
-  final double blurSygmaY;
-  final double borderOpacity;
-
-  @override
-  Widget build(BuildContext context) {
-    return GlassContainer(
-      borderOpacity: borderOpacity,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              color.withOpacity(0.4),
-              color.withOpacity(0.4),
-            ],
-          ),
-          borderRadius: BorderRadius.circular(6),
-          boxShadow: [
-            BoxShadow(
-              color: color.withOpacity(borderOpacity),
-              blurRadius: blurSygmaX,
-              spreadRadius: blurSygmaY,
-            ),
-          ],
-        ),
-        child: child,
       ),
     );
   }

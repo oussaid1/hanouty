@@ -52,11 +52,11 @@ class AddFabWidget extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) =>
-              ExpenseBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+              ExpensesBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
         ),
         BlocProvider(
           create: (context) =>
-              IncomeBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
+              IncomesBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
         ),
         BlocProvider(
           create: (context) =>

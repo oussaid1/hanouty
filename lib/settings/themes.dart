@@ -28,15 +28,14 @@ class MThemeData {
   ////////////////////
   static const accentColor = Color(0xFF038C8C);
   static const primaryColor = Color(0xFF185A9D);
-  static const secondaryColor = Color.fromARGB(255, 59, 189, 148);
+  static const secondaryColor = Color.fromARGB(255, 0, 199, 136);
 // black and white
   static const black = Color(0xFF000000);
   static const almostBlackColor = Color(0xFF22282F);
   static const white = Color(0xFFFFFFFF);
   static const almostWhiteColor = Color(0xFFF5F5F5);
-  static const hintColor = Color.fromARGB(144, 233, 233, 233);
+  static const hintColor = Color.fromARGB(157, 255, 254, 254);
   static const errorColor = Color.fromARGB(255, 255, 0, 0);
-
   /////////////////////
   static const ColorScheme lightColorScheme = ColorScheme(
     primary: primaryColor,
@@ -74,7 +73,7 @@ class MThemeData {
   static const revenuColor = Color(0xFFC8AF8A);
   static const profitColor = Color.fromARGB(255, 255, 0, 85);
   static const salesColor = Color.fromARGB(255, 231, 131, 74);
-  static const productColor = Color.fromARGB(255, 6, 165, 117);
+  static const productColor = Color.fromARGB(255, 25, 179, 94);
   static const serviceColor = Color.fromARGB(255, 25, 66, 179);
   static const expensesColor = Color.fromARGB(255, 247, 166, 16);
   static const incomeColor = Color.fromARGB(255, 161, 15, 154);
@@ -129,7 +128,7 @@ class MThemeData {
       textTheme: _textTheme,
       focusColor: focusColor,
       dialogBackgroundColor: colorScheme.secondaryContainer,
-      iconTheme: IconThemeData(color: colorScheme.onSecondary),
+      iconTheme: IconThemeData(color: hintColor),
       // cursorColor: colorScheme.onPrimary,
       // textSelectionColor: colorScheme.primary,
       // textSelectionHandleColor: colorScheme.secondary,
@@ -145,38 +144,34 @@ class MThemeData {
   static const _light = FontWeight.w300;
 
   static final TextTheme _textTheme = TextTheme(
-      headline1: GoogleFonts.robotoSlab(fontWeight: _bold, fontSize: 22.0),
-      /***************************** */
-      headline2: GoogleFonts.sansita(fontWeight: _semiBold, fontSize: 20.0),
-      /***************************** */
-      headline3: GoogleFonts.sansita(fontWeight: _semiBold, fontSize: 18.0),
-      /***************************** */
-      headline4: GoogleFonts.robotoMono(fontWeight: _semiBold, fontSize: 16.0),
-      /***************************** */
-      headline5: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 16.0),
-      /***************************** */
-      headline6: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 14.0),
-      /***************************** */
-      subtitle1: GoogleFonts.robotoMono(fontWeight: _light, fontSize: 14.0),
-      /***************************** */
-      subtitle2: GoogleFonts.robotoMono(
-        fontWeight: _light,
-        fontSize: 12.0,
-      ),
-      /***************************** */
-      caption: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 12.0),
-      /***************************** */
-      overline: GoogleFonts.robotoMono(
-          fontWeight: _light, fontSize: 12.0, color: hintTextColor),
-      /***************************** */
-      bodyText1: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 14.0),
-      /***************************** */
-      bodyText2: GoogleFonts.robotoMono(fontWeight: _bold, fontSize: 14.0),
-      // bodyMedium: GoogleFonts.robotoMono(
-      //   fontWeight: _bold,
-      //   fontSize: 14.0,
-      // ),
-      /***************************** */
-
-      button: GoogleFonts.robotoMono(fontWeight: _medium, fontSize: 14.0));
+    headline1: GoogleFonts.robotoSlab(fontWeight: _bold, fontSize: 22.0),
+    /***************************** */
+    headline2: GoogleFonts.sansita(fontWeight: _semiBold, fontSize: 20.0),
+    /***************************** */
+    headline3: GoogleFonts.sansita(fontWeight: _semiBold, fontSize: 18.0),
+    /***************************** */
+    headline4: GoogleFonts.robotoMono(fontWeight: _semiBold, fontSize: 16.0),
+    /***************************** */
+    headline5: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 16.0),
+    /***************************** */
+    headline6: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 14.0),
+    /***************************** */
+    subtitle1: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 12.0),
+    /***************************** */
+    subtitle2: GoogleFonts.robotoMono(
+      fontWeight: _light,
+      fontSize: 12.0,
+    ),
+    /***************************** */
+    caption: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 12.0),
+    /***************************** */
+    overline: GoogleFonts.robotoMono(
+        fontWeight: _light, fontSize: 12.0, color: hintTextColor),
+    /***************************** */
+    bodyText1: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 14.0),
+    /***************************** */
+    bodyText2: GoogleFonts.robotoMono(fontWeight: _bold, fontSize: 14.0),
+    button: GoogleFonts.robotoMono(fontWeight: _medium, fontSize: 14.0),
+    // displayLarge: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 34.0),
+  );
 }

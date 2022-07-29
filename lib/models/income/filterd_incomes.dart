@@ -64,4 +64,14 @@ class FilteredIncomes {
     }
     return count;
   }
+
+  //////////////////////////////////////////////////////////////////////////////
+  ///distinctCategories
+  List<String> get distinctCategories {
+    List<String> categories = [];
+    for (var i in incomes) {
+      categories.add(i.source);
+    }
+    return categories.toSet().toList();
+  }
 }

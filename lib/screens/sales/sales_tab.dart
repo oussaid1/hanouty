@@ -37,11 +37,18 @@ class SalesTab extends StatelessWidget {
             isScrollable: false,
             tabs: [
               Tab(
-                text: 'Product Sales'.tr(),
+                child: Row(
+                  children: [
+                    const Text('Product Sales').tr(),
+                  ],
+                ),
               ),
               Tab(
-                text: 'Service Sales'.tr(),
-                //style: Theme.of(context).textTheme.bodyText1!,
+                child: Row(
+                  children: [
+                    const Text('Service Sales').tr(),
+                  ],
+                ),
               ),
             ],
           ),

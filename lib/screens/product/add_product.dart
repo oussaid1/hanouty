@@ -78,9 +78,18 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
     super.initState();
   }
 
+  /// dispose all controllers
+  void disposeControllers() {
+    barcodeController.dispose();
+    productNameController.dispose();
+    priceInController.dispose();
+    priceOutController.dispose();
+    descrController.dispose();
+  }
+
   @override
   void dispose() {
-    clear();
+    disposeControllers();
     super.dispose();
   }
 

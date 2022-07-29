@@ -1,9 +1,5 @@
-import 'dart:developer';
-
 import 'package:hanouty/blocs/fullsalesbloc/fullsales_bloc.dart';
-import 'package:hanouty/widgets/price_number_zone.dart';
 import 'package:flutter/material.dart';
-import '../../blocs/salesbloc/sales_bloc.dart';
 import '../../blocs/sellactionsbloc/sellactions_bloc.dart';
 import '../../components.dart';
 import '../../local_components.dart';
@@ -23,36 +19,6 @@ class SalesList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.transparent,
-        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        // floatingActionButton: Padding(
-        //   padding: const EdgeInsets.only(bottom: 80.0),
-        //   child: FloatingActionButton.extended(
-        //     icon: const Icon(Icons.add),
-        //     onPressed: () {
-        //       MDialogs.dialogSimple(
-        //         context,
-        //         title: Text(
-        //           "Add Sale",
-        //           style: Theme.of(context).textTheme.headline3!,
-        //         ),
-        //         contentWidget: Container(
-        //           decoration: BoxDecoration(
-        //             borderRadius: BorderRadius.circular(6),
-        //           ),
-        //           height: 500,
-        //           width: 420,
-        //           child: const AddOrEditSaleWidget(
-        //               // sale: null,
-        //               // product: null,
-        //               // initialDate: null,
-        //               // initialQuantity: null,
-        //               ),
-        //         ),
-        //       );
-        //     },
-        //     label: const Text("Add Sale").tr(),
-        //   ),
-        // ),
         body: MultiBlocListener(
           listeners: [
             BlocListener<SellActionsBloc, SellActionsState>(
@@ -93,12 +59,11 @@ class SalesList extends StatelessWidget {
                             runSpacing: 20,
                             alignment: WrapAlignment.start,
                             children: [
-                              const Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 8.0),
-                                child: SalesOverAllWidget(),
-                              ),
-                              SizedBox(
+                              const SizedBox(
+                                  width: 420,
+                                  height: 200,
+                                  child: SalesOverAllWidget()),
+                              BluredContainer(
                                 width: 420,
                                 height: 200,
                                 child: SalesByCategoryWidget(
@@ -108,7 +73,10 @@ class SalesList extends StatelessWidget {
                           ),
                           const SizedBox(height: 20),
                           const Expanded(
-                            child: SalesDataTable(),
+                            child: Padding(
+                              padding: EdgeInsets.all(20.0),
+                              child: SalesDataTable(),
+                            ),
                           ),
                         ],
                       ),

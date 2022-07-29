@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 
 import '../../blocs/incomebloc/income_bloc.dart';
 import '../../components.dart';
+import '../../database/database_operations.dart';
 import '../../models/income/income.dart';
 import '../../settings/themes.dart';
 import '../../widgets/date_pickers.dart/date_picker.dart';
@@ -69,6 +70,7 @@ class AddIncomeState extends State<AddIncome> {
   }
 
   Row buildSaveButton(BuildContext context) {
+    var ncmBlc = IncomesBloc(databaseOperations: GetIt.I<DatabaseOperations>());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -90,13 +92,11 @@ class AddIncomeState extends State<AddIncome> {
                         amount: double.parse(amountController.text.trim()),
                       );
                       log(income.toString());
-                      GetIt.I<IncomeBloc>().add(widget.income != null
+                      ncmBlc.add(widget.income != null
                           ? UpdateIncomeEvent(income)
                           : AddIncomeEvent(income));
                       Navigator.pop(context);
-                      setState(() {
-                        _canSave = true;
-                      });
+                      clear();
                     }
                   },
             child: Text(
@@ -123,6 +123,11 @@ class AddIncomeState extends State<AddIncome> {
           return "error".tr();
         }
         return null;
+      },
+      onChanged: (text) {
+        setState(() {
+          _canSave = true;
+        });
       },
       textAlign: TextAlign.center,
       maxLength: 20,
@@ -164,6 +169,11 @@ class AddIncomeState extends State<AddIncome> {
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp('[0-9.]+')),
       ],
+      onChanged: (text) {
+        setState(() {
+          _canSave = true;
+        });
+      },
       textAlign: TextAlign.center,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       maxLength: 10,
@@ -194,10 +204,7 @@ class AddIncomeState extends State<AddIncome> {
       },
       onChanged: (text) {
         setState(() {
-          if (text.trim().isNotEmpty &&
-              expenseNameController.text.trim().isNotEmpty) {
-            _canSave = true;
-          }
+          _canSave = true;
         });
       },
       textAlign: TextAlign.center,

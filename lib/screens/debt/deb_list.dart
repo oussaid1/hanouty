@@ -336,7 +336,6 @@ class OverallDebtsWidget extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    // Figma Flutter Generator Group116Widget - GROUP
     return BluredContainer(
       width: 420,
       height: 156,

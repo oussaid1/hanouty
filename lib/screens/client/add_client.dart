@@ -54,9 +54,17 @@ class AddClientState extends State<AddClient> {
     super.initState();
   }
 
+  /// dispose all controllers
+  void disposecntrl() {
+    titleController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+    super.dispose();
+  }
+
   @override
   void dispose() {
-    clear();
+    disposecntrl();
     super.dispose();
   }
 

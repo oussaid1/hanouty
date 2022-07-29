@@ -29,16 +29,17 @@ class HomeForAll extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        // image: DecorationImage(
-        //   colorFilter: ColorFilter.mode(
-        //       Colors.black.withOpacity(0.2), BlendMode.darken),
-        //   image: const AssetImage(
-        //     'assets/images/background.jpg',
-        //     // bundle: AssetBundle,/// TODO: fix this, read docs
-        //   ),
-        //   fit: BoxFit.cover,
-        // ),
-        gradient: MThemeData.gradient1,
+        image: DecorationImage(
+          // colorFilter:
+          //     ColorFilter.mode(Color.fromARGB(43, 0, 0, 0), BlendMode.darken),
+          image: AssetImage(
+            'assets/images/background1.jpg',
+            // bundle: AssetBundle,/// TODO: fix this, read docs
+          ),
+          fit: BoxFit.cover,
+        ),
+        color: Colors.transparent,
+        //color: MThemeData.secondaryColor,
       ),
       //  / color: Colors.transparent),
       child: MultiBlocProvider(
@@ -68,12 +69,12 @@ class HomeForAll extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) =>
-                ExpenseBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                ExpensesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
                   ..add(GetExpensesEvent()),
           ),
           BlocProvider(
             create: (context) =>
-                IncomeBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                IncomesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
                   ..add(GetIncomeEvent()),
           ),
           BlocProvider(

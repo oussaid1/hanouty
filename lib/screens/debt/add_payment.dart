@@ -74,36 +74,30 @@ class AddPaymentState extends State<AddPayment> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Form(
-          key: dformKey,
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                widget.payingStatus != PayingStatus.paying
-                    ? buildClientName()
-                    : const SizedBox.shrink(),
-                const SizedBox(height: 20),
-                buildamountAmount(),
-                const SizedBox(height: 20),
-                buildDate(),
-                const SizedBox(height: 40),
-                buildSaveButton(
-                  context,
-                ),
-                const SizedBox(
-                  height: 100,
-                ) //but
-              ],
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Form(
+        key: dformKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            widget.payingStatus != PayingStatus.paying
+                ? buildClientName()
+                : const SizedBox.shrink(),
+            const SizedBox(height: 20),
+            buildamountAmount(),
+            const SizedBox(height: 20),
+            buildDate(),
+            const SizedBox(height: 40),
+            buildSaveButton(
+              context,
             ),
-          ),
+            const SizedBox(height: 100) //but
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -167,7 +161,8 @@ class AddPaymentState extends State<AddPayment> {
                         );
                         pymntBloc.add(AddPaymentEvent(payment));
                       }
-                      Navigator.pop(context);
+                      clear();
+                      //Navigator.pop(context);
                     }
                   },
             child: Text(widget.payingStatus == PayingStatus.editing

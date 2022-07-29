@@ -3,6 +3,9 @@ import 'package:hanouty/local_components.dart';
 import 'package:hanouty/screens/expenses/add_expense.dart';
 import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
+import 'package:hanouty/widgets/search_widget.dart';
+
+import '../../blocs/expensesbloc/expenses_bloc.dart';
 
 class ExpensesListWidget extends ConsumerWidget {
   const ExpensesListWidget({Key? key}) : super(key: key);
@@ -35,21 +38,46 @@ class ExpensesListWidget extends ConsumerWidget {
           label: const Text("Add").tr(),
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 120,
+      body: BlocBuilder<ExpensesBloc, ExpensesState>(
+        builder: (context, state) {
+          if (state.expenses.isEmpty) {
+            return Center(
+              child: Text(
+                "No Expenses",
+                style: Theme.of(context).textTheme.headline3!,
+              ),
+            );
+          }
+          List<ExpenseModel> expenses = state.expenses;
+          return ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height - 120,
+              maxWidth: 600,
             ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return Container(); //ExpenseListCard(expense: expense);
-              },
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 120,
+                    child: SearchByWidget(
+                      listOfCategories: const [],
+                      onSearchTextChanged: (String search) {},
+                    ),
+                  ),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    childCount: expenses.length,
+                    (context, index) {
+                      ExpenseModel expense = expenses[index];
+                      return ExpenseListCard(expense: expense);
+                    },
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -122,51 +150,7 @@ class ExpenseListCard extends ConsumerWidget {
               color: MThemeData.errorColor,
             ),
             onPressed: () {
-              MDialogs.dialogSimple(
-                context,
-                title: Text(
-                  " ${expense.name}",
-                  style: Theme.of(context).textTheme.headline3!,
-                ),
-                contentWidget: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ElevatedButton(
-                      style: MThemeData.raisedButtonStyleSave,
-                      child: Text(
-                        'Delete'.tr(),
-                        style: Theme.of(context).textTheme.bodyText1!,
-                      ),
-                      onPressed: () {
-                        // ref
-                        //     .read(databaseProvider)!
-                        //     .deleteExpense(expense)
-                        //     .then((value) {
-                        //   if (value) {
-                        //     ScaffoldMessenger.of(context)
-                        //         .showSnackBar(MDialogs.snackBar('Done !'));
-
-                        //     Navigator.of(context).pop();
-                        //   } else {
-                        //     ScaffoldMessenger.of(context).showSnackBar(
-                        //         MDialogs.errorSnackBar('Error !'));
-                        //   }
-                        // });
-                      },
-                    ),
-                    ElevatedButton(
-                      style: MThemeData.raisedButtonStyleCancel,
-                      child: Text(
-                        'Cancel'.tr(),
-                        style: Theme.of(context).textTheme.bodyText1!,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-              );
+              context.read<ExpensesBloc>().add(DeleteExpensesEvent(expense));
             },
           ),
         ],
@@ -182,27 +166,14 @@ class ExpenseListCard extends ConsumerWidget {
           ),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 expense.name,
               ),
               RichText(
                 text: TextSpan(
-                  text: ' Paid :',
-                  style: Theme.of(context).textTheme.subtitle2!,
-                  children: [
-                    TextSpan(
-                      text: ' ${expense.amountPaid}',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: MThemeData.serviceColor,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
-              RichText(
-                text: TextSpan(
-                  text: ' Price-out :',
+                  text: 'Category',
                   style: Theme.of(context).textTheme.subtitle2!,
                   children: [
                     TextSpan(
@@ -222,10 +193,16 @@ class ExpenseListCard extends ConsumerWidget {
           ),
           trailing: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                expense.amount.toString(),
-                style: Theme.of(context).textTheme.headline3!,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '${expense.amount} / ${expense.amountPaid}',
+                    style: Theme.of(context).textTheme.headline3!,
+                  ),
+                ],
               ),
               Text(
                 expense.deadLine.toString(),

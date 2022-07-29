@@ -28,6 +28,7 @@ class AddProductState extends State<SellProductDialoge> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   // bool isProduct = true;
   int quantity = 1;
+  num qntLmt = 0;
   double priceSoldFor = 0;
   int rducedQnt = 0;
   String clientId = 'client';
@@ -39,6 +40,7 @@ class AddProductState extends State<SellProductDialoge> {
   }
 
   initializeProperties() {
+    qntLmt = widget.product.quantity;
     priceSoldFor = widget.product.priceOut;
     priceCntlr.text = widget.product.priceOut.toString();
     rducedQnt = quantity = widget.product.quantity;
@@ -142,6 +144,9 @@ class AddProductState extends State<SellProductDialoge> {
                         saleModel: sale,
                       ),
                     );
+                    setState(() {
+                      qntLmt -= quantity;
+                    });
                   }
                 },
           child: Text(
@@ -177,7 +182,7 @@ class AddProductState extends State<SellProductDialoge> {
 
   Widget buildQuantity(BuildContext context) {
     return NumberIncrementerWidget(
-      limitUp: widget.product.quantity,
+      limitUp: qntLmt,
       initialValue: quantity,
       labelText: 'Quantity'.tr(),
       fraction: 1,

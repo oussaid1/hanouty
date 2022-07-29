@@ -20,8 +20,8 @@ class RevenuWidget extends StatelessWidget {
         var debtBloc = context.watch<DebtBloc>().state;
         var paymentsBloc = context.watch<PaymentsBloc>().state;
         var fullSalesBloc = context.watch<FullSalesBloc>().state;
-        var incomeBloc = context.watch<IncomeBloc>().state;
-        var expenseBloc = context.watch<ExpenseBloc>().state;
+        var incomeBloc = context.watch<IncomesBloc>().state;
+        var expenseBloc = context.watch<ExpensesBloc>().state;
         var filteredDebts = FilteredDebts(debts: debtBloc.debts);
         var filteredIncome = FilteredIncomes(incomes: incomeBloc.incomes);
         var filteredExpense = FilteredExpenses(expenses: expenseBloc.expenses);

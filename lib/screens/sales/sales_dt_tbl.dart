@@ -62,8 +62,6 @@ class _SalesDataTableState extends State<SalesDataTable> {
         return SingleChildScrollView(
           child: Column(
             children: [
-              Text('* tap to sell',
-                  style: Theme.of(context).textTheme.subtitle2),
               SearchByWidget(
                 listOfCategories: ProductModel.fieldStrings,
                 withCategory: true,
@@ -72,91 +70,95 @@ class _SalesDataTableState extends State<SalesDataTable> {
                   _data!.filterByCategory(category, text);
                 },
               ),
-              Theme(
-                data: Theme.of(context).copyWith(
-                    dividerColor: const Color.fromARGB(54, 0, 0, 0),
-                    cardColor: const Color.fromARGB(42, 0, 240, 172)),
-                child: PaginatedDataTable(
-                  sortColumnIndex: _sortColumnIndex,
-                  sortAscending: _sortAscending,
-                  showCheckboxColumn: false,
-                  // columnSpacing: 10,
-                  // checkboxHorizontalMargin: 4,
-                  // horizontalMargin: 4,
-                  rowsPerPage: 10,
-                  columns: [
-                    const DataColumn(
-                      label: Text('ID'),
-                      tooltip: 'ID',
-                    ),
-                    const DataColumn(
-                      label: Text('Unsell'),
-                      tooltip: 'Unsell',
-                    ),
-                    // const  DataColumn(
-                    //   label: Text('Barcode'),
-                    //   tooltip: 'Barcode',
-                    // ),
-                    DataColumn(
-                      label: const Text('Product Name'),
-                      tooltip: 'Product Name',
-                      onSort: (columnIndex, ascending) => sort(
-                        (SaleModel d) => d.productName,
-                        columnIndex,
-                        ascending,
+              BluredContainer(
+                width: context.width,
+                height: 800,
+                child: Theme(
+                  data: Theme.of(context).copyWith(
+                      dividerColor: Color.fromARGB(54, 106, 106, 106),
+                      cardColor: Color.fromARGB(0, 255, 255, 255)),
+                  child: PaginatedDataTable(
+                    sortColumnIndex: _sortColumnIndex,
+                    sortAscending: _sortAscending,
+                    showCheckboxColumn: false,
+                    // columnSpacing: 10,
+                    // checkboxHorizontalMargin: 4,
+                    // horizontalMargin: 4,
+                    rowsPerPage: 10,
+                    columns: [
+                      const DataColumn(
+                        label: Text('ID'),
+                        tooltip: 'ID',
                       ),
-                    ),
-                    DataColumn(
-                      numeric: true,
-                      label: const Text('Qnt-Sold'),
-                      tooltip: 'Quantity Sold',
-                      onSort: (columnIndex, ascending) => sort(
-                        (SaleModel d) => d.quantitySold,
-                        columnIndex,
-                        ascending,
+                      const DataColumn(
+                        label: Text('Unsell'),
+                        tooltip: 'Unsell',
                       ),
-                    ),
-                    const DataColumn(
-                      numeric: true,
-                      label: Text('Price In'),
-                      tooltip: 'Price In',
-                    ),
-                    const DataColumn(
-                      numeric: true,
-                      label: Text('Price Out'),
-                      tooltip: 'Price Out',
-                    ),
-                    const DataColumn(
-                      label: Text('Suplier'),
-                      tooltip: 'Suplier',
-                    ),
-                    const DataColumn(
-                      numeric: true,
-                      label: Text('Price Sold For'),
-                      tooltip: 'Price Sold For',
-                    ),
-                    const DataColumn(
-                      label: Text('Date In'),
-                      tooltip: 'Date In',
-                    ),
-                    const DataColumn(
-                      label: Text('Category'),
-                      tooltip: 'Category',
-                    ),
-                    const DataColumn(
-                      label: Text('Description'),
-                      tooltip: 'Description',
-                    ),
-                    const DataColumn(
-                      label: Text('Edit'),
-                      tooltip: 'Edit',
-                    ),
-                    // const DataColumn(
-                    //   label: Text('Delete'),
-                    //   tooltip: 'Delete',
-                    // ),
-                  ],
-                  source: _data!,
+                      // const  DataColumn(
+                      //   label: Text('Barcode'),
+                      //   tooltip: 'Barcode',
+                      // ),
+                      DataColumn(
+                        label: const Text('Product Name'),
+                        tooltip: 'Product Name',
+                        onSort: (columnIndex, ascending) => sort(
+                          (SaleModel d) => d.productName,
+                          columnIndex,
+                          ascending,
+                        ),
+                      ),
+                      DataColumn(
+                        numeric: true,
+                        label: const Text('Qnt'),
+                        tooltip: 'Quantity Sold',
+                        onSort: (columnIndex, ascending) => sort(
+                          (SaleModel d) => d.quantitySold,
+                          columnIndex,
+                          ascending,
+                        ),
+                      ),
+                      const DataColumn(
+                        numeric: true,
+                        label: Text('Price In'),
+                        tooltip: 'Price In',
+                      ),
+                      const DataColumn(
+                        numeric: true,
+                        label: Text('Price Out'),
+                        tooltip: 'Price Out',
+                      ),
+                      const DataColumn(
+                        label: Text('Suplier'),
+                        tooltip: 'Suplier',
+                      ),
+                      const DataColumn(
+                        numeric: true,
+                        label: Text('Price Sold For'),
+                        tooltip: 'Price Sold For',
+                      ),
+                      const DataColumn(
+                        label: Text('Date In'),
+                        tooltip: 'Date In',
+                      ),
+                      const DataColumn(
+                        label: Text('Category'),
+                        tooltip: 'Category',
+                      ),
+                      const DataColumn(
+                        label: Text('Description'),
+                        tooltip: 'Description',
+                      ),
+                      const DataColumn(
+                        label: Text('Edit'),
+                        tooltip: 'Edit',
+                      ),
+                      // const DataColumn(
+                      //   label: Text('Delete'),
+                      //   tooltip: 'Delete',
+                      // ),
+                    ],
+                    source: _data!,
+                  ),
                 ),
               ),
             ],

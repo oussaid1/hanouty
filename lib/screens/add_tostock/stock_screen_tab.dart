@@ -16,18 +16,18 @@ class StockTab extends ConsumerWidget {
           backgroundColor: Colors.transparent,
           leading: Container(),
           elevation: 0,
-          flexibleSpace: const TabBar(
-            labelStyle: TextStyle(fontSize: 18),
+          flexibleSpace: TabBar(
+            labelStyle: const TextStyle(fontSize: 18),
             indicatorColor: Colors.transparent,
-            labelColor: Color.fromARGB(255, 254, 242, 255),
+            labelColor: const Color.fromARGB(255, 254, 242, 255),
             //unselectedLabelColor: Colors.black,
             indicatorSize: TabBarIndicatorSize.label,
-            labelPadding: EdgeInsets.symmetric(horizontal: 80),
-            padding: EdgeInsets.symmetric(horizontal: 8),
+            labelPadding: const EdgeInsets.symmetric(horizontal: 80),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             //indicatorPadding: const EdgeInsets.symmetric(horizontal: 8),
             //splashBorderRadius: const BorderRadius.all(Radius.circular(6)),
 
-            indicator: BoxDecoration(
+            indicator: const BoxDecoration(
               color: Color.fromARGB(50, 255, 255, 255),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
@@ -37,15 +37,17 @@ class StockTab extends ConsumerWidget {
             isScrollable: false,
             tabs: [
               Tab(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text("Products"),
+                child: Row(
+                  children: [
+                    const Text('Products').tr(),
+                  ],
                 ),
               ),
               Tab(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text("Services"),
+                child: Row(
+                  children: [
+                    const Text('Services').tr(),
+                  ],
                 ),
               ),
             ],

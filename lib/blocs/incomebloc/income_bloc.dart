@@ -8,11 +8,11 @@ import '../../models/income/income.dart';
 part 'income_event.dart';
 part 'income_state.dart';
 
-class IncomeBloc extends Bloc<IncomeEvent, IncomesState> {
+class IncomesBloc extends Bloc<IncomeEvent, IncomesState> {
   /// stream subscription to get the products from the database
   late final DatabaseOperations _databaseOperations;
   StreamSubscription<List<IncomeModel>>? incomesSubscription;
-  IncomeBloc({required DatabaseOperations databaseOperations})
+  IncomesBloc({required DatabaseOperations databaseOperations})
       : super(
           const IncomesState(
             status: IncomeStatus.initial,

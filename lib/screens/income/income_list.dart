@@ -1,17 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
+import 'package:hanouty/local_components.dart';
+import 'package:hanouty/widgets/search_widget.dart';
 
+import '../../blocs/incomebloc/income_bloc.dart';
 import '../../models/income/income.dart';
 import '../../settings/themes.dart';
 import '../../utils/popup_dialogues.dart';
 import 'add_income.dart';
 
 class IncomeListWidget extends StatelessWidget {
-  const IncomeListWidget({Key? key, required this.incomes}) : super(key: key);
-  final List<IncomeModel> incomes;
+  const IncomeListWidget({
+    Key? key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 80.0),
@@ -36,24 +42,47 @@ class IncomeListWidget extends StatelessWidget {
           label: const Text("Add").tr(),
         ),
       ),
-      body: CustomScrollView(
-        slivers: [
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 120,
+      body: BlocBuilder<IncomesBloc, IncomesState>(
+        builder: (context, state) {
+          if (state.incomes.isEmpty) {
+            return Center(
+              child: Text(
+                "No Incomes",
+                style: Theme.of(context).textTheme.headline3!,
+              ),
+            );
+          }
+          List<IncomeModel> incomes = state.incomes;
+          FilteredIncomes filteredIncomes = FilteredIncomes(incomes: incomes);
+          return ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height - 120,
+              maxWidth: 600,
             ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                IncomeModel income = incomes[index];
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                      height: 120,
+                      child: SearchByWidget(
+                        listOfCategories: filteredIncomes.distinctCategories,
+                        onSearchTextChanged: (txt) {},
+                      )),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      IncomeModel income = incomes[index];
 
-                return IncomeListCard(income: income);
-              },
-              childCount: incomes.length,
+                      return IncomeListCard(income: income);
+                    },
+                    childCount: incomes.length,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -116,20 +145,10 @@ class IncomeListCard extends ConsumerWidget {
                         style: Theme.of(context).textTheme.bodyText1!,
                       ),
                       onPressed: () {
-                        // ref
-                        //     .read(databaseProvider)!
-                        //     .deleteIncome(income)
-                        //     .then((value) {
-                        //   if (value) {
-                        //     ScaffoldMessenger.of(context)
-                        //         .showSnackBar(MDialogs.snackBar('Done !'));
-
-                        //     Navigator.of(context).pop();
-                        //   } else {
-                        //     ScaffoldMessenger.of(context).showSnackBar(
-                        //         MDialogs.errorSnackBar('Error !'));
-                        //   }
-                        // });
+                        BlocProvider.of<IncomesBloc>(context).add(
+                          DeleteIncomeEvent(income),
+                        );
+                        Navigator.pop(context);
                       },
                     ),
                     ElevatedButton(
@@ -158,15 +177,24 @@ class IncomeListCard extends ConsumerWidget {
               style: Theme.of(context).textTheme.headline3!,
             ),
           ),
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          title: Text(
+            income.name,
+          ),
+          subtitle: Text(
+            income.date.ddmmyyyy(),
+            style: Theme.of(context).textTheme.subtitle2!,
+          ),
+          trailing: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                income.name,
+                income.amount.toString(),
+                style: Theme.of(context).textTheme.headline3!,
               ),
               RichText(
                 text: TextSpan(
-                  text: ' Source :',
+                  text: 'From :',
                   style: Theme.of(context).textTheme.subtitle2!,
                   children: [
                     TextSpan(
@@ -179,14 +207,6 @@ class IncomeListCard extends ConsumerWidget {
                 ),
               ),
             ],
-          ),
-          subtitle: Text(
-            '${income.date} }',
-            style: Theme.of(context).textTheme.subtitle2!,
-          ),
-          trailing: Text(
-            income.amount.toString(),
-            style: Theme.of(context).textTheme.headline3!,
           ),
         ),
       ),

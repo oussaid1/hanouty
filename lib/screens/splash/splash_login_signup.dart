@@ -63,9 +63,9 @@ class AuthPageState extends State<AuthPage> {
             GlobalFunctions.showSnackBar(context, 'Login Successful');
           }
 
-          if (state is UnauthenticatedState) {
-            GlobalFunctions.showSnackBar(context, 'Login Failed');
-          }
+          // if (state is UnauthenticatedState) {
+          //   GlobalFunctions.showSnackBar(context, 'Sign in ');
+          // }
         },
         child: SingleChildScrollView(
           child: Column(
@@ -81,7 +81,6 @@ class AuthPageState extends State<AuthPage> {
                   Expanded(child: buildRightSide(context)),
                 ],
               ),
-              Align(alignment: Alignment.bottomCenter, child: AppAssets.logoTm),
             ],
           ),
         ),
@@ -95,9 +94,18 @@ class AuthPageState extends State<AuthPage> {
       // width: MediaQuery.of(context).size.width * 0.4,
       height: MediaQuery.of(context).size.height,
       alignment: Alignment.center,
-      decoration: BoxDecoration(
-        //gradient: MThemeData.gradient1,
-        color: Theme.of(context).colorScheme.secondary,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          // colorFilter:
+          //     ColorFilter.mode(Color.fromARGB(43, 0, 0, 0), BlendMode.darken),
+          image: AssetImage(
+            'assets/images/background1.jpg',
+            // bundle: AssetBundle,/// TODO: fix this, read docs
+          ),
+          fit: BoxFit.cover,
+        ),
+        color: Colors.transparent,
+        //color: MThemeData.secondaryColor,
       ),
       //color: Theme.of(context).scaffoldBackgroundColor,
       child: Column(
@@ -172,7 +180,7 @@ class AuthPageState extends State<AuthPage> {
             ),
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            //  mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               BluredContainer(
@@ -242,6 +250,7 @@ class AuthPageState extends State<AuthPage> {
               ),
             ],
           ),
+          Align(alignment: Alignment.bottomCenter, child: AppAssets.logoTm),
         ],
       ),
     );
@@ -249,34 +258,57 @@ class AuthPageState extends State<AuthPage> {
 
   buildLefttSide(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
-        //gradient: MThemeData.gradient2,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(0),
+          bottomLeft: Radius.circular(0),
+          bottomRight: Radius.circular(0),
+          topRight: Radius.circular(0),
+        ),
+        image: DecorationImage(
+          // colorFilter:
+          //     ColorFilter.mode(Color.fromARGB(43, 0, 0, 0), BlendMode.darken),
+          image: AssetImage(
+            'assets/images/background1.jpg',
+            // bundle: AssetBundle,/// TODO: fix this, read docs
+          ),
+          fit: BoxFit.cover,
+        ),
       ),
       height: MediaQuery.of(context).size.height,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            children: [
-              Text('Welcome To Smart Tech-Store ',
-                  style: Theme.of(context).textTheme.headline3!.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      )),
-              Text('Manage Your Sales Wisely & Smart',
-                  style: Theme.of(context).textTheme.subtitle2!),
-              //const AppInfoWidget(),
-            ],
-          ),
-          SizedBox(
-              height: 400,
-              width: 400,
-              child: Image.asset(
-                AppAssets.splashLeftPng,
+      //color: Theme.of(context).colorScheme.primary,
+
+      child: BluredContainer(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(0),
+          bottomLeft: Radius.circular(0),
+          bottomRight: Radius.circular(0),
+          topRight: Radius.circular(0),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              children: [
+                Text('Welcome To Smart Tech-Store ',
+                    style: Theme.of(context).textTheme.headline3!.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        )),
+                Text('Manage Your Sales Wisely & Smart',
+                    style: Theme.of(context).textTheme.subtitle2!),
+                //const AppInfoWidget(),
+              ],
+            ),
+            SizedBox(
                 height: 400,
                 width: 400,
-              )),
-        ],
+                child: Image.asset(
+                  AppAssets.splashLeftPng,
+                  height: 400,
+                  width: 400,
+                )),
+          ],
+        ),
       ),
     );
   }

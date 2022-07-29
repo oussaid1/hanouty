@@ -1,4 +1,4 @@
-import 'package:hanouty/screens/dashboard/dashboard_tab.dart';
+import 'package:hanouty/screens/dashboard/dashboard.dart';
 import 'package:hanouty/screens/device_specific/homeforweb/home_for_web.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

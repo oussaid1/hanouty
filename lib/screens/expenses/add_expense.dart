@@ -78,7 +78,7 @@ class AddExpenseState extends State<AddExpense> {
 
   buildSaveButton(BuildContext context) {
     var expnsBloc =
-        ExpenseBloc(databaseOperations: GetIt.I<DatabaseOperations>());
+        ExpensesBloc(databaseOperations: GetIt.I<DatabaseOperations>());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -103,6 +103,8 @@ class AddExpenseState extends State<AddExpense> {
                     expnsBloc.add(_isUpdate
                         ? UpdateExpenseEvent(expense)
                         : AddExpenseEvent(expense));
+                    clear();
+                    //Navigator.pop(context);
                   }
                 },
           style: MThemeData.raisedButtonStyleSave,
@@ -136,6 +138,11 @@ class AddExpenseState extends State<AddExpense> {
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp('[0-9.]+')),
       ],
+      onChanged: (text) {
+        setState(() {
+          _canSave = true;
+        });
+      },
       textAlign: TextAlign.center,
       maxLength: 10,
       decoration: InputDecoration(
@@ -161,7 +168,10 @@ class AddExpenseState extends State<AddExpense> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2050),
       onDateSelected: (value) {
-        dueDate = value;
+        setState(() {
+          dueDate = value;
+          _canSave = true;
+        });
       },
     );
   }
@@ -169,7 +179,10 @@ class AddExpenseState extends State<AddExpense> {
   Widget buildDate() {
     return SelectDate(
       onDateSelected: (date) {
-        date = date;
+        setState(() {
+          date = date;
+          _canSave = true;
+        });
       },
     );
   }
@@ -183,6 +196,9 @@ class AddExpenseState extends State<AddExpense> {
         }
         return null;
       },
+      onChanged: (value) => setState(() {
+        _canSave = true;
+      }),
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp('[0-9.]+')),
       ],
@@ -214,6 +230,11 @@ class AddExpenseState extends State<AddExpense> {
         }
         return null;
       },
+      onChanged: (text) {
+        setState(() {
+          _canSave = true;
+        });
+      },
       maxLength: 20,
       decoration: InputDecoration(
         counterText: '',
@@ -236,6 +257,7 @@ class AddExpenseState extends State<AddExpense> {
       categories: ExpenseCategory.values.map((e) => e.name).toList(),
       onChanged: (category) {
         setState(() {
+          _canSave = true;
           expenseCategory = category;
         });
       },

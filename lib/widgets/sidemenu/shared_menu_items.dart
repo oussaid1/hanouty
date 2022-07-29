@@ -20,6 +20,7 @@ class NavMenu extends ConsumerWidget {
           constraints: BoxConstraints(minHeight: constraint.maxHeight),
           child: IntrinsicHeight(
             child: NavigationRail(
+              backgroundColor: Colors.white.withOpacity(0.5),
               extended: false,
               onDestinationSelected: (int index) {
                 ref.read(menuIndexProvider.state).state = index;
@@ -27,7 +28,6 @@ class NavMenu extends ConsumerWidget {
               },
               selectedIndex: ref.watch(menuIndexProvider.state).state,
               elevation: 20,
-              backgroundColor: const Color.fromARGB(87, 48, 255, 203),
               leading: const UserAvatarWidget(),
               indicatorColor:
                   Theme.of(context).colorScheme.primary.withOpacity(0.5),

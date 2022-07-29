@@ -115,7 +115,10 @@ class ProductList extends ConsumerWidget {
                           ),
                           const SizedBox(height: 20),
                           const Expanded(
-                            child: ProductsDataTable(),
+                            child: Padding(
+                              padding: EdgeInsets.all(20.0),
+                              child: ProductsDataTable(),
+                            ),
                           ),
                         ],
                       ),

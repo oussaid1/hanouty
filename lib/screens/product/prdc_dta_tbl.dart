@@ -57,8 +57,6 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
         return SingleChildScrollView(
           child: Column(
             children: [
-              Text('* tap to sell',
-                  style: Theme.of(context).textTheme.subtitle2),
               SearchByWidget(
                 listOfCategories: ProductModel.fieldStrings,
                 withCategory: true,
@@ -72,8 +70,8 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
                 height: 800,
                 child: Theme(
                   data: Theme.of(context).copyWith(
-                      dividerColor: const Color.fromARGB(54, 0, 0, 0),
-                      cardColor: const Color.fromARGB(42, 0, 240, 172)),
+                      dividerColor: Color.fromARGB(54, 79, 79, 79),
+                      cardColor: Color.fromARGB(0, 255, 255, 255)),
                   child: PaginatedDataTable(
                     sortColumnIndex: _sortColumnIndex,
                     sortAscending: _sortAscending,
