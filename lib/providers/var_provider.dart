@@ -2,36 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-//number of scares products variables
-final scareceVaflueProvider = StateProvider<int>((ref) {
-  return 4;
-});
-// select or add product variables
-final selectedSelectOrAddCat = StateProvider<String?>((ref) {
-  return null;
-});
+// //number of scares products variables
+// final scareceVaflueProvider = StateProvider<int>((ref) {
+//   return 4;
+// // });
+// // select or add product variables
+// final selectedSelectOrAddCat = StateProvider<String?>((ref) {
+//   return null;
+// });
 // final isNewSelectOrmkAddCat = StateProvider<bool>((ref) {
 //   return false;
 // });
 // final isNewSelekctOrAmddClient = StateProvider<bool>((ref) {
 //   return false;
+// // });
+// final selectedSelectOrAddSuplier = StateProvider<String?>((ref) {
+//   return;
 // });
-final selectedSelectOrAddSuplier = StateProvider<String?>((ref) {
-  return;
-});
-final isNewSelectOrAddSuplier = StateProvider<bool>((ref) {
-  return false;
-});
-final selectedExpenseCat = StateProvider<String?>((ref) {
-  return null;
-});
-final selectedItemProvider = StateProvider<String?>((ref) {
-  return null;
-});
+// final isNewSelectOrAddSuplier = StateProvider<bool>((ref) {
+//   return false;
+// });
+// final selectedExpenseCat = StateProvider<String?>((ref) {
+//   return null;
+// });
+// final selectedItemProvider = StateProvider<String?>((ref) {
+//   return null;
+// });
 
-final incrementableDate = StateProvider<DateTime>((ref) {
-  return DateTime.now();
-});
+// final incrementableDate = StateProvider<DateTime>((ref) {
+//   return DateTime.now();
+// });
 
 // currency provider to all app like dollar sign dh, euro sign eu, etc
 final currencyProvider = Provider<CurrencyStringProvider>((ref) {

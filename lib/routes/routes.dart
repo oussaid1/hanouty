@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 
-import '../screens/add_tostock/add_screen_tab.dart';
+import '../screens/add_tostock/stock_screen_tab.dart';
+import '../screens/client/people_tab.dart';
 import '../screens/dashboard/dashboard_tab.dart';
 import '../screens/debt/deb_list.dart';
 import '../screens/device_specific/homeforweb/home_for_web.dart';
@@ -21,8 +21,7 @@ class RouteGenerator {
   static const String debts = "/debts";
   static const String income = "/income";
   static const String expenses = "/expenses";
-  static const String orders = "/orders";
-  static const String addstock = "/addstock";
+  static const String people = "/people";
   static const String settingsPage = "/settings";
 
   static Route<T> fadeThrough<T>(RouteSettings settings, WidgetBuilder page,
@@ -55,11 +54,6 @@ class RouteGenerator {
             title: 'stock',
             centreWidget: StockTab(),
           );
-        // case orders:
-        //   return const HomeForAll(
-        //     title: 'orders',
-        //     centreWidget: SellTab(),
-        //   );
         case sales:
           return const HomeForAll(
             title: 'sales',
@@ -79,6 +73,11 @@ class RouteGenerator {
           return const HomeForAll(
             title: 'expenses',
             centreWidget: ExpensesTab(),
+          );
+        case people:
+          return const HomeForAll(
+            title: 'clients',
+            centreWidget: PeopleTab(),
           );
         case settingsPage:
           return const HomeForAll(

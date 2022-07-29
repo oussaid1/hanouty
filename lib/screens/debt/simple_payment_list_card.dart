@@ -73,49 +73,49 @@ class SimplePaymentListCard extends StatelessWidget {
                   );
                 },
                 icon: Icons.edit,
-                label: 'Edit',
                 backgroundColor: MThemeData.secondaryColor,
               ),
               SlidableAction(
                 onPressed: (context) {
-                  MDialogs.dialogSimple(
-                    context,
-                    title: Text(
-                      "Are you sure to delete this payment".tr(),
-                      style: Theme.of(context).textTheme.headline3!,
-                    ),
-                    contentWidget: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          style: MThemeData.raisedButtonStyleSave,
-                          child: Text(
-                            'Delete'.tr(),
-                            style: Theme.of(context).textTheme.bodyText1!,
-                          ),
-                          onPressed: () {
-                            context
-                                .read<PaymentsBloc>()
-                                .add(DeletePaymentEvent(payment));
-                            Navigator.pop(context);
-                          },
-                        ),
-                        ElevatedButton(
-                          style: MThemeData.raisedButtonStyleCancel,
-                          child: Text(
-                            'Cancel'.tr(),
-                            style: Theme.of(context).textTheme.bodyText1!,
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
-                  );
+                  context.read<PaymentsBloc>().add(DeletePaymentEvent(payment));
+
+                  // MDialogs.dialogSimple(
+                  //   context,
+                  //   title: Text(
+                  //     "Are you sure to delete this payment".tr(),
+                  //     style: Theme.of(context).textTheme.headline3!,
+                  //   ),
+                  //   contentWidget: Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //     children: [
+                  //       ElevatedButton(
+                  //         style: MThemeData.raisedButtonStyleSave,
+                  //         child: Text(
+                  //           'Delete'.tr(),
+                  //           style: Theme.of(context).textTheme.bodyText1!,
+                  //         ),
+                  //         onPressed: () {
+                  //           context
+                  //               .read<PaymentsBloc>()
+                  //               .add(DeletePaymentEvent(payment));
+                  //           Navigator.pop(context);
+                  //         },
+                  //       ),
+                  //       ElevatedButton(
+                  //         style: MThemeData.raisedButtonStyleCancel,
+                  //         child: Text(
+                  //           'Cancel'.tr(),
+                  //           style: Theme.of(context).textTheme.bodyText1!,
+                  //         ),
+                  //         onPressed: () {
+                  //           Navigator.pop(context);
+                  //         },
+                  //       ),
+                  //     ],
+                  //   ),
+                  // );
                 },
                 icon: Icons.delete,
-                label: 'Delete',
                 backgroundColor: MThemeData.errorColor,
               ),
             ],

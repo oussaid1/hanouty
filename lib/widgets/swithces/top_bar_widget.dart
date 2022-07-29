@@ -19,9 +19,11 @@ class TopBarWidget extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const DateRangePicker(), const RangeFilterSpinner(),
-
+        const DateRangePicker(),
+        const RangeFilterSpinner(),
+        if (Responsive.isDesktop(context)) const SizedBox(width: 20),
         buildLocalSwitch(context, ref),
+        if (Responsive.isDesktop(context)) const SizedBox(width: 20),
         myAppBarIcon(context, ref),
         // buildThemeSwitch(context, appThemeState),
         if (Responsive.isDesktop(context)) const SizedBox(width: 10),

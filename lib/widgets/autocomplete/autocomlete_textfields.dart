@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 import '../../blocs/clientsbloc/clients_bloc.dart';
 import '../../blocs/productbloc/product_bloc.dart';
@@ -13,25 +14,32 @@ import '../../utils/constents.dart';
 import '../../utils/popup_dialogues.dart';
 
 class ProductsAutoCompleteWidget extends StatelessWidget {
-  const ProductsAutoCompleteWidget({Key? key, required this.onChanged})
-      : super(key: key);
   final Function(ProductModel) onChanged;
+  final ProductModel? initialValue;
+  const ProductsAutoCompleteWidget({
+    Key? key,
+    required this.onChanged,
+    this.initialValue,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) =>
             ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>())
               ..add(GetProductsEvent()),
-        child: ProductsAutocompleteField(onChanged: onChanged));
+        child: ProductsAutocompleteField(
+            onChanged: onChanged, initialValue: initialValue));
     //return ProductsAutocompleteField(onChanged: onChanged);
   }
 }
 
 class ProductsAutocompleteField extends StatelessWidget {
   final Function(ProductModel) onChanged;
+  final ProductModel? initialValue;
   const ProductsAutocompleteField({
     Key? key,
     required this.onChanged,
+    this.initialValue,
   }) : super(key: key);
 
 //  static String _displayStringForOption(User option) => option.name;
@@ -61,6 +69,54 @@ class ProductsAutocompleteField extends StatelessWidget {
                   .toString()
                   .contains(textEditingValue.text.toLowerCase());
             });
+          },
+          initialValue: TextEditingValue(text: initialValue?.productName ?? ''),
+          optionsViewBuilder: (BuildContext context,
+              AutocompleteOnSelected<ProductModel> onSelected,
+              Iterable<ProductModel> options) {
+            return Align(
+              alignment: Alignment.topLeft,
+              child: Material(
+                elevation: 4.0,
+                child: ConstrainedBox(
+                  constraints:
+                      const BoxConstraints(maxHeight: 200, maxWidth: 200),
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: options.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final ProductModel option = options.elementAt(index);
+                      return InkWell(
+                        onTap: () {
+                          onSelected(option);
+                        },
+                        child: Builder(builder: (BuildContext context) {
+                          final bool highlight =
+                              AutocompleteHighlightedOption.of(context) ==
+                                  index;
+                          if (highlight) {
+                            SchedulerBinding.instance
+                                .addPostFrameCallback((Duration timeStamp) {
+                              Scrollable.ensureVisible(context, alignment: 0.5);
+                            });
+                          }
+                          return Container(
+                            color:
+                                highlight ? Theme.of(context).focusColor : null,
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              RawAutocomplete.defaultStringForOption(
+                                  option.productName),
+                            ),
+                          );
+                        }),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            );
           },
           fieldViewBuilder: (BuildContext context,
               TextEditingController textEditingController,
@@ -96,9 +152,11 @@ class ProductsAutocompleteField extends StatelessWidget {
 
 class ClientsAutocompleteWidget extends StatelessWidget {
   final Function(ShopClientModel) onChanged;
+  final ShopClientModel? initialValue;
   const ClientsAutocompleteWidget({
     Key? key,
     required this.onChanged,
+    this.initialValue,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -110,6 +168,7 @@ class ClientsAutocompleteWidget extends StatelessWidget {
             ),
       child: ClientAutocompleteInputField(
         onChanged: onChanged,
+        initialValue: initialValue,
       ),
     );
     // return ClientAutocompleteInputField(onChanged: onChanged);
@@ -118,6 +177,7 @@ class ClientsAutocompleteWidget extends StatelessWidget {
 
 class ClientAutocompleteInputField extends StatefulWidget {
   final Function(ShopClientModel) onChanged;
+  //final String? Function(String?)? validator;
   final ShopClientModel? initialValue;
   const ClientAutocompleteInputField({
     Key? key,
@@ -175,20 +235,56 @@ class _ClientAutocompleteInputFieldState
                   .contains(textEditingValue.text.toLowerCase());
             });
           },
-          // optionsViewBuilder: (context, onSelected, options) {
-          //   return ListView.builder(
-          //     itemCount: options.length,
-          //     itemBuilder: (context, index) {
-          //       var option = options.toList()[index];
-          //       return ListTile(
-          //         title: Text(option.clientName!),
-          //         onTap: () {
-          //           onSelected(option);
-          //         },
-          //       );
-          //     },
-          //   );
-          // },
+          initialValue: TextEditingValue(
+            text: widget.initialValue?.clientName ?? '',
+          ),
+          optionsViewBuilder: (BuildContext context,
+              AutocompleteOnSelected<ShopClientModel> onSelected,
+              Iterable<ShopClientModel> options) {
+            return Align(
+              alignment: Alignment.topLeft,
+              child: Material(
+                elevation: 4.0,
+                child: ConstrainedBox(
+                  constraints:
+                      const BoxConstraints(maxHeight: 200, maxWidth: 200),
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: options.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final ShopClientModel option = options.elementAt(index);
+                      return InkWell(
+                        onTap: () {
+                          onSelected(option);
+                        },
+                        child: Builder(builder: (BuildContext context) {
+                          final bool highlight =
+                              AutocompleteHighlightedOption.of(context) ==
+                                  index;
+                          if (highlight) {
+                            SchedulerBinding.instance
+                                .addPostFrameCallback((Duration timeStamp) {
+                              Scrollable.ensureVisible(context, alignment: 0.5);
+                            });
+                          }
+                          return Container(
+                            color:
+                                highlight ? Theme.of(context).focusColor : null,
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              RawAutocomplete.defaultStringForOption(
+                                  option.clientName),
+                            ),
+                          );
+                        }),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            );
+          },
           fieldViewBuilder: (BuildContext context,
               TextEditingController textEditingController,
               FocusNode focusNode,
@@ -257,7 +353,9 @@ class _ClientAutocompleteInputFieldState
 
 class SuplierAutocompleteWidget extends StatelessWidget {
   final Function(SuplierModel) onChanged;
-  const SuplierAutocompleteWidget({Key? key, required this.onChanged})
+  final SuplierModel? initialValue;
+  const SuplierAutocompleteWidget(
+      {Key? key, required this.onChanged, this.initialValue})
       : super(key: key);
 
   @override
@@ -265,16 +363,19 @@ class SuplierAutocompleteWidget extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           SuplierBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
-      child: SuplierAutocompleteField(onChanged: onChanged),
+      child: SuplierAutocompleteField(
+          onChanged: onChanged, initialSuplier: initialValue),
     );
   }
 }
 
 class SuplierAutocompleteField extends StatelessWidget {
   final Function(SuplierModel) onChanged;
+  final SuplierModel? initialSuplier;
   const SuplierAutocompleteField({
     Key? key,
     required this.onChanged,
+    this.initialSuplier,
   }) : super(key: key);
 
 //  static String _displayStringForOption(User option) => option.name;
@@ -294,6 +395,52 @@ class SuplierAutocompleteField extends StatelessWidget {
               .toString()
               .contains(textEditingValue.text.toLowerCase());
         });
+      },
+      initialValue: TextEditingValue(
+        text: initialSuplier?.name ?? '',
+      ),
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<SuplierModel> onSelected,
+          Iterable<SuplierModel> options) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 200, maxWidth: 200),
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: options.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final SuplierModel option = options.elementAt(index);
+                  return InkWell(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Builder(builder: (BuildContext context) {
+                      final bool highlight =
+                          AutocompleteHighlightedOption.of(context) == index;
+                      if (highlight) {
+                        SchedulerBinding.instance
+                            .addPostFrameCallback((Duration timeStamp) {
+                          Scrollable.ensureVisible(context, alignment: 0.5);
+                        });
+                      }
+                      return Container(
+                        color: highlight ? Theme.of(context).focusColor : null,
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          RawAutocomplete.defaultStringForOption(option.name),
+                        ),
+                      );
+                    }),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
       },
       fieldViewBuilder: (BuildContext context,
           TextEditingController textEditingController,
@@ -329,10 +476,12 @@ class SuplierAutocompleteField extends StatelessWidget {
 class CategoryAutocompleteField extends StatelessWidget {
   final Function(String) onChanged;
   final List<String>? categories;
+  final String? initialCategory;
   const CategoryAutocompleteField({
     Key? key,
     this.categories,
     required this.onChanged,
+    this.initialCategory,
   }) : super(key: key);
 
 //  static String _displayStringForOption(User option) => option.name;
@@ -351,6 +500,51 @@ class CategoryAutocompleteField extends StatelessWidget {
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
         });
+      },
+      initialValue: TextEditingValue(
+        text: initialCategory ?? '',
+      ),
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<String> onSelected, Iterable<String> options) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 200, maxWidth: 200),
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: options.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final String option = options.elementAt(index);
+                  return InkWell(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Builder(builder: (BuildContext context) {
+                      final bool highlight =
+                          AutocompleteHighlightedOption.of(context) == index;
+                      if (highlight) {
+                        SchedulerBinding.instance
+                            .addPostFrameCallback((Duration timeStamp) {
+                          Scrollable.ensureVisible(context, alignment: 0.5);
+                        });
+                      }
+                      return Container(
+                        color: highlight ? Theme.of(context).focusColor : null,
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text(
+                          RawAutocomplete.defaultStringForOption(option),
+                        ),
+                      );
+                    }),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
       },
       fieldViewBuilder: (BuildContext context,
           TextEditingController textEditingController,

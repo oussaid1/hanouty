@@ -1,19 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'blocs/authbloc/auth_bloc.dart';
-// import 'blocs/clientsbloc/clients_bloc.dart';
-// import 'blocs/datefilterbloc/date_filter_bloc.dart';
-// import 'blocs/debtbloc /debt_bloc.dart';
-// import 'blocs/expensesbloc/expenses_bloc.dart';
-// import 'blocs/fullsalesbloc/fullsales_bloc.dart';
-// import 'blocs/incomebloc/income_bloc.dart';
-// import 'blocs/paymentsbloc/payments_bloc.dart';
-// import 'blocs/productbloc/product_bloc.dart';
-// import 'blocs/salesbloc/sales_bloc.dart';
-// import 'blocs/sellactionsbloc/sellactions_bloc.dart';
-// import 'blocs/suplierbloc/suplier_bloc.dart';
-// import 'blocs/techservicebloc/techservice_bloc.dart';
-// import 'database/database_operations.dart';
+
 import 'blocs/loginbloc/login_bloc.dart';
 import 'blocs/signupbloc/signup_bloc.dart';
 import 'components.dart';
@@ -64,63 +52,6 @@ class App extends StatelessWidget {
           BlocProvider<UserModelCubit>(
             create: (context) => UserModelCubit()..loadUser(),
           ),
-          // BlocProvider(
-          //   create: (context) =>
-          //       ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-          //         ..add(GetProductsEvent()),
-          // ),
-          // BlocProvider(
-          //   create: (context) => SellActionsBloc(GetIt.I<DatabaseOperations>()),
-          // ),
-          // BlocProvider(
-          //   create: (context) =>
-          //       SalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-          //         ..add(GetSalesEvent()),
-          // ),
-          // BlocProvider(
-          //   create: (context) =>
-          //       FullSalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-          //         ..add(GetFullSalesEvent()),
-          // ),
-          // BlocProvider(
-          //   create: (context) =>
-          //       DebtBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-          //         ..add(GetDebtEvent()),
-          // ),
-          // BlocProvider(
-          //   create: (context) =>
-          //       ExpenseBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-          //         ..add(GetExpensesEvent()),
-          // ),
-          // BlocProvider(
-          //   create: (context) =>
-          //       IncomeBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-          //         ..add(GetIncomeEvent()),
-          // ),
-          // BlocProvider(
-          //   create: (context) => ShopClientBloc(
-          //       databaseOperations: GetIt.I<DatabaseOperations>())
-          //     ..add(GetShopClientsEvent()),
-          // ),
-          // BlocProvider(
-          //   create: (context) =>
-          //       SuplierBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-          //         ..add(GetSupliersEvent()),
-          // ),
-          // BlocProvider(
-          //   create: (context) => TechServiceBloc(
-          //       databaseOperations: GetIt.I<DatabaseOperations>())
-          //     ..add(GetTechServiceEvent()),
-          // ),
-          // BlocProvider(
-          //   create: (context) =>
-          //       PaymentsBloc(databaseOperations: GetIt.I<DatabaseOperations>())
-          //         ..add(GetPaymentsEvent()),
-          // ),
-          // BlocProvider(
-          //   create: (context) => DateFilterBloc()
-          //     ..add(const UpdateFilterEvent(filterType: DateFilter.all)),
-          // ),
         ],
         child: Hanouty(initialization: initialization),
       ),

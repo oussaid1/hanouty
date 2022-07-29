@@ -42,7 +42,6 @@ class SimpleDebtCard extends StatelessWidget {
                 );
               },
               icon: Icons.payment,
-              label: 'Pay',
               backgroundColor: MThemeData.accentColor,
             ),
           ],
@@ -64,47 +63,13 @@ class SimpleDebtCard extends StatelessWidget {
                 );
               },
               icon: Icons.edit,
-              label: 'Edit',
               backgroundColor: MThemeData.secondaryColor,
             ),
             SlidableAction(
               onPressed: (context) {
-                MDialogs.dialogSimple(
-                  context,
-                  title: Text(
-                    "Are you sure to delete this debt".tr(),
-                    style: Theme.of(context).textTheme.headline3!,
-                  ),
-                  contentWidget: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        style: MThemeData.raisedButtonStyleSave,
-                        child: Text(
-                          'Delete'.tr(),
-                          style: Theme.of(context).textTheme.bodyText1!,
-                        ),
-                        onPressed: () {
-                          context.read<DebtBloc>().add(DeleteDebtEvent(debt));
-                          Navigator.pop(context);
-                        },
-                      ),
-                      ElevatedButton(
-                        style: MThemeData.raisedButtonStyleCancel,
-                        child: Text(
-                          'Cancel'.tr(),
-                          style: Theme.of(context).textTheme.bodyText1!,
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    ],
-                  ),
-                );
+                context.read<DebtBloc>().add(DeleteDebtEvent(debt));
               },
               icon: Icons.delete,
-              label: 'Delete',
               backgroundColor: MThemeData.errorColor,
             ),
           ],

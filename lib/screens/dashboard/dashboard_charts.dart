@@ -4,8 +4,8 @@ import '../../blocs/datefilterbloc/date_filter_bloc.dart';
 import '../../blocs/fullsalesbloc/fullsales_bloc.dart';
 import '../../components.dart';
 import '../../local_components.dart';
-import '../sales/sales_bar_chart.dart';
-import 'sales_barchart.dart';
+import '../sales/sales_line_chart.dart';
+import '../sales/sales_barchart.dart';
 
 class DashboardCharts extends StatelessWidget {
   const DashboardCharts({Key? key}) : super(key: key);
@@ -36,14 +36,14 @@ class DashboardCharts extends StatelessWidget {
                     maxHeight: 400,
                   ),
                   child: BluredContainer(
-                      // width: 420,
-                      // height: 400,
+                      width: 420,
+                      height: 400,
                       child: DashboardLineChart(
-                    dta: allslzDta.chartDataDDMMYY,
-                    sdta: sSlzDta.chartDataDDMMYY,
-                    pdta: pSlzDta.chartDataDDMMYY,
-                    title: 'Inventory',
-                  )),
+                        dta: allslzDta.chartDataDDMMYY,
+                        sdta: sSlzDta.chartDataDDMMYY,
+                        pdta: pSlzDta.chartDataDDMMYY,
+                        title: 'Inventory',
+                      )),
                 ),
                 ConstrainedBox(
                   constraints: const BoxConstraints(
@@ -51,6 +51,8 @@ class DashboardCharts extends StatelessWidget {
                     maxHeight: 400,
                   ),
                   child: BluredContainer(
+                    width: 420,
+                    height: 400,
                     child: DashboardBarChart(
                       dta: allslzDta.chartDataDDMMYY,
                       sdta: sSlzDta.chartDataDDMMYY,

@@ -17,16 +17,31 @@ class SalesTab extends StatelessWidget {
           leading: Container(),
           elevation: 0,
           flexibleSpace: TabBar(
-            indicatorColor: Theme.of(context).tabBarTheme.labelColor,
+            labelStyle: const TextStyle(fontSize: 18),
+            indicatorColor: Colors.transparent,
+            labelColor: const Color.fromARGB(255, 254, 242, 255),
+            //unselectedLabelColor: Colors.black,
+            indicatorSize: TabBarIndicatorSize.label,
+            labelPadding: const EdgeInsets.symmetric(horizontal: 80),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            //indicatorPadding: const EdgeInsets.symmetric(horizontal: 8),
+            //splashBorderRadius: const BorderRadius.all(Radius.circular(6)),
+
+            indicator: const BoxDecoration(
+              color: Color.fromARGB(50, 255, 255, 255),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+            ),
             isScrollable: false,
             tabs: [
-              Text(
-                'Product Sales'.tr(),
-                style: Theme.of(context).textTheme.bodyText1!,
+              Tab(
+                text: 'Product Sales'.tr(),
               ),
-              Text(
-                'Service Sales'.tr(),
-                style: Theme.of(context).textTheme.bodyText1!,
+              Tab(
+                text: 'Service Sales'.tr(),
+                //style: Theme.of(context).textTheme.bodyText1!,
               ),
             ],
           ),

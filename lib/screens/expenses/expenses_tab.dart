@@ -28,10 +28,11 @@ class ExpensesTab extends StatelessWidget {
             ],
           ),
         ),
-        body: const TabBarView(
-          physics: BouncingScrollPhysics(),
+        body: TabBarView(
+          physics: const BouncingScrollPhysics(),
           children: [
-            ExpensesListWidget(),
+            Container(),
+            // ExpensesListWidget(),
           ],
         ),
       ),

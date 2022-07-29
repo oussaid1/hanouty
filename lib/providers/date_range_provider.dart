@@ -1,11 +1,6 @@
 import 'package:hanouty/models/daterange.dart';
 import 'package:flutter/material.dart';
-import 'package:hanouty/components.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-// Theme
-final selectedDateRangeStateNotifier =
-    ChangeNotifierProvider((ref) => DateRangeState());
 
 class DateRangeState extends ChangeNotifier {
   final String mstart = "start";

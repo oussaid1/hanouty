@@ -88,6 +88,11 @@ class _DebtListState extends State<_DebtList> {
           builder: (context, paymentsState) {
             return BlocBuilder<DebtBloc, DebtState>(
               builder: (context, debtsState) {
+                if (debtsState.debts.isEmpty) {
+                  return const Center(
+                    child: Text('No debts'),
+                  );
+                }
                 DebtsStatsViewModel debtsStatsViewModel = DebtsStatsViewModel(
                     shopClients: shopsState.clients,
                     debts: debtsState.debts,
@@ -96,6 +101,7 @@ class _DebtListState extends State<_DebtList> {
                 //   allDebts: debtsState.debts,
                 //   allpayments: paymentsState.payments,
                 // );
+
                 _clientDebts = debtsStatsViewModel.clientDebts
                     .where((e) => e.shopClient.clientName!
                         .toLowerCase()

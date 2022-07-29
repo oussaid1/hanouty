@@ -92,22 +92,8 @@ class StockInventory extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       // mainAxisSize: MainAxisSize.min,
                       children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Total Product Quantity".tr(),
-                                style: Theme.of(context).textTheme.bodySmall),
-                            Text("you have Products with zero quantity".tr(),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle2!
-                                    .copyWith(
-                                        fontSize: 10,
-                                        color: const Color.fromARGB(
-                                            131, 255, 255, 255))),
-                          ],
-                        ),
+                        Text("Total Product Quantity".tr(),
+                            style: Theme.of(context).textTheme.bodySmall),
                         PriceNumberZone(
                           withDollarSign: false,
                           right: const SizedBox.shrink(),
@@ -164,3 +150,12 @@ class StockInventory extends StatelessWidget {
     );
   }
 }
+
+// Text("you have Products with zero quantity".tr(),
+//                                 style: Theme.of(context)
+//                                     .textTheme
+//                                     .subtitle2!
+//                                     .copyWith(
+//                                         fontSize: 10,
+//                                         color: const Color.fromARGB(
+//                                             131, 255, 255, 255))),

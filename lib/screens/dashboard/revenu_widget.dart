@@ -49,10 +49,10 @@ class RevenuWidget extends StatelessWidget {
 }
 
 class RevenuRadialChart extends StatelessWidget {
-  final Revenu? data;
+  final Revenu data;
   const RevenuRadialChart({
     Key? key,
-    this.data,
+    required this.data,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -60,27 +60,27 @@ class RevenuRadialChart extends StatelessWidget {
       ChartData(
         color: MThemeData.revenuColor,
         label: 'Revenu',
-        value: 4530,
+        value: data.totalRevenue,
       ),
       ChartData(
         color: MThemeData.expensesColor,
         label: 'Expense',
-        value: 535,
+        value: data.expensesData!.totalExpensesAmount,
       ),
       ChartData(
         color: MThemeData.productColor,
         label: 'Debts',
-        value: 6678,
+        value: data.debtData!.totalDebtAmount,
       ),
       ChartData(
         color: MThemeData.incomeColor,
         label: 'Incomes',
-        value: 700,
+        value: data.incomeData!.totalIncomeAmount,
       ),
       ChartData(
         color: MThemeData.profitColor,
         label: 'Profit',
-        value: 4560,
+        value: data.totalRevenue,
       ),
     ];
 

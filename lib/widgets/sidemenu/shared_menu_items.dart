@@ -26,7 +26,7 @@ class NavMenu extends ConsumerWidget {
                 _onTap(context, index);
               },
               selectedIndex: ref.watch(menuIndexProvider.state).state,
-              elevation: 2,
+              elevation: 20,
               backgroundColor: const Color.fromARGB(87, 48, 255, 203),
               leading: const UserAvatarWidget(),
               indicatorColor:
@@ -45,12 +45,12 @@ class NavMenu extends ConsumerWidget {
                   label: Text('Stock'),
                 ),
                 NavigationRailDestination(
-                  icon: Icon(Icons.shopping_cart),
-                  label: Text('Orders'),
-                ),
-                NavigationRailDestination(
                   icon: Icon(FontAwesomeIcons.salesforce),
                   label: Text('Sales'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.account_balance_wallet),
+                  label: Text('Debt'),
                 ),
                 NavigationRailDestination(
                   icon: Icon(Icons.attach_money),
@@ -63,8 +63,8 @@ class NavMenu extends ConsumerWidget {
                   label: Text('Expenses'),
                 ),
                 NavigationRailDestination(
-                  icon: Icon(Icons.account_balance_wallet),
-                  label: Text('Debt'),
+                  icon: Icon(Icons.person),
+                  label: Text('People'),
                 ),
                 NavigationRailDestination(
                   icon: Icon(Icons.settings),
@@ -107,10 +107,10 @@ void _onTap(BuildContext context, int index) {
       GlobalFunctions.pushNamed(context, '/income');
       break;
     case 5:
-      GlobalFunctions.pushNamed(context, '/people');
+      GlobalFunctions.pushNamed(context, '/expenses');
       break;
     case 6:
-      GlobalFunctions.pushNamed(context, '/expenses');
+      GlobalFunctions.pushNamed(context, '/clients');
       break;
     case 7:
       GlobalFunctions.pushNamed(context, '/settings');

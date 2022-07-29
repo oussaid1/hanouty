@@ -68,6 +68,8 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
                 },
               ),
               BluredContainer(
+                width: context.width,
+                height: 800,
                 child: Theme(
                   data: Theme.of(context).copyWith(
                       dividerColor: const Color.fromARGB(54, 0, 0, 0),
@@ -76,9 +78,9 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
                     sortColumnIndex: _sortColumnIndex,
                     sortAscending: _sortAscending,
                     showCheckboxColumn: false,
-                    columnSpacing: 10,
-                    checkboxHorizontalMargin: 0,
-                    horizontalMargin: 4,
+                    // columnSpacing: 10,
+                    // checkboxHorizontalMargin: 4,
+                    // horizontalMargin: 4,
                     rowsPerPage: 10,
                     columns: [
                       const DataColumn(
@@ -101,6 +103,7 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
                                 columnIndex, ascending);
                           }),
                       DataColumn(
+                          numeric: true,
                           label: const Text('Qnt'),
                           tooltip: 'Quantity',
                           onSort: (int columnIndex, bool ascending) {
@@ -108,10 +111,12 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
                                 columnIndex, ascending);
                           }),
                       const DataColumn(
+                        numeric: true,
                         label: Text('Price In'),
                         tooltip: 'Price In',
                       ),
                       const DataColumn(
+                        numeric: true,
                         label: Text('Price Out'),
                         tooltip: 'Price Out',
                       ),

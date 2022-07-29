@@ -82,13 +82,13 @@ class DashboardBarChart extends StatelessWidget {
               // Renders spline chart
               ColumnSeries<ChartData, DateTime>(
                   name: 'Services'.tr(),
-                  color: MThemeData.productColor,
+                  color: MThemeData.serviceColor,
                   dataSource: sdta,
                   xValueMapper: (ChartData sales, _) => (sales.date),
                   yValueMapper: (ChartData sales, z) => sales.value),
               ColumnSeries<ChartData, DateTime>(
                   name: 'Products',
-                  color: MThemeData.serviceColor,
+                  color: MThemeData.productColor,
                   dataSource: pdta,
                   xValueMapper: (ChartData sales, _) => sales.date,
                   yValueMapper: (ChartData sales, _) => sales.value),

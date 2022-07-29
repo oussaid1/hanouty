@@ -123,14 +123,13 @@ class TechServiceListCard extends ConsumerWidget {
             ],
           ),
           child: BluredContainer(
-            height: 48,
             child: Theme(
               data: Theme.of(context).copyWith(
                 dividerColor: Colors.transparent,
               ),
               child: ExpansionTile(
                 leading: CircleAvatar(
-                  backgroundColor: Color.fromARGB(83, 255, 255, 255),
+                  backgroundColor: const Color.fromARGB(83, 255, 255, 255),
                   child: Text(
                     techService.title.substring(0, 1).toUpperCase(),
                     style: Theme.of(context).textTheme.headline3!,

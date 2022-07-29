@@ -26,7 +26,7 @@ class GlassContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+        filter: ImageFilter.blur(sigmaX: blurSygmaX, sigmaY: blurSygmaY),
         child: Container(
           decoration: BoxDecoration(
             color: backgroundColor,
@@ -62,34 +62,38 @@ class BluredContainer extends StatelessWidget {
   final double? width;
   final double? height;
   final EdgeInsetsGeometry? margin;
-
   final double borderColorOpacity;
-
+  final BorderRadiusGeometry borderRadius;
+  final double? blurSygmaX;
+  final double? blurSygmaY;
   const BluredContainer({
     Key? key,
     required this.child,
-    this.start = 0.15,
-    this.end = 0.15,
+    this.start = 0.3,
+    this.end = 0.2,
     this.width,
     this.height,
     this.margin,
-    this.borderColorOpacity = 0.1,
+    this.blurSygmaX = 43,
+    this.blurSygmaY = 43,
+    this.borderColorOpacity = 0.3,
+    this.borderRadius =
+        const BorderRadius.all(Radius.circular(AppConstants.radius)),
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius:
-          const BorderRadius.all(Radius.circular(AppConstants.radius)),
+      borderRadius: BorderRadius.zero,
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 42, sigmaY: 42),
+        filter: ImageFilter.blur(
+            sigmaX: blurSygmaX ?? 43, sigmaY: blurSygmaY ?? 43),
         child: Container(
-          margin: margin,
-          width: width ?? MediaQuery.of(context).size.width,
-          height: height ?? MediaQuery.of(context).size.height,
+          // margin: margin,
+          width: width ?? 420, // MediaQuery.of(context).size.width,
+          height: height ?? 400, // MediaQuery.of(context).size.height,
           decoration: BoxDecoration(
-            borderRadius:
-                const BorderRadius.all(Radius.circular(AppConstants.radius)),
+            borderRadius: borderRadius,
             gradient: LinearGradient(
               colors: [
                 Colors.white.withOpacity(start),
@@ -99,9 +103,17 @@ class BluredContainer extends StatelessWidget {
               end: AlignmentDirectional.bottomEnd,
             ),
             border: Border.all(
-              width: 1.5,
+              width: 1,
               color: Colors.white.withOpacity(borderColorOpacity),
             ),
+            // backgroundBlendMode: BlendMode.srcOver,
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Colors.white.withOpacity(0.1),
+            //     blurRadius: 10,
+            //     offset: const Offset(1, 1),
+            //   ),
+            // ],
           ),
           child: child,
         ),

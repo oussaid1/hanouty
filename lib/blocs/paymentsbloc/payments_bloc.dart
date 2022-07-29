@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -106,7 +107,8 @@ class PaymentsBloc extends Bloc<PaymentEvent, PaymentsState> {
   void _onDeletePayment(
       DeletePaymentEvent event, Emitter<PaymentsState> emit) async {
     try {
-      await _databaseOperations.deletePayment(event.payment);
+      var success = await _databaseOperations.deletePayment(event.payment);
+      log('delete payment $success');
       emit(
         PaymentsState(
           status: PaymentsStatus.deleted,

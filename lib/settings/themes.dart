@@ -28,7 +28,7 @@ class MThemeData {
   ////////////////////
   static const accentColor = Color(0xFF038C8C);
   static const primaryColor = Color(0xFF185A9D);
-  static const secondaryColor = Color(0xff43CEA2);
+  static const secondaryColor = Color.fromARGB(255, 59, 189, 148);
 // black and white
   static const black = Color(0xFF000000);
   static const almostBlackColor = Color(0xFF22282F);
@@ -42,7 +42,7 @@ class MThemeData {
     primary: primaryColor,
     primaryContainer: Color(0xFF023E62),
     secondary: secondaryColor,
-    secondaryContainer: Color(0xFFFBFAFC),
+    secondaryContainer: secondaryColor,
     background: almostWhiteColor,
     surface: white,
     onBackground: white,
@@ -58,13 +58,13 @@ class MThemeData {
     primary: primaryColor,
     primaryContainer: hintColor,
     secondary: secondaryColor,
-    secondaryContainer: Color(0xFF9BE9F2),
+    secondaryContainer: secondaryColor,
     surface: Color(0xFF2C3035),
     background: almostBlackColor,
     onBackground: Color(0xFF262626),
     error: _darkFillColor,
     onError: _darkFillColor,
-    onPrimary: hintColor,
+    onPrimary: _darkFillColor,
     onSecondary: accentColor,
     onSurface: _darkFillColor,
     brightness: Brightness.dark,
@@ -125,78 +125,17 @@ class MThemeData {
 
   static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
     return ThemeData(
-        dialogBackgroundColor: secondaryColor,
-        iconTheme: const IconThemeData(color: hintColor),
-        colorScheme: colorScheme,
-        textTheme: _textTheme,
-        buttonTheme: ButtonThemeData(
-          buttonColor: colorScheme.primary,
-          textTheme: ButtonTextTheme.primary,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6),
-          ),
-        ),
-        focusColor: focusColor,
-
-        ///#deprecated
-        //accentColor: colorScheme.primary,
-
-        scaffoldBackgroundColor: colorScheme.surface,
-        cardColor: colorScheme.background,
-        dividerColor: colorScheme.onSurface,
-
-        ///#deprecated
-        // cursorColor: colorScheme.onPrimary,
-        // textSelectionColor: colorScheme.primary,
-        // textSelectionHandleColor: colorScheme.secondary,
-        indicatorColor: colorScheme.primary,
-        hintColor: colorScheme.onSurface,
-        errorColor: colorScheme.error,
-        toggleableActiveColor: colorScheme.primary,
-        unselectedWidgetColor: colorScheme.onSurface,
-        disabledColor: colorScheme.onSurface,
-        fontFamily: GoogleFonts.roboto().fontFamily,
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(6),
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-          labelStyle: TextStyle(
-            color: colorScheme.onSurface,
-          ),
-          hintStyle: TextStyle(
-            color: colorScheme.onSurface,
-          ),
-          errorStyle: TextStyle(
-            color: colorScheme.error,
-          ),
-        ),
-        appBarTheme: AppBarTheme(
-          color: colorScheme.background,
-          elevation: 0,
-        ),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: colorScheme.background,
-          foregroundColor: colorScheme.onPrimary,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6),
-          ),
-        ),
-        snackBarTheme: SnackBarThemeData(
-          backgroundColor: colorScheme.background,
-          contentTextStyle: _textTheme.bodyText1,
-        ),
-        dialogTheme: DialogTheme(
-          titleTextStyle: _textTheme.headline6,
-          contentTextStyle: _textTheme.bodyText1,
-        ),
-        bottomSheetTheme: BottomSheetThemeData(
-          backgroundColor: colorScheme.background,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6),
-          ),
-        ));
+      colorScheme: colorScheme,
+      textTheme: _textTheme,
+      focusColor: focusColor,
+      dialogBackgroundColor: colorScheme.secondaryContainer,
+      iconTheme: IconThemeData(color: colorScheme.onSecondary),
+      // cursorColor: colorScheme.onPrimary,
+      // textSelectionColor: colorScheme.primary,
+      // textSelectionHandleColor: colorScheme.secondary,
+      //disabledColor: colorScheme.onSurface,
+      fontFamily: GoogleFonts.robotoSlab().fontFamily,
+    );
   }
 
   static const _bold = FontWeight.bold;
@@ -206,24 +145,26 @@ class MThemeData {
   static const _light = FontWeight.w300;
 
   static final TextTheme _textTheme = TextTheme(
-      headline1: GoogleFonts.robotoSlab(fontWeight: _bold, fontSize: 24.0),
+      headline1: GoogleFonts.robotoSlab(fontWeight: _bold, fontSize: 22.0),
       /***************************** */
-      headline2: GoogleFonts.sansita(fontWeight: _semiBold, fontSize: 22.0),
+      headline2: GoogleFonts.sansita(fontWeight: _semiBold, fontSize: 20.0),
       /***************************** */
       headline3: GoogleFonts.sansita(fontWeight: _semiBold, fontSize: 18.0),
       /***************************** */
-      headline4: GoogleFonts.robotoMono(fontWeight: _medium, fontSize: 18.0),
+      headline4: GoogleFonts.robotoMono(fontWeight: _semiBold, fontSize: 16.0),
       /***************************** */
       headline5: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 16.0),
       /***************************** */
-      headline6: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 16.0),
+      headline6: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 14.0),
       /***************************** */
-      subtitle1: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 14.0),
+      subtitle1: GoogleFonts.robotoMono(fontWeight: _light, fontSize: 14.0),
       /***************************** */
       subtitle2: GoogleFonts.robotoMono(
-          fontWeight: _light, fontSize: 12.0, color: hintColor),
+        fontWeight: _light,
+        fontSize: 12.0,
+      ),
       /***************************** */
-      caption: GoogleFonts.robotoMono(fontWeight: _light, fontSize: 12.0),
+      caption: GoogleFonts.robotoMono(fontWeight: _regular, fontSize: 12.0),
       /***************************** */
       overline: GoogleFonts.robotoMono(
           fontWeight: _light, fontSize: 12.0, color: hintTextColor),
@@ -237,5 +178,5 @@ class MThemeData {
       // ),
       /***************************** */
 
-      button: GoogleFonts.robotoMono(fontWeight: _semiBold, fontSize: 14.0));
+      button: GoogleFonts.robotoMono(fontWeight: _medium, fontSize: 14.0));
 }

@@ -106,18 +106,10 @@ class ProductList extends ConsumerWidget {
                           Wrap(
                             spacing: 20,
                             children: [
-                              const BluredContainer(
-                                width: 420,
-                                height: 200,
-                                child: StockInventory(),
-                              ),
-                              BluredContainer(
-                                width: 420,
-                                height: 200,
-                                child: StockCategoriesPieChart(
-                                  // title: 'Products in stock',
-                                  data: productStockData.prdCatSumCnt,
-                                ),
+                              const StockInventory(),
+                              StockCategoriesPieChart(
+                                // title: 'Products in stock',
+                                data: productStockData.prdCatSumCnt,
                               ),
                             ],
                           ),

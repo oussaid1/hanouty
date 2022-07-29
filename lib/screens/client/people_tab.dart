@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hanouty/screens/client/client_list.dart';
+import 'package:hanouty/screens/suplier/suplier_list.dart';
 
 import '../../components.dart';
-import '../client/client_list.dart';
 import '../product/products_listview.dart';
 import '../techservice/services_list.dart';
-import '../suplier/suplier_list.dart';
 
-class StockTab extends ConsumerWidget {
-  const StockTab({Key? key}) : super(key: key);
+class PeopleTab extends ConsumerWidget {
+  const PeopleTab({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return DefaultTabController(
-      length: 4,
+      length: 2,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -41,25 +41,13 @@ class StockTab extends ConsumerWidget {
               Tab(
                 child: Align(
                   alignment: Alignment.center,
-                  child: Text("Products"),
-                ),
-              ),
-              Tab(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text("Services"),
-                ),
-              ),
-              Tab(
-                child: Align(
-                  alignment: Alignment.center,
                   child: Text("Clients"),
                 ),
               ),
               Tab(
                 child: Align(
                   alignment: Alignment.center,
-                  child: Text("Supliers"),
+                  child: Text("Suppliers"),
                 ),
               ),
             ],
@@ -70,8 +58,6 @@ class StockTab extends ConsumerWidget {
           child: TabBarView(
             physics: BouncingScrollPhysics(),
             children: [
-              ProductList(),
-              TechServiceList(),
               ShopClientsList(),
               SupliersList(),
             ],

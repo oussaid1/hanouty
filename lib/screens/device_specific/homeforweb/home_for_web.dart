@@ -149,7 +149,8 @@ class HomeForAll extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: SizedBox(
-                              height: 50,
+                              height: 48,
+                              width: double.infinity,
                               child: BluredContainer(
                                 child: Row(
                                   mainAxisAlignment:

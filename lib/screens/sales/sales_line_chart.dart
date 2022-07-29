@@ -5,11 +5,15 @@ import '../../models/chart_data.dart';
 import '../../settings/themes.dart';
 
 class DashboardLineChart extends StatelessWidget {
-  final List<ChartData> data;
+  final List<ChartData> pdta;
+  final List<ChartData> sdta;
+  final List<ChartData> dta;
   final String? title;
   const DashboardLineChart({
     Key? key,
-    required this.data,
+    required this.dta,
+    required this.sdta,
+    required this.pdta,
     this.title,
   }) : super(key: key);
 
@@ -81,19 +85,19 @@ class DashboardLineChart extends StatelessWidget {
               SplineSeries<ChartData, DateTime>(
                   name: 'Sales'.tr(),
                   color: MThemeData.salesColor,
-                  dataSource: const [],
+                  dataSource: dta,
                   xValueMapper: (ChartData sales, _) => sales.date,
                   yValueMapper: (ChartData sales, _) => sales.value),
               SplineSeries<ChartData, DateTime>(
                   name: 'Products'.tr(),
                   color: MThemeData.productColor,
-                  dataSource: [],
+                  dataSource: pdta,
                   xValueMapper: (ChartData sales, _) => sales.date,
                   yValueMapper: (ChartData sales, _) => sales.value),
               SplineSeries<ChartData, DateTime>(
                   name: 'Services'.tr(),
                   color: MThemeData.serviceColor,
-                  dataSource: const [],
+                  dataSource: sdta,
                   xValueMapper: (ChartData sales, _) => sales.date,
                   yValueMapper: (ChartData sales, _) => sales.value),
             ],
