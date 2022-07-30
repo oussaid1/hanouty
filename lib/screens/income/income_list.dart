@@ -4,9 +4,7 @@ import 'package:hanouty/local_components.dart';
 import 'package:hanouty/widgets/search_widget.dart';
 
 import '../../blocs/incomebloc/income_bloc.dart';
-import '../../models/income/income.dart';
-import '../../settings/themes.dart';
-import '../../utils/popup_dialogues.dart';
+
 import 'add_income.dart';
 
 class IncomeListWidget extends StatelessWidget {
@@ -22,8 +20,6 @@ class IncomeListWidget extends StatelessWidget {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 80.0),
         child: FloatingActionButton.extended(
-          hoverColor: MThemeData.accentColor,
-          backgroundColor: MThemeData.accentColor,
           icon: const Icon(Icons.add),
           onPressed: () {
             MDialogs.dialogSimple(

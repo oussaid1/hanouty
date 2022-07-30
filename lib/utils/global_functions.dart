@@ -1,6 +1,5 @@
 import 'package:hanouty/blocs/loginbloc/login_bloc.dart';
 import 'package:hanouty/settings/themes.dart';
-import 'package:hanouty/utils/constents.dart';
 import 'package:flutter/material.dart';
 
 import '../components.dart';
@@ -100,11 +99,11 @@ class GlobalFunctions {
   ) {
     return showDialog<void>(
         context: context,
-        barrierDismissible: false, // user must tap button!
+        barrierDismissible: true, // user must tap button!
         builder: (BuildContext context) {
           return AlertDialog(
-            backgroundColor: AppConstants.whiteOpacity,
-            title: const Text('Log-out !?').tr(),
+            //backgroundColor: AppConstants.whiteOpacity,
+            title: const Text(' You will Exit the app ').tr(),
             titleTextStyle: Theme.of(context).textTheme.headline6,
             actionsPadding: const EdgeInsets.only(left: 8, right: 8),
             actions: [

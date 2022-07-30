@@ -1,3 +1,4 @@
+import 'package:hanouty/local_components.dart';
 import 'package:hanouty/providers/pachage_info_provider.dart';
 import 'package:hanouty/components.dart';
 import 'package:hanouty/utils/constents.dart';
@@ -19,9 +20,11 @@ class SettingsPage extends ConsumerWidget {
       backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         child: Center(
-          child: SizedBox(
+          child: BluredContainer(
             width: 800,
+            height: 600,
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Column(
                   children: [

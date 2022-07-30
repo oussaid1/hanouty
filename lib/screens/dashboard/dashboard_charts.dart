@@ -29,30 +29,27 @@ class DashboardCharts extends StatelessWidget {
               spacing: 20,
               direction: Axis.horizontal,
               alignment: WrapAlignment.spaceBetween,
+              runSpacing: 20,
               children: [
                 ConstrainedBox(
                   constraints: const BoxConstraints(
-                    maxWidth: 500,
-                    maxHeight: 400,
+                    minWidth: 600,
+                    minHeight: 400,
                   ),
                   child: BluredContainer(
-                      width: 420,
-                      height: 400,
                       child: DashboardLineChart(
-                        dta: allslzDta.chartDataDDMMYY,
-                        sdta: sSlzDta.chartDataDDMMYY,
-                        pdta: pSlzDta.chartDataDDMMYY,
-                        title: 'Inventory',
-                      )),
+                    dta: allslzDta.chartDataDDMMYY,
+                    sdta: sSlzDta.chartDataDDMMYY,
+                    pdta: pSlzDta.chartDataDDMMYY,
+                    title: 'Inventory',
+                  )),
                 ),
                 ConstrainedBox(
                   constraints: const BoxConstraints(
-                    maxWidth: 500,
-                    maxHeight: 400,
+                    minWidth: 600,
+                    minHeight: 400,
                   ),
                   child: BluredContainer(
-                    width: 420,
-                    height: 400,
                     child: DashboardBarChart(
                       dta: allslzDta.chartDataDDMMYY,
                       sdta: sSlzDta.chartDataDDMMYY,

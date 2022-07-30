@@ -36,7 +36,7 @@ class _SearchByWidgetState extends State<SearchByWidget> {
   @override
   Widget build(BuildContext context) {
     return BluredContainer(
-      height: 50,
+      height: 60,
       width: MediaQuery.of(context).size.width,
       child: Row(
         children: [

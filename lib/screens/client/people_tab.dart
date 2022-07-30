@@ -38,6 +38,7 @@ class PeopleTab extends ConsumerWidget {
             tabs: [
               Tab(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text('Client').tr(),
                   ],

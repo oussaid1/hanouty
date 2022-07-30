@@ -110,7 +110,7 @@ void _onTap(BuildContext context, int index) {
       GlobalFunctions.pushNamed(context, '/expenses');
       break;
     case 6:
-      GlobalFunctions.pushNamed(context, '/clients');
+      GlobalFunctions.pushNamed(context, '/people');
       break;
     case 7:
       GlobalFunctions.pushNamed(context, '/settings');

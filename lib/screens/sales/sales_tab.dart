@@ -38,15 +38,17 @@ class SalesTab extends StatelessWidget {
             tabs: [
               Tab(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Product Sales').tr(),
+                    const Text('Products').tr(),
                   ],
                 ),
               ),
               Tab(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Service Sales').tr(),
+                    const Text('Services').tr(),
                   ],
                 ),
               ),

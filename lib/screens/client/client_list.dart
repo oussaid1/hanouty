@@ -48,10 +48,6 @@ class _ShopClientsListState extends State<ShopClientsList> {
               return Column(
                 children: [
                   const SizedBox(height: 20),
-                  Text(
-                    "Clients",
-                    style: Theme.of(context).textTheme.headline3!,
-                  ),
                   SearchByWidget(
                       listOfCategories: const [
                         "Name",
@@ -64,6 +60,7 @@ class _ShopClientsListState extends State<ShopClientsList> {
                           filter = text;
                         });
                       }),
+                  const SizedBox(height: 20),
                   ConstrainedBox(
                     constraints: const BoxConstraints(
                       maxHeight: 600,

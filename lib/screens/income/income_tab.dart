@@ -39,6 +39,7 @@ class IncomeTab extends ConsumerWidget {
                 tabs: [
                   Tab(
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text('Income').tr(),
                       ],

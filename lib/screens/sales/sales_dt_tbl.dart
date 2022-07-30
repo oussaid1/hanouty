@@ -70,9 +70,10 @@ class _SalesDataTableState extends State<SalesDataTable> {
                   _data!.filterByCategory(category, text);
                 },
               ),
+              const SizedBox(height: 20),
               BluredContainer(
                 width: context.width,
-                height: 800,
+                height: 840,
                 child: Theme(
                   data: Theme.of(context).copyWith(
                       dividerColor: Color.fromARGB(54, 106, 106, 106),

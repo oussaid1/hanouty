@@ -8,16 +8,33 @@ abstract class SellingactionsEvent extends Equatable {
 }
 
 /// selling requested event
-class SellingRequested extends SellingactionsEvent {
+class SellingRequestedEvent extends SellingactionsEvent {
   final SaleModel saleModel;
   final ProductModel productModel;
   int get reducedQuantity => productModel.quantity - saleModel.quantitySold;
-  const SellingRequested({required this.saleModel, required this.productModel});
+  const SellingRequestedEvent(
+      {required this.saleModel, required this.productModel});
 
   @override
   List<Object> get props => [saleModel, productModel];
 }
 
+class SellServiceRequestedEvent extends SellingactionsEvent {
+  final SaleModel saleModel;
+
+  const SellServiceRequestedEvent({required this.saleModel});
+
+  @override
+  List<Object> get props => [saleModel];
+}
+
+/// unselling service requested event
+class UnsellServiceRequestedEvent extends SellingactionsEvent {
+  final SaleModel saleModel;
+  const UnsellServiceRequestedEvent({required this.saleModel});
+  @override
+  List<Object> get props => [saleModel];
+}
 // /// selling successful event
 // class SellingSuccessful extends SellingactionsEvent {
 //   final ProductModel soldProduct;

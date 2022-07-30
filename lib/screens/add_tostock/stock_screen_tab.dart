@@ -23,7 +23,7 @@ class StockTab extends ConsumerWidget {
             //unselectedLabelColor: Colors.black,
             indicatorSize: TabBarIndicatorSize.label,
             labelPadding: const EdgeInsets.symmetric(horizontal: 80),
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            // padding: const EdgeInsets.symmetric(horizontal: 8),
             //indicatorPadding: const EdgeInsets.symmetric(horizontal: 8),
             //splashBorderRadius: const BorderRadius.all(Radius.circular(6)),
 
@@ -38,6 +38,7 @@ class StockTab extends ConsumerWidget {
             tabs: [
               Tab(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text('Products').tr(),
                   ],
@@ -45,6 +46,7 @@ class StockTab extends ConsumerWidget {
               ),
               Tab(
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text('Services').tr(),
                   ],

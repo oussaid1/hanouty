@@ -14,13 +14,15 @@ class SellActionsBloc extends Bloc<SellingactionsEvent, SellActionsState> {
   late final DatabaseOperations _databaseOperations;
   SellActionsBloc(DatabaseOperations dbOp) : super(SellactionsInitial()) {
     _databaseOperations = dbOp;
-    on<SellingRequested>(_onSellRequested);
+    on<SellingRequestedEvent>(_onSellRequested);
     on<UnsellingRequested>(_onUnsellRequested);
+    on<SellServiceRequestedEvent>(_onSellServiceRequested);
+    on<UnsellServiceRequestedEvent>(_onUnsellServiceRequested);
   }
 
   /// on Sell Requested
   Future<void> _onSellRequested(
-      SellingRequested event, Emitter<SellActionsState> emit) async {
+      SellingRequestedEvent event, Emitter<SellActionsState> emit) async {
     log('Selling Requested');
     try {
       var success = await _databaseOperations.addSale(event.saleModel);
@@ -48,6 +50,36 @@ class SellActionsBloc extends Bloc<SellingactionsEvent, SellActionsState> {
         await _databaseOperations.updateProductQuantity(
             productId: event.saleModel.pId!,
             quantity: event.saleModel.totalQuantity);
+        emit(UnsellingSuccessfulState(event.saleModel));
+      } else {
+        emit(UnsellingFailedState('Unselling Failed', event.saleModel));
+      }
+    } catch (e) {
+      emit(UnsellingFailedState(e.toString(), event.saleModel));
+    }
+  }
+
+  /// on sell service requested
+  Future<void> _onSellServiceRequested(
+      SellServiceRequestedEvent event, Emitter<SellActionsState> emit) async {
+    try {
+      bool success = await _databaseOperations.addSale(event.saleModel);
+      if (success) {
+        emit(SellingSuccessfulState(event.saleModel));
+      } else {
+        emit(SellingFailedState('Selling Failed', event.saleModel));
+      }
+    } catch (e) {
+      emit(SellingFailedState(e.toString(), event.saleModel));
+    }
+  }
+
+  /// on unsell service requested
+  Future<void> _onUnsellServiceRequested(
+      UnsellServiceRequestedEvent event, Emitter<SellActionsState> emit) async {
+    try {
+      bool success = await _databaseOperations.deleteSale(event.saleModel);
+      if (success) {
         emit(UnsellingSuccessfulState(event.saleModel));
       } else {
         emit(UnsellingFailedState('Unselling Failed', event.saleModel));

@@ -41,27 +41,24 @@ class TechServiceList extends ConsumerWidget {
             label: const Text("Add").tr(),
           ),
         ),
-        body: SingleChildScrollView(
-          child: BlocBuilder<TechServiceBloc, TechServiceState>(
-              builder: (context, state) {
-            if (state.status == TechServiceStatus.loaded) {
-              var techServicesList = state.techservices;
+        body: BlocBuilder<TechServiceBloc, TechServiceState>(
+            builder: (context, state) {
+          if (state.status == TechServiceStatus.loaded) {
+            var techServicesList = state.techservices;
 
-              return ConstrainedBox(
-                constraints: const BoxConstraints(
-                  maxHeight: 600,
-                  maxWidth: 600,
-                  minWidth: 420,
+            return Column(
+              children: [
+                Expanded(
+                  child: TechServiceListView(
+                    techServiceList: techServicesList,
+                  ),
                 ),
-                child: TechServiceListView(
-                  techServiceList: techServicesList,
-                ),
-              );
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
+              ],
             );
-          }),
-        ));
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }));
   }
 }

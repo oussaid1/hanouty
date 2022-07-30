@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../widgets/cards/latest_trans_list_card.dart';
 import '../../widgets/cards/scares_products_instock.dart';
+import '../../widgets/fabs/expandaible_fab.dart';
 import '../add_tostock/addstuff_fab.dart';
 import '../product/stock_inventory.dart';
 import '../sales/sales_iventory_widget.dart';
@@ -20,9 +21,11 @@ class DashBoardPage extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: const Padding(
         padding: EdgeInsets.only(bottom: 80.0),
-        child: SizedBox(
-          width: 120,
-          child: AddStuffWidget(),
+        child: ExpandableFab(
+          distance: 0,
+          children: [
+            AddStuffWidget(),
+          ],
         ),
       ),
       body: SingleChildScrollView(

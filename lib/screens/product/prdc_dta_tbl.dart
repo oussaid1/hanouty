@@ -65,6 +65,7 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
                   _data!.filterByCategory(category, text);
                 },
               ),
+              const SizedBox(height: 20),
               BluredContainer(
                 width: context.width,
                 height: 800,

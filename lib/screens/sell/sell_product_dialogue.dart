@@ -28,19 +28,20 @@ class AddProductState extends State<SellProductDialoge> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   // bool isProduct = true;
   int quantity = 1;
-  num qntLmt = 0;
+  //num qntLmt = 0;
   double priceSoldFor = 0;
   int rducedQnt = 0;
   String clientId = 'client';
   DateTime date = DateTime.now();
-  bool _canSell = false;
+  bool _canSell = false, _isProduct = true;
   final TextEditingController priceCntlr = TextEditingController();
   void clear() {
     priceCntlr.clear();
   }
 
   initializeProperties() {
-    qntLmt = widget.product.quantity;
+    // qntLmt = widget.product.quantity;
+    _isProduct = widget.saleType == SaleType.product;
     priceSoldFor = widget.product.priceOut;
     priceCntlr.text = widget.product.priceOut.toString();
     rducedQnt = quantity = widget.product.quantity;
@@ -72,21 +73,25 @@ class AddProductState extends State<SellProductDialoge> {
             const SizedBox(height: 10),
             Column(
               children: [
-                Center(
-                    child: Padding(
-                        padding: const EdgeInsets.only(bottom: 15.0),
-                        child: widget.product.quantity == 0
-                            ? Text('Product is out of stock',
-                                style: Theme.of(context).textTheme.bodyText1)
-                            : Text(
-                                'Product quantity: ${widget.product.quantity}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(
-                                      color:
-                                          Theme.of(context).colorScheme.error,
-                                    )))),
+                _isProduct
+                    ? Center(
+                        child: Padding(
+                            padding: const EdgeInsets.only(bottom: 15.0),
+                            child: widget.product.quantity == 0
+                                ? Text('Product is out of stock',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1)
+                                : Text(
+                                    'Product quantity: ${widget.product.quantity}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .error,
+                                        ))))
+                    : const SizedBox.shrink(),
                 buildClientName(),
                 const SizedBox(height: 15),
                 buildQuantity(context),
@@ -138,15 +143,25 @@ class AddProductState extends State<SellProductDialoge> {
                       productId: widget.product.pId!,
                     );
 
-                    sellActionsBloc.add(
-                      SellingRequested(
-                        productModel: widget.product,
-                        saleModel: sale,
-                      ),
-                    );
-                    setState(() {
-                      qntLmt -= quantity;
-                    });
+                    if (_isProduct) {
+                      sellActionsBloc.add(
+                        SellingRequestedEvent(
+                          productModel: widget.product,
+                          saleModel: sale,
+                        ),
+                      );
+                    } else if (!_isProduct) {
+                      sellActionsBloc.add(
+                        SellServiceRequestedEvent(
+                          saleModel: sale,
+                        ),
+                      );
+                    }
+                    clear();
+                    Navigator.of(context).pop();
+                    // setState(() {
+                    //   qntLmt -= quantity;
+                    // });
                   }
                 },
           child: Text(
@@ -182,7 +197,7 @@ class AddProductState extends State<SellProductDialoge> {
 
   Widget buildQuantity(BuildContext context) {
     return NumberIncrementerWidget(
-      limitUp: qntLmt,
+      limitUp: _isProduct ? widget.product.quantity : null,
       initialValue: quantity,
       labelText: 'Quantity'.tr(),
       fraction: 1,

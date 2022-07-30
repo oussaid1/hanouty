@@ -18,8 +18,6 @@ class ExpensesListWidget extends ConsumerWidget {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 80.0),
         child: FloatingActionButton.extended(
-          hoverColor: MThemeData.accentColor,
-          backgroundColor: MThemeData.accentColor,
           icon: const Icon(Icons.add),
           onPressed: () {
             MDialogs.dialogSimple(

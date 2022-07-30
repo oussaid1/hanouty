@@ -18,111 +18,112 @@ class TechServiceListCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Slidable(
-          startActionPane: ActionPane(
-            motion: const ScrollMotion(),
-            children: [
-              SlidableAction(
-                label: 'Sell'.tr(),
-                icon: Icons.price_check_rounded,
-                //color: MThemeData.productColor,
-                backgroundColor: Colors.transparent,
-                onPressed: (context) {
-                  MDialogs.dialogSimple(
-                    context,
-                    title: Text(
-                      "Sell : ".tr() + techService.title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline3!
-                          .copyWith(color: MThemeData.productColor),
-                      textAlign: TextAlign.center,
-                    ),
-                    contentWidget: SizedBox(
-                      height: 420,
-                      width: 400,
-                      child: SellProductDialoge(
-                        product: techService,
-                        saleType: SaleType.service,
+      child: BluredContainer(
+        height: 54,
+        child: Slidable(
+            startActionPane: ActionPane(
+              motion: const ScrollMotion(),
+              children: [
+                SlidableAction(
+                  label: 'Sell'.tr(),
+                  icon: Icons.price_check_rounded,
+                  //color: MThemeData.productColor,
+                  backgroundColor: Colors.transparent,
+                  onPressed: (context) {
+                    MDialogs.dialogSimple(
+                      context,
+                      title: Text(
+                        "Sell : ".tr() + techService.title,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline3!
+                            .copyWith(color: MThemeData.productColor),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-          endActionPane: ActionPane(
-            motion: const ScrollMotion(),
-            children: [
-              SlidableAction(
-                icon: Icons.edit_outlined,
-                // color: MThemeData.serviceColor,
-                backgroundColor: Colors.transparent,
+                      contentWidget: SizedBox(
+                        height: 420,
+                        width: 400,
+                        child: SellProductDialoge(
+                          product: techService,
+                          saleType: SaleType.service,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+            endActionPane: ActionPane(
+              motion: const ScrollMotion(),
+              children: [
+                SlidableAction(
+                  icon: Icons.edit_outlined,
+                  // color: MThemeData.serviceColor,
+                  backgroundColor: Colors.transparent,
 
-                label: 'Edit'.tr(),
-                onPressed: (context) {
-                  MDialogs.dialogSimple(
-                    context,
-                    title: Text(
-                      "Edit : ".tr() + techService.title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline3!
-                          .copyWith(color: MThemeData.productColor),
-                      textAlign: TextAlign.center,
-                    ),
-                    contentWidget: AddService(
-                      techService: techService,
-                    ),
-                  );
-                },
-              ),
-              SlidableAction(
-                label: 'Delete'.tr(),
-                icon: Icons.clear,
-                //color: MThemeData.errorColor,
-                backgroundColor: Colors.transparent,
-                onPressed: (context) {
-                  MDialogs.dialogSimple(
-                    context,
-                    title: Text(
-                      " ${techService.title}",
-                      style: Theme.of(context).textTheme.headline3!,
-                    ),
-                    contentWidget: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          style: MThemeData.raisedButtonStyleSave,
-                          child: Text(
-                            'Delete'.tr(),
-                            style: Theme.of(context).textTheme.bodyText1!,
+                  label: 'Edit'.tr(),
+                  onPressed: (context) {
+                    MDialogs.dialogSimple(
+                      context,
+                      title: Text(
+                        "Edit : ".tr() + techService.title,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline3!
+                            .copyWith(color: MThemeData.productColor),
+                        textAlign: TextAlign.center,
+                      ),
+                      contentWidget: AddService(
+                        techService: techService,
+                      ),
+                    );
+                  },
+                ),
+                SlidableAction(
+                  label: 'Delete'.tr(),
+                  icon: Icons.clear,
+                  //color: MThemeData.errorColor,
+                  backgroundColor: Colors.transparent,
+                  onPressed: (context) {
+                    MDialogs.dialogSimple(
+                      context,
+                      title: Text(
+                        " ${techService.title}",
+                        style: Theme.of(context).textTheme.headline3!,
+                      ),
+                      contentWidget: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            style: MThemeData.raisedButtonStyleSave,
+                            child: Text(
+                              'Delete'.tr(),
+                              style: Theme.of(context).textTheme.bodyText1!,
+                            ),
+                            onPressed: () {
+                              var servBloc = TechServiceBloc(
+                                  databaseOperations:
+                                      GetIt.I<DatabaseOperations>());
+                              servBloc.add(DeleteTechServiceEvent(techService));
+                            },
                           ),
-                          onPressed: () {
-                            var servBloc = TechServiceBloc(
-                                databaseOperations:
-                                    GetIt.I<DatabaseOperations>());
-                            servBloc.add(DeleteTechServiceEvent(techService));
-                          },
-                        ),
-                        ElevatedButton(
-                          style: MThemeData.raisedButtonStyleCancel,
-                          child: Text(
-                            'Cancel'.tr(),
-                            style: Theme.of(context).textTheme.bodyText1!,
+                          ElevatedButton(
+                            style: MThemeData.raisedButtonStyleCancel,
+                            child: Text(
+                              'Cancel'.tr(),
+                              style: Theme.of(context).textTheme.bodyText1!,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
                           ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-          child: BluredContainer(
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
             child: Theme(
               data: Theme.of(context).copyWith(
                 dividerColor: Colors.transparent,
@@ -143,7 +144,7 @@ class TechServiceListCard extends ConsumerWidget {
                   Row(
                     children: [
                       const SizedBox(
-                        width: 10,
+                        width: 8,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -195,8 +196,8 @@ class TechServiceListCard extends ConsumerWidget {
                   ),
                 ],
               ),
-            ),
-          )),
+            )),
+      ),
     );
   }
 
@@ -207,7 +208,7 @@ class TechServiceListCard extends ConsumerWidget {
             height: 30,
             child: Card(
               shape: CircleBorder(),
-              color: Colors.green,
+              color: Color.fromARGB(127, 76, 175, 79),
             ),
           )
         : const SizedBox(
@@ -215,7 +216,7 @@ class TechServiceListCard extends ConsumerWidget {
             height: 30,
             child: Card(
               shape: CircleBorder(),
-              color: Colors.red,
+              color: Color.fromARGB(127, 244, 67, 54),
             ),
           );
   }

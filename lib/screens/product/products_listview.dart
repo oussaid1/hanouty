@@ -105,6 +105,7 @@ class ProductList extends ConsumerWidget {
                         children: [
                           Wrap(
                             spacing: 20,
+                            runSpacing: 20,
                             children: [
                               const StockInventory(),
                               StockCategoriesPieChart(

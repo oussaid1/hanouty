@@ -13,6 +13,7 @@ class ExpensesTab extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
+          backgroundColor: Colors.transparent,
           leading: Container(),
           elevation: 0,
           flexibleSpace: Column(
@@ -39,6 +40,7 @@ class ExpensesTab extends StatelessWidget {
                 tabs: [
                   Tab(
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text('Expenses').tr(),
                       ],

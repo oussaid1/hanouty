@@ -185,8 +185,8 @@ class AuthPageState extends State<AuthPage> {
             children: [
               BluredContainer(
                 height: isSignIn
-                    ? MediaQuery.of(context).size.height * 0.3
-                    : MediaQuery.of(context).size.height * 0.5,
+                    ? MediaQuery.of(context).size.height * 0.4
+                    : MediaQuery.of(context).size.height * 0.6,
                 //height: MediaQuery.of(context).size.height * 0.5,
                 width: 400,
                 child: PageView(
@@ -211,11 +211,11 @@ class AuthPageState extends State<AuthPage> {
                               ),
                               buildPassword(context),
                               const SizedBox(
-                                height: 20,
+                                height: 40,
                               ),
                               buildSignInButton(context),
                               const SizedBox(
-                                height: 20,
+                                height: 40,
                               ),
                             ],
                           ),
@@ -237,7 +237,7 @@ class AuthPageState extends State<AuthPage> {
                               buildPassword(context),
                               const SizedBox(height: 20),
                               buildConfirmPassword(context),
-                              const SizedBox(height: 20),
+                              const SizedBox(height: 40),
                               buildSignUpButton(context),
                               const SizedBox(height: 40),
                             ],

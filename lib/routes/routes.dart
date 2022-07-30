@@ -76,7 +76,7 @@ class RouteGenerator {
           );
         case people:
           return const HomeForAll(
-            title: 'clients',
+            title: 'people',
             centreWidget: PeopleTab(),
           );
         case settingsPage:

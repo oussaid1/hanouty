@@ -11,6 +11,7 @@ import '../../models/product/product.dart';
 import '../../models/suplier/suplier.dart';
 import '../../screens/client/add_client.dart';
 import '../../utils/constents.dart';
+import '../../utils/glasswidgets.dart';
 import '../../utils/popup_dialogues.dart';
 
 class ProductsAutoCompleteWidget extends StatelessWidget {
@@ -244,42 +245,54 @@ class _ClientAutocompleteInputFieldState
             return Align(
               alignment: Alignment.topLeft,
               child: Material(
-                elevation: 4.0,
+                elevation: 14.0,
                 child: ConstrainedBox(
                   constraints:
                       const BoxConstraints(maxHeight: 200, maxWidth: 200),
-                  child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemCount: options.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final ShopClientModel option = options.elementAt(index);
-                      return InkWell(
-                        onTap: () {
-                          onSelected(option);
-                        },
-                        child: Builder(builder: (BuildContext context) {
-                          final bool highlight =
-                              AutocompleteHighlightedOption.of(context) ==
-                                  index;
-                          if (highlight) {
-                            SchedulerBinding.instance
-                                .addPostFrameCallback((Duration timeStamp) {
-                              Scrollable.ensureVisible(context, alignment: 0.5);
-                            });
-                          }
-                          return Container(
-                            color:
-                                highlight ? Theme.of(context).focusColor : null,
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              RawAutocomplete.defaultStringForOption(
-                                  option.clientName),
-                            ),
-                          );
-                        }),
-                      );
-                    },
+                  child: BluredContainer(
+                    blurSygmaX: 93,
+                    blurSygmaY: 93,
+                    start: 0.2,
+                    end: 0.1,
+                    borderRadius: BorderRadius.circular(2),
+                    child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      itemCount: options.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final ShopClientModel option = options.elementAt(index);
+                        return InkWell(
+                          onTap: () {
+                            onSelected(option);
+                          },
+                          child: Builder(builder: (BuildContext context) {
+                            final bool highlight =
+                                AutocompleteHighlightedOption.of(context) ==
+                                    index;
+                            if (highlight) {
+                              SchedulerBinding.instance
+                                  .addPostFrameCallback((Duration timeStamp) {
+                                Scrollable.ensureVisible(context,
+                                    alignment: 0.5);
+                              });
+                            }
+                            return Container(
+                              // color: highlight ? Theme.of(context).focusColor : null,
+                              padding: const EdgeInsets.all(16.0),
+                              decoration: BoxDecoration(
+                                color: highlight
+                                    ? Theme.of(context).focusColor
+                                    : null,
+                              ),
+                              child: Text(
+                                RawAutocomplete.defaultStringForOption(
+                                    option.clientName),
+                              ),
+                            );
+                          }),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
