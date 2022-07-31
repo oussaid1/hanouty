@@ -20,17 +20,19 @@ class StockInventory extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 4.0),
-              child: Text(label, style: Theme.of(context).textTheme.bodySmall),
+              child: Text(
+                label,
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      //color: MThemeData.productColor,
+                    ),
+              ),
             ),
             PriceNumberZone(
               withDollarSign: withDollarsign,
               right: const SizedBox.shrink(),
               price: value,
-              priceStyle: Theme.of(context).textTheme.caption,
-              // style: Theme.of(context)
-              //     .textTheme
-              //     .headline5!
-              //     .copyWith(color: context.theme.onPrimary),
+              priceStyle: Theme.of(context).textTheme.bodyMedium,
             ),
           ],
         );
@@ -48,13 +50,14 @@ class StockInventory extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 15.0, bottom: 5, top: 15),
                 child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       FontAwesomeIcons.solidPenToSquare,
-                      color: context.theme.primaryContainer,
                     ),
                     const SizedBox(width: 15),
                     Text('Stock',
-                        style: Theme.of(context).textTheme.bodyMedium!),
+                        style: Theme.of(context).textTheme.headline3!.copyWith(
+                              fontWeight: FontWeight.bold,
+                            )),
                   ],
                 ),
               ),
@@ -98,7 +101,11 @@ class StockInventory extends StatelessWidget {
                           withDollarSign: false,
                           right: const SizedBox.shrink(),
                           price: productStockData.totalProductQuantityInStock,
-                          priceStyle: Theme.of(context).textTheme.caption,
+                          priceStyle:
+                              Theme.of(context).textTheme.bodySmall!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    //color: MThemeData.productColor,
+                                  ),
 
                           // style: Theme.of(context)
                           //     .textTheme
@@ -124,7 +131,7 @@ class StockInventory extends StatelessWidget {
                           'Capital',
                           style: Theme.of(context)
                               .textTheme
-                              .bodyMedium!
+                              .headline3!
                               .copyWith(
                                   color: context.theme.onSecondaryContainer),
                         ),
@@ -132,11 +139,11 @@ class StockInventory extends StatelessWidget {
                           right: const SizedBox.shrink(),
                           withDollarSign: true,
                           price: productStockData.totalCapitalInStock,
-                          priceStyle: context.textTheme.bodyLarge,
-                          // style: Theme.of(context)
-                          //     .textTheme
-                          //     .headline2!
-                          //     .copyWith(color: context.theme.primary),
+                          priceStyle: Theme.of(context)
+                              .textTheme
+                              .headline1!
+                              .copyWith(
+                                  color: context.theme.onSecondaryContainer),
                         ),
                       ],
                     ),

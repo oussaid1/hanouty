@@ -10,15 +10,20 @@ class ExpenseData {
 
   List<ExpenseModel> get highestExpenses {
     var expensew = expenses;
-    expensew.sort((b, a) => a.amount.compareTo(b.amount));
+    if (expensew.isNotEmpty) {
+      expensew.sort((a, b) => b.amount.compareTo(a.amount));
+      return expensew;
+    }
+
     return expensew;
   }
 
   List<ExpenseModel> get lowestExpenses {
-    List<ExpenseModel> expensew = [];
-    expensew = expenses;
-    expensew.sort((a, b) => a.amount.compareTo(b.amount));
-    return expensew;
+    if (expenses.isNotEmpty) {
+      expenses.sort((a, b) => a.amount.compareTo(b.amount));
+      return expenses;
+    }
+    return expenses;
   }
 
   double get highestExpenseAmount {

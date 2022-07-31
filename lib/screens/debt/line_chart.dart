@@ -82,15 +82,15 @@ class DebtLineChart extends StatelessWidget {
                 series: <ChartSeries>[
                   // Renders spline chart
                   SplineSeries<ChartData, DateTime>(
-                      name: 'Sales'.tr(),
+                      name: 'Debts'.tr(),
                       color: MThemeData.salesColor,
-                      dataSource: data.debtsChartDataMMYY,
+                      dataSource: data.debtsChartDataDDMMYY,
                       xValueMapper: (ChartData sales, _) => sales.date,
                       yValueMapper: (ChartData sales, _) => sales.value),
                   SplineSeries<ChartData, DateTime>(
-                      name: 'Products'.tr(),
-                      color: MThemeData.productColor,
-                      dataSource: data.debtsChartDataMMYY,
+                      name: 'Payments'.tr(),
+                      color: MThemeData.serviceColor,
+                      dataSource: data.paymentsChartDataDDMMYY,
                       xValueMapper: (ChartData sales, _) => sales.date,
                       yValueMapper: (ChartData sales, _) => sales.value),
                   // SplineSeries<ChartData, DateTime>(

@@ -11,6 +11,7 @@ import '../screens/income/income_tab.dart';
 import '../screens/sales/sales_tab.dart';
 import '../screens/splash/splash_login_signup.dart';
 import '../settings/settings.dart';
+import '../widgets/sidemenu/shared_menu_items.dart';
 
 class RouteGenerator {
   static const String root = "/";
@@ -42,6 +43,7 @@ class RouteGenerator {
     return fadeThrough(settings, (context) {
       switch (settings.name) {
         case root:
+          //menuIndexProvider;
           return const SplashPage();
 
         case dashboard:

@@ -26,11 +26,7 @@ class ExpensesListWidget extends ConsumerWidget {
                 "Add Expense",
                 style: Theme.of(context).textTheme.headline3!,
               ),
-              contentWidget: const SizedBox(
-                height: 400,
-                width: 400,
-                child: AddExpense(),
-              ),
+              contentWidget: const AddExpense(),
             );
           },
           label: const Text("Add").tr(),
@@ -47,32 +43,35 @@ class ExpensesListWidget extends ConsumerWidget {
             );
           }
           List<ExpenseModel> expenses = state.expenses;
-          return ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height - 120,
-              maxWidth: 600,
-            ),
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 120,
-                    child: SearchByWidget(
-                      listOfCategories: const [],
-                      onSearchTextChanged: (String search) {},
+          return Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height - 120,
+                maxWidth: 600,
+              ),
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                      height: 120,
+                      child: SearchByWidget(
+                        listOfCategories: const [],
+                        onSearchTextChanged: (String search) {},
+                      ),
                     ),
                   ),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    childCount: expenses.length,
-                    (context, index) {
-                      ExpenseModel expense = expenses[index];
-                      return ExpenseListCard(expense: expense);
-                    },
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      childCount: expenses.length,
+                      (context, index) {
+                        ExpenseModel expense = expenses[index];
+                        return ExpenseListCard(expense: expense);
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },
@@ -154,9 +153,11 @@ class ExpenseListCard extends ConsumerWidget {
         ],
       ),
       child: Card(
+        color: const Color.fromARGB(204, 255, 255, 255),
         child: ListTile(
+          isThreeLine: true,
           leading: CircleAvatar(
-            backgroundColor: MThemeData.primaryColor,
+            backgroundColor: const Color.fromARGB(122, 24, 91, 157),
             child: Text(
               expense.name.substring(0, 1).toUpperCase(),
               style: Theme.of(context).textTheme.headline3!,
@@ -169,42 +170,37 @@ class ExpenseListCard extends ConsumerWidget {
               Text(
                 expense.name,
               ),
-              RichText(
-                text: TextSpan(
-                  text: 'Category',
-                  style: Theme.of(context).textTheme.subtitle2!,
-                  children: [
-                    TextSpan(
-                      text: ' ${expense.expenseCategory}',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: MThemeData.expensesColor,
-                          ),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
-          subtitle: Text(
-            '${expense.date} }',
-            style: Theme.of(context).textTheme.subtitle2!,
+          subtitle: RichText(
+            text: TextSpan(
+              text: 'Category',
+              style: Theme.of(context).textTheme.subtitle2!,
+              children: [
+                TextSpan(
+                  text: expense.expenseCategory,
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: MThemeData.expensesColor,
+                      ),
+                ),
+              ],
+            ),
           ),
           trailing: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '${expense.amount} / ${expense.amountPaid}',
-                    style: Theme.of(context).textTheme.headline3!,
-                  ),
-                ],
+              Text(
+                expense.isPaid ? "Paid" : '${expense.amount}',
+                style: Theme.of(context).textTheme.headline3!,
               ),
               Text(
                 expense.deadLine.toString(),
-                style: Theme.of(context).textTheme.subtitle2!,
+                style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                      color: expense.isPaid
+                          ? Colors.green
+                          : const Color.fromARGB(217, 244, 67, 54),
+                    ),
               ),
             ],
           ),

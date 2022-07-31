@@ -231,13 +231,9 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
       width: 400,
       child: SelectDate(
         initialDate: widget.initialDateTime ?? DateTime.now(),
-        onDateSelected: (date) {
-          toast(
-            'date: $date',
-            context: context,
-          );
+        onDateSelected: (mdate) {
           setState(() {
-            _pickedDateTime = date;
+            _pickedDateTime = mdate;
           });
         },
       ),

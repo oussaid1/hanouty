@@ -100,7 +100,6 @@ class AuthPageState extends State<AuthPage> {
           //     ColorFilter.mode(Color.fromARGB(43, 0, 0, 0), BlendMode.darken),
           image: AssetImage(
             'assets/images/background1.jpg',
-            // bundle: AssetBundle,/// TODO: fix this, read docs
           ),
           fit: BoxFit.cover,
         ),
@@ -270,7 +269,6 @@ class AuthPageState extends State<AuthPage> {
           //     ColorFilter.mode(Color.fromARGB(43, 0, 0, 0), BlendMode.darken),
           image: AssetImage(
             'assets/images/background1.jpg',
-            // bundle: AssetBundle,/// TODO: fix this, read docs
           ),
           fit: BoxFit.cover,
         ),

@@ -15,8 +15,8 @@ class DueDebtsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DebtData debtData = DebtData(
-        allDebts: debtsStatsViewModel.debts,
-        allpayments: debtsStatsViewModel.payments);
+        dbtsFrmDb: debtsStatsViewModel.debts,
+        pymtsFrmDb: debtsStatsViewModel.payments);
     return SizedBox(
       height: 400,
       width: 420,

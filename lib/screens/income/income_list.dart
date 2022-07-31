@@ -28,11 +28,7 @@ class IncomeListWidget extends StatelessWidget {
                 "Add Income",
                 style: Theme.of(context).textTheme.headline3!,
               ),
-              contentWidget: const SizedBox(
-                height: 600,
-                width: 400,
-                child: AddIncome(),
-              ),
+              contentWidget: const AddIncome(),
             );
           },
           label: const Text("Add").tr(),
@@ -50,32 +46,35 @@ class IncomeListWidget extends StatelessWidget {
           }
           List<IncomeModel> incomes = state.incomes;
           FilteredIncomes filteredIncomes = FilteredIncomes(incomes: incomes);
-          return ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height - 120,
-              maxWidth: 600,
-            ),
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(
-                  child: SizedBox(
-                      height: 120,
-                      child: SearchByWidget(
-                        listOfCategories: filteredIncomes.distinctCategories,
-                        onSearchTextChanged: (txt) {},
-                      )),
-                ),
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      IncomeModel income = incomes[index];
-
-                      return IncomeListCard(income: income);
-                    },
-                    childCount: incomes.length,
+          return Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height - 120,
+                maxWidth: 600,
+              ),
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: SizedBox(
+                        height: 120,
+                        child: SearchByWidget(
+                          listOfCategories: filteredIncomes.distinctCategories,
+                          onSearchTextChanged: (txt) {},
+                        )),
                   ),
-                ),
-              ],
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        IncomeModel income = incomes[index];
+
+                        return IncomeListCard(income: income);
+                      },
+                      childCount: incomes.length,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

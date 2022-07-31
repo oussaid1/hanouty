@@ -1,49 +1,70 @@
 part of 'debt.dart';
 
-// final debtsDatasProvider = StateProvider<DebtData>((
+class DebtData {
+  List<DebtModel> dbtsFrmDb = [];
+  List<PaymentModel> pymtsFrmDb = [];
+  DebtData({
+    required this.dbtsFrmDb,
+    required this.pymtsFrmDb,
+  });
+
+  /// a geter for sorted debts// final debtsDatasProvider = StateProvider<DebtData>((
 //   ref,
 // ) {
 //   final data = ref.watch(filteredDebtsProvider);
 //   return DebtData(filteredDebts: data.state.debts);
 // });
+  List<DebtModel> get allDebts {
+    if (dbtsFrmDb.isNotEmpty) {
+      dbtsFrmDb.sort((a, b) => a.timeStamp.compareTo(b.timeStamp));
+    }
+    return dbtsFrmDb;
+  }
 
-class DebtData {
-  List<DebtModel> allDebts;
-  List<PaymentModel> allpayments;
-  DebtData({
-    required this.allDebts,
-    required this.allpayments,
-  });
+  /// a geter for sorted payments
+  List<PaymentModel> get allPayments {
+    if (pymtsFrmDb.isNotEmpty) {
+      pymtsFrmDb.sort((a, b) => a.date.compareTo(b.date));
+    }
+    return pymtsFrmDb;
+  }
 
 //DateTime   nearestDeadlineDate = DateTime.now().subtract(const Duration(days: 15));
   // get highest debts
   List<DebtModel> get highestDebts {
     List<DebtModel> debts = allDebts;
-    debts.sort((b, a) => a.amount.compareTo(b.amount));
+    if (debts.isNotEmpty) {
+      debts.sort((b, a) => a.amount.compareTo(b.amount));
+    }
     return debts;
   }
 
 // get lowestDebts
   List<DebtModel> get lowestDebts {
     List<DebtModel> debts = allDebts;
-    debts.sort((a, b) => a.amount.compareTo(b.amount));
+    if (debts.isNotEmpty) {
+      debts.sort((a, b) => a.amount.compareTo(b.amount));
+    }
+
     return debts;
   }
 
   double get highestDebtAmount {
     var amount = 0.0;
-    highestDebts.sort((b, a) => a.amount.compareTo(b.amount));
     if (highestDebts.isNotEmpty) {
+      highestDebts.sort((b, a) => a.amount.compareTo(b.amount));
       amount = highestDebts.first.amount;
     }
+
     return amount;
   }
 //check if expenses is empty or not then return the first element
 
   double get lowestDebtAmount {
     var amount = 0.0;
-    lowestDebts.sort((a, b) => a.amount.compareTo(b.amount));
+
     if (lowestDebts.isNotEmpty) {
+      lowestDebts.sort((a, b) => a.amount.compareTo(b.amount));
       amount = lowestDebts.first.amount;
     }
     return amount;
@@ -68,7 +89,7 @@ class DebtData {
   // totall payments amount for the provided payments list
   double get totalPayments {
     double total = 0;
-    for (var item in allpayments) {
+    for (var item in allPayments) {
       total += item.amount;
     }
     return total;
@@ -207,7 +228,7 @@ class DebtData {
   /// get distinct days as a map /////////////////////////////////////////////
   Map<DateTime, double> get paymentsByYear {
     Map<DateTime, double> paymentsByYear = {};
-    for (PaymentModel payment in allpayments) {
+    for (PaymentModel payment in allPayments) {
       paymentsByYear[DateTime(payment.date.year, 00, 00)] ??= 0.0;
       paymentsByYear[DateTime(payment.date.year, 00, 00)] =
           paymentsByYear[DateTime(payment.date.year, 00, 00)]! + payment.amount;
@@ -218,7 +239,7 @@ class DebtData {
   /// get distinct months /////////////////////////////////////////////
   Map<DateTime, double> get paymentsByMonth {
     Map<DateTime, double> paymentsByMonth = {};
-    for (PaymentModel payment in allpayments) {
+    for (PaymentModel payment in allPayments) {
       paymentsByMonth[DateTime(payment.date.year, payment.date.month, 00)] ??=
           0.0;
       paymentsByMonth[DateTime(payment.date.year, payment.date.month, 00)] =
@@ -232,7 +253,7 @@ class DebtData {
   /// get distinct years /////////////////////////////////////////////
   Map<DateTime, double> get paymentsByDay {
     Map<DateTime, double> paymentsByDay = {};
-    for (PaymentModel payment in allpayments) {
+    for (PaymentModel payment in allPayments) {
       paymentsByDay[DateTime(
           payment.date.year, payment.date.month, payment.date.day)] ??= 0.0;
       paymentsByDay[DateTime(
@@ -329,8 +350,8 @@ class ClientDebt {
   /// get DebtData for the client /////////////////////////////////////////////
   DebtData get debtData {
     return DebtData(
-      allDebts: allDebts,
-      allpayments: allPayments,
+      dbtsFrmDb: allDebts,
+      pymtsFrmDb: allPayments,
     );
   }
 

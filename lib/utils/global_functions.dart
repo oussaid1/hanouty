@@ -124,11 +124,11 @@ class GlobalFunctions {
                   ),
                   SizedBox(
                     width: 120,
-                    child: TextButton(
+                    child: ElevatedButton(
+                        style: MThemeData.raisedButtonStyleSave,
                         onPressed: () {
                           context.read<LoginBloc>().add(LogOutRequestedEvent());
                         },
-                        style: MThemeData.raisedButtonStyleSave,
                         child: Text(
                           'Exit'.tr(),
                         )),

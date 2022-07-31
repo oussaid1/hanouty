@@ -39,11 +39,6 @@ class UpdateSaleState extends State<AddOrEditSaleWidget> {
   }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-  void _handleDatePicked(DateTime date) {
-    setState(() {
-      pickedDate = date;
-    });
-  }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
   void initialize() {
@@ -135,8 +130,10 @@ class UpdateSaleState extends State<AddOrEditSaleWidget> {
   buildDate(DateTime initialDate) {
     return SelectDate(
       initialDate: initialDate,
-      onDateSelected: (date) {
-        _handleDatePicked(date);
+      onDateSelected: (mdate) {
+        setState(() {
+          pickedDate = mdate;
+        });
       },
     );
   }

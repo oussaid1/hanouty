@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hanouty/extensions/extensions.dart';
 import 'package:hanouty/screens/debt/add_payment.dart';
 
 import '../../blocs/paymentsbloc/payments_bloc.dart';
@@ -78,42 +79,6 @@ class SimplePaymentListCard extends StatelessWidget {
               SlidableAction(
                 onPressed: (context) {
                   context.read<PaymentsBloc>().add(DeletePaymentEvent(payment));
-
-                  // MDialogs.dialogSimple(
-                  //   context,
-                  //   title: Text(
-                  //     "Are you sure to delete this payment".tr(),
-                  //     style: Theme.of(context).textTheme.headline3!,
-                  //   ),
-                  //   contentWidget: Row(
-                  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //     children: [
-                  //       ElevatedButton(
-                  //         style: MThemeData.raisedButtonStyleSave,
-                  //         child: Text(
-                  //           'Delete'.tr(),
-                  //           style: Theme.of(context).textTheme.bodyText1!,
-                  //         ),
-                  //         onPressed: () {
-                  //           context
-                  //               .read<PaymentsBloc>()
-                  //               .add(DeletePaymentEvent(payment));
-                  //           Navigator.pop(context);
-                  //         },
-                  //       ),
-                  //       ElevatedButton(
-                  //         style: MThemeData.raisedButtonStyleCancel,
-                  //         child: Text(
-                  //           'Cancel'.tr(),
-                  //           style: Theme.of(context).textTheme.bodyText1!,
-                  //         ),
-                  //         onPressed: () {
-                  //           Navigator.pop(context);
-                  //         },
-                  //       ),
-                  //     ],
-                  //   ),
-                  // );
                 },
                 icon: Icons.delete,
                 backgroundColor: MThemeData.errorColor,
@@ -121,6 +86,7 @@ class SimplePaymentListCard extends StatelessWidget {
             ],
           ),
           child: ListTile(
+            minLeadingWidth: 4,
             contentPadding: const EdgeInsets.all(0),
             dense: true,
             leading: const VerticalDivider(
@@ -133,6 +99,10 @@ class SimplePaymentListCard extends StatelessWidget {
               '${payment.clientName}',
               style: Theme.of(context).textTheme.bodyText2!.copyWith(
                   color: Theme.of(context).colorScheme.onSecondaryContainer),
+            ),
+            subtitle: Text(
+              payment.date.ddmmyyyy(),
+              style: Theme.of(context).textTheme.subtitle2!.copyWith(),
             ),
             trailing: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),

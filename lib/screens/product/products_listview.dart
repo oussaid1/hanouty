@@ -34,15 +34,7 @@ class ProductList extends ConsumerWidget {
                   "Add Product",
                   style: Theme.of(context).textTheme.headline3!,
                 ),
-                contentWidget: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  //  gradient: MThemeData.gradient2),
-                  height: 500,
-                  width: 420,
-                  child: const AddOrEditProduct(),
-                ),
+                contentWidget: const AddOrEditProduct(),
               );
             },
             label: const Text("Add Product").tr(),

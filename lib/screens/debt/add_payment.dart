@@ -59,6 +59,9 @@ class AddPaymentState extends State<AddPayment> {
       date = widget.payment!.date;
       description = widget.payment!.description!;
     }
+    if (widget.client != null) {
+      client = widget.client;
+    }
     if (widget.payingStatus == PayingStatus.paying) {
       client = widget.client;
       amuontamountController.text = widget.debt!.amount.toString();
@@ -83,9 +86,7 @@ class AddPaymentState extends State<AddPayment> {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            widget.payingStatus != PayingStatus.paying
-                ? buildClientName()
-                : const SizedBox.shrink(),
+            widget.client == null ? buildClientName() : const SizedBox.shrink(),
             const SizedBox(height: 20),
             buildamountAmount(),
             const SizedBox(height: 20),
@@ -109,6 +110,7 @@ class AddPaymentState extends State<AddPayment> {
       //   }
       //   return null;
       // },
+      initialValue: client,
       onChanged: (selectedClient) {
         setState(() {
           client = selectedClient;
@@ -141,7 +143,7 @@ class AddPaymentState extends State<AddPayment> {
                         widget.payment!.clientId =
                             client?.id ?? widget.payment!.clientId;
                         widget.payment!.description = description;
-                        pymntBloc.add(AddPaymentEvent(widget.payment!));
+                        pymntBloc.add(UpdatePaymentEvent(widget.payment!));
                       } else if (widget.payingStatus == PayingStatus.paying) {
                         PaymentModel payment = PaymentModel(
                           clientName: client!.clientName,
@@ -181,10 +183,10 @@ class AddPaymentState extends State<AddPayment> {
 
   Widget buildDate() {
     return SelectDate(
-      onDateSelected: (date) {
+      onDateSelected: (selectedDate) {
         setState(() {
           _canSave = true;
-          date = date;
+          date = selectedDate;
         });
       },
     );

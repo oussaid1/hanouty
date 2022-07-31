@@ -50,7 +50,7 @@ class PriceNumberZone extends StatelessWidget {
             textAlign: textAlign,
             style: priceStyle ??
                 Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: context.theme.onSecondaryContainer,
+                    // color: context.theme.onSecondaryContainer,
                     ),
           ),
         ],

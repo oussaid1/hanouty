@@ -28,11 +28,6 @@ class FilteredIncomes {
     }).toList();
   }
 
-  DateTime firstIncomeDate() {
-    incomes.sort((a, b) => a.date.compareTo(b.date));
-    return incomes.first.date;
-  }
-
   List<IncomeModel> incomesThisYear() {
     return incomes.where((income) {
       return income.date.year == DateTime.now().year;

@@ -26,11 +26,7 @@ class SupliersList extends ConsumerWidget {
                 "Add Suplier",
                 style: Theme.of(context).textTheme.headline3!,
               ),
-              contentWidget: const SizedBox(
-                height: 400,
-                width: 600,
-                child: AddSuplier(),
-              ),
+              contentWidget: const AddSuplier(),
             );
           },
           label: const Text("Add").tr(),

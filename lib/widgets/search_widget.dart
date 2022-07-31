@@ -1,9 +1,9 @@
 import 'package:hanouty/local_components.dart';
 import 'package:hanouty/utils/constents.dart';
 import 'package:flutter/material.dart';
+import 'package:hanouty/widgets/autocomplete/autocomlete_textfields.dart';
 
 import '../components.dart';
-import 'spinners/search_spinner.dart';
 
 class SearchByWidget extends StatefulWidget {
   final bool withCategory;
@@ -47,14 +47,14 @@ class _SearchByWidgetState extends State<SearchByWidget> {
                     flex: 1,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: SearchCategorySpinner(
-                        initialItem: 'Name',
+                      child: CategoryAutocompleteField(
+                        initialCategory: 'Name',
                         onChanged: (value) {
                           setState(() {
                             selectedCategory = value;
                           });
                         },
-                        list: widget.listOfCategories,
+                        categories: widget.listOfCategories,
                       ),
                     ),
                   ))

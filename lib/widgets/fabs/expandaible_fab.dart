@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
 @immutable
@@ -16,10 +14,10 @@ class ExpandableFab extends StatefulWidget {
   final List<Widget> children;
 
   @override
-  _ExpandableFabState createState() => _ExpandableFabState();
+  ExpandableFabState createState() => ExpandableFabState();
 }
 
-class _ExpandableFabState extends State<ExpandableFab>
+class ExpandableFabState extends State<ExpandableFab>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _expandAnimation;
@@ -69,7 +67,7 @@ class _ExpandableFabState extends State<ExpandableFab>
         mainAxisSize: MainAxisSize.min,
         children: [
           //    buildTapToCloseFab(),
-          _ExpandingActionButton(
+          ExpandingActionButton(
             directionInDegrees: 0,
             maxDistance: widget.distance,
             progress: _expandAnimation,
@@ -82,24 +80,24 @@ class _ExpandableFabState extends State<ExpandableFab>
     );
   }
 
-  List<Widget> _buildExpandingActionButtons() {
-    final children = <Widget>[];
-    final count = widget.children.length;
-    final step = 156.0 / (count);
-    for (var i = 0, angleInDegrees = 0.0;
-        i < count;
-        i++, angleInDegrees += step) {
-      children.add(
-        _ExpandingActionButton(
-          directionInDegrees: angleInDegrees,
-          maxDistance: widget.distance,
-          progress: _expandAnimation,
-          child: widget.children[i],
-        ),
-      );
-    }
-    return children;
-  }
+  // List<Widget> _buildExpandingActionButtons() {
+  //   final children = <Widget>[];
+  //   final count = widget.children.length;
+  //   final step = 156.0 / (count);
+  //   for (var i = 0, angleInDegrees = 0.0;
+  //       i < count;
+  //       i++, angleInDegrees += step) {
+  //     children.add(
+  //       _ExpandingActionButton(
+  //         directionInDegrees: angleInDegrees,
+  //         maxDistance: widget.distance,
+  //         progress: _expandAnimation,
+  //         child: widget.children[i],
+  //       ),
+  //     );
+  //   }
+  //   return children;
+  // }
 
   Widget _buildTapToOpenFab() {
     return IgnorePointer(
@@ -135,8 +133,8 @@ class _ExpandableFabState extends State<ExpandableFab>
 }
 
 @immutable
-class _ExpandingActionButton extends StatelessWidget {
-  _ExpandingActionButton({
+class ExpandingActionButton extends StatelessWidget {
+  const ExpandingActionButton({
     Key? key,
     required this.directionInDegrees,
     required this.maxDistance,

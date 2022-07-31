@@ -178,9 +178,9 @@ class AddExpenseState extends State<AddExpense> {
 
   Widget buildDate() {
     return SelectDate(
-      onDateSelected: (date) {
+      onDateSelected: (mdate) {
         setState(() {
-          date = date;
+          date = mdate;
           _canSave = true;
         });
       },

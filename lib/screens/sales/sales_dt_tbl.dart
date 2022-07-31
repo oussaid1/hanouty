@@ -76,8 +76,8 @@ class _SalesDataTableState extends State<SalesDataTable> {
                 height: 840,
                 child: Theme(
                   data: Theme.of(context).copyWith(
-                      dividerColor: Color.fromARGB(54, 106, 106, 106),
-                      cardColor: Color.fromARGB(0, 255, 255, 255)),
+                      dividerColor: const Color.fromARGB(54, 106, 106, 106),
+                      cardColor: const Color.fromARGB(0, 255, 255, 255)),
                   child: PaginatedDataTable(
                     sortColumnIndex: _sortColumnIndex,
                     sortAscending: _sortAscending,

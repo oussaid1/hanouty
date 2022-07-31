@@ -199,7 +199,7 @@ class SalesOverAllWidget extends StatelessWidget {
             right: const SizedBox.shrink(),
             price: value1,
             priceStyle: cellStyle ??
-                Theme.of(context).textTheme.caption!.copyWith(
+                Theme.of(context).textTheme.bodyMedium!.copyWith(
                     // color: AppConstants.whiteOpacity,
                     ),
             // style: Theme.of(context)

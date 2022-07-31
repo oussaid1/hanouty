@@ -41,19 +41,21 @@ class NavMenu extends ConsumerWidget {
                   label: Text('Dashboard'),
                 ),
                 NavigationRailDestination(
-                  icon: Icon(FontAwesomeIcons.store),
+                  icon: Icon(Icons.store),
                   label: Text('Stock'),
                 ),
                 NavigationRailDestination(
-                  icon: Icon(FontAwesomeIcons.salesforce),
+                  icon: Icon(
+                    FontAwesomeIcons.coins,
+                  ),
                   label: Text('Sales'),
                 ),
                 NavigationRailDestination(
-                  icon: Icon(Icons.account_balance_wallet),
+                  icon: Icon(FontAwesomeIcons.moneyCheckDollar),
                   label: Text('Debt'),
                 ),
                 NavigationRailDestination(
-                  icon: Icon(Icons.attach_money),
+                  icon: Icon(FontAwesomeIcons.handHoldingDollar),
                   label: Text('Income'),
                 ),
                 NavigationRailDestination(

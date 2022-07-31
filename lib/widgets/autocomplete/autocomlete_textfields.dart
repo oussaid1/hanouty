@@ -48,8 +48,6 @@ class ProductsAutocompleteField extends StatelessWidget {
       option.productName;
   @override
   Widget build(BuildContext context) {
-    /// TODO: implement provide a list of products to autocomplete from ProductsBloc
-
     return BlocBuilder<ProductBloc, ProductState>(
       builder: (context, state) {
         /// if there is no product in the list, show a progress indicator

@@ -29,7 +29,7 @@ class RevenuWidget extends StatelessWidget {
         var incomeData = IncomeData(filteredIncome: filteredIncome.incomes);
         var expenseData = ExpenseData(expenses: filteredExpense.expenses);
         var debtData = DebtData(
-            allpayments: paymentsBloc.payments, allDebts: filteredDebts.debts);
+            pymtsFrmDb: paymentsBloc.payments, dbtsFrmDb: filteredDebts.debts);
         Revenu revenu = Revenu(
           debtData: debtData,
           salesData: salesData,

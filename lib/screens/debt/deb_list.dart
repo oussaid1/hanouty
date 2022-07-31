@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hanouty/local_components.dart';
+import 'package:hanouty/screens/debt/add_debt.dart';
 
 import 'package:hanouty/utils/global_functions.dart';
 import '../../blocs/clientsbloc/clients_bloc.dart';
@@ -15,13 +16,33 @@ import 'debt_details_widget.dart';
 import 'debt_piechart.dart';
 import 'due_debts_card.dart';
 import 'line_chart.dart';
+import 'overall_debt_widget.dart';
 
 class DebtsView extends StatelessWidget {
   const DebtsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: BlocListener<DebtBloc, DebtState>(
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 80.0),
+        child: FloatingActionButton.extended(
+          icon: const Icon(Icons.add),
+          onPressed: () {
+            MDialogs.dialogSimple(
+              context,
+              title: Text(
+                "Add Debt",
+                style: Theme.of(context).textTheme.headline3!,
+              ),
+              contentWidget: const AddDebt(),
+            );
+          },
+          label: const Text("Add").tr(),
+        ),
+      ),
+      body: BlocListener<DebtBloc, DebtState>(
         listener: (context, state) {
           switch (state.status) {
             case DebtStatus.initial:
@@ -56,11 +77,13 @@ class DebtsView extends StatelessWidget {
               break;
           }
         },
-        child: Column(
-          children: const [
-            TopWidgetDebtsView(),
-            _DebtList(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: const [
+              TopWidgetDebtsView(),
+              _DebtList(),
+            ],
+          ),
         ),
       ),
     );
@@ -201,9 +224,10 @@ class TopWidgetDebtsView extends StatelessWidget {
                     debts: debtsState.debts,
                     payments: paymentsState.payments);
                 DebtData debtData = DebtData(
-                  allDebts: debtsState.debts,
-                  allpayments: paymentsState.payments,
+                  dbtsFrmDb: debtsState.debts,
+                  pymtsFrmDb: paymentsState.payments,
                 );
+
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Wrap(
@@ -323,143 +347,6 @@ class DebtListCard extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class OverallDebtsWidget extends StatelessWidget {
-  final DebtData debtdata;
-  const OverallDebtsWidget({
-    Key? key,
-    required this.debtdata,
-  }) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return BluredContainer(
-      width: 420,
-      height: 156,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(FontAwesomeIcons.moneyBillTransfer),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 18.0, right: 18),
-                    child: Text(
-                      'Overall'.tr(),
-                      style: Theme.of(context).textTheme.headline3!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                  ),
-                ],
-              ),
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.more_vert_outlined,
-                  ))
-            ],
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: LinearPercentIndicator(
-                  percent: debtdata.unitInterval,
-                  progressColor: MThemeData.expensesColor,
-                ),
-              ),
-              Text(
-                '${debtdata.totalDifferencePercentage}%',
-                style: Theme.of(context).textTheme.headline4!.copyWith(
-                      color: MThemeData.productColor,
-                    ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 18.0, right: 18),
-                child: Column(
-                  children: [
-                    Text(
-                      'Highest'.tr(),
-                      style: Theme.of(context).textTheme.headline3!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                    PriceNumberZone(
-                      price: debtdata.highestDebtAmount,
-                      withDollarSign: true,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-              Padding(
-                padding: const EdgeInsets.only(left: 18.0, right: 18),
-                child: Column(
-                  children: [
-                    Text(
-                      'Lowest'.tr(),
-                      style: Theme.of(context).textTheme.headline3!.copyWith(
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                    PriceNumberZone(
-                      price: debtdata.lowestDebtAmount,
-                      withDollarSign: true,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          const Divider(
-            height: 0,
-            thickness: 1,
-            color: Color.fromARGB(202, 255, 255, 255),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0, top: 8, right: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Total',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: context.theme.onSecondaryContainer),
-                ),
-                PriceNumberZone(
-                  right: const SizedBox.shrink(),
-                  withDollarSign: true,
-                  price: debtdata.totalDebtAmount,
-                  priceStyle: context.textTheme.bodyLarge!.copyWith(
-                      //fontWeight: FontWeight.w100,
-                      // wordSpacing: 0.5,
-                      fontSize: 18,
-                      color: Colors.white.withOpacity(0.8)),
-                  // style: Theme.of(context)
-                  //     .textTheme
-                  //     .headline2!
-                  //     .copyWith(color: context.theme.primary),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
