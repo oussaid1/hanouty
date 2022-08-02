@@ -15,7 +15,7 @@ class SelectDate extends StatefulWidget {
   final DateTime? initialDate;
   final DateTime? firstDate;
   final DateTime? lastDate;
-  final void Function(DateTime)? onDateSelected;
+  final void Function(DateTime selectedDate)? onDateSelected;
 
   @override
   State<SelectDate> createState() => _SelectDateState();

@@ -115,7 +115,8 @@ class AddProductState extends State<SellProductDialoge> {
 
   buildSaveButton(BuildContext context) {
     //PopupDialogs popups = ref.read(popupDialogs);
-    var sellActionsBloc = SellActionsBloc(GetIt.I<DatabaseOperations>());
+    var sellActionsBloc =
+        SellActionsBloc(databaseOperations: GetIt.I<DatabaseOperations>());
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,

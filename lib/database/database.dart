@@ -12,9 +12,12 @@ import 'package:hanouty/models/user/user_model.dart';
 import 'package:hanouty/components.dart';
 
 import '../models/expenses/expenses.dart';
+import '../models/recharge/recharge.dart';
 
 class DbTables {
   static const String products = ('Products');
+  static const String recharges = ('Recharges');
+  static const String rechargeSales = ('RechargeSales');
   static const String sales = ('Sales');
   static const String techServices = ('TechServices');
   static const String debts = ('Credits');
@@ -165,6 +168,24 @@ class Database {
         .then((value) => true)
         .catchError((error) => false);
   }
+
+  Future<bool> addRecharge(RechargeModel recharge) {
+    return users
+        .doc(uid)
+        .collection(DbTables.recharges)
+        .add(recharge.toMap())
+        .then((value) => true)
+        .catchError((error) => false);
+  }
+
+  Future<bool> addRechargeSale(RechargeSaleModel rechargeSale) {
+    return users
+        .doc(uid)
+        .collection(DbTables.rechargeSales)
+        .add(rechargeSale.toMap())
+        .then((value) => true)
+        .catchError((error) => false);
+  }
 // get from Firestore
 ////////////////////////
 ////////////////////////////
@@ -260,6 +281,20 @@ class Database {
     return users.doc(uid).collection(DbTables.expenses).snapshots().map(
         (QuerySnapshot query) => query.docs
             .map((element) => ExpenseModel.fromMap(element))
+            .toList(growable: true));
+  }
+
+  Stream<List<RechargeModel>> rechargeStream() {
+    return users.doc(uid).collection(DbTables.recharges).snapshots().map(
+        (QuerySnapshot query) => query.docs
+            .map((element) => RechargeModel.fromDocumentSnapshot(element))
+            .toList(growable: true));
+  }
+
+  Stream<List<RechargeSaleModel>> rechargeSaleStream() {
+    return users.doc(uid).collection(DbTables.rechargeSales).snapshots().map(
+        (QuerySnapshot query) => query.docs
+            .map((element) => RechargeSaleModel.fromDocument(element))
             .toList(growable: true));
   }
 
@@ -386,6 +421,30 @@ class Database {
         .catchError((error) => false);
   }
 
+  Future<bool> updateRecharge(
+    RechargeModel recharge,
+  ) {
+    return users
+        .doc(uid)
+        .collection(DbTables.recharges)
+        .doc(recharge.id)
+        .update(recharge.toMap())
+        .then((value) => true)
+        .catchError((error) => false);
+  }
+
+  Future<bool> updateRechargeSale(
+    RechargeSaleModel rechargeSale,
+  ) {
+    return users
+        .doc(uid)
+        .collection(DbTables.rechargeSales)
+        .doc(rechargeSale.id)
+        .update(rechargeSale.toMap())
+        .then((value) => true)
+        .catchError((error) => false);
+  }
+
   // delete in firestore
   /////////////////////
   /////////////////////
@@ -487,6 +546,26 @@ class Database {
         .doc(uid)
         .collection(DbTables.expenses)
         .doc(expense.id)
+        .delete()
+        .then((value) => true)
+        .catchError((error) => false);
+  }
+
+  Future<bool> deleteRecharge(RechargeModel recharge) {
+    return users
+        .doc(uid)
+        .collection(DbTables.recharges)
+        .doc(recharge.id)
+        .delete()
+        .then((value) => true)
+        .catchError((error) => false);
+  }
+
+  Future<bool> deleteRechargeSale(RechargeSaleModel rechargeSale) {
+    return users
+        .doc(uid)
+        .collection(DbTables.rechargeSales)
+        .doc(rechargeSale.id)
         .delete()
         .then((value) => true)
         .catchError((error) => false);

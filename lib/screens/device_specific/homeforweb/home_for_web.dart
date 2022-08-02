@@ -7,6 +7,7 @@ import '../../../blocs/fullsalesbloc/fullsales_bloc.dart';
 import '../../../blocs/incomebloc/income_bloc.dart';
 import '../../../blocs/paymentsbloc/payments_bloc.dart';
 import '../../../blocs/productbloc/product_bloc.dart';
+import '../../../blocs/rechargebloc/fullrechargesales_bloc.dart';
 import '../../../blocs/salesbloc/sales_bloc.dart';
 import '../../../blocs/sellactionsbloc/sellactions_bloc.dart';
 import '../../../blocs/suplierbloc/suplier_bloc.dart';
@@ -49,7 +50,8 @@ class HomeForAll extends StatelessWidget {
                   ..add(GetProductsEvent()),
           ),
           BlocProvider(
-            create: (context) => SellActionsBloc(GetIt.I<DatabaseOperations>()),
+            create: (context) => SellActionsBloc(
+                databaseOperations: GetIt.I<DatabaseOperations>()),
           ),
           BlocProvider(
             create: (context) =>
@@ -65,6 +67,11 @@ class HomeForAll extends StatelessWidget {
             create: (context) =>
                 DebtBloc(databaseOperations: GetIt.I<DatabaseOperations>())
                   ..add(GetDebtEvent()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                RechargeBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                  ..add(GetFullRechargeSalesEvent()),
           ),
           BlocProvider(
             create: (context) =>

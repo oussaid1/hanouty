@@ -51,6 +51,12 @@ class NavMenu extends ConsumerWidget {
                   label: Text('Sales'),
                 ),
                 NavigationRailDestination(
+                  icon: Icon(
+                    FontAwesomeIcons.squarePhone,
+                  ),
+                  label: Text('Recharges'),
+                ),
+                NavigationRailDestination(
                   icon: Icon(FontAwesomeIcons.moneyCheckDollar),
                   label: Text('Debt'),
                 ),
@@ -103,18 +109,21 @@ void _onTap(BuildContext context, int index) {
       GlobalFunctions.pushNamed(context, '/sales');
       break;
     case 3:
-      GlobalFunctions.pushNamed(context, '/debts');
+      GlobalFunctions.pushNamed(context, '/recharges');
       break;
     case 4:
-      GlobalFunctions.pushNamed(context, '/income');
+      GlobalFunctions.pushNamed(context, '/debts');
       break;
     case 5:
-      GlobalFunctions.pushNamed(context, '/expenses');
+      GlobalFunctions.pushNamed(context, '/income');
       break;
     case 6:
-      GlobalFunctions.pushNamed(context, '/people');
+      GlobalFunctions.pushNamed(context, '/expenses');
       break;
     case 7:
+      GlobalFunctions.pushNamed(context, '/people');
+      break;
+    case 8:
       GlobalFunctions.pushNamed(context, '/settings');
       break;
     default:

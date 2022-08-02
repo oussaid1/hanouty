@@ -61,6 +61,9 @@ class IncomeListWidget extends StatelessWidget {
                         child: SearchByWidget(
                           listOfCategories: filteredIncomes.distinctCategories,
                           onSearchTextChanged: (txt) {},
+                          onBothChanged: (catg, txt) {
+                            // filteredIncomes.filterByCategory(catg);
+                          },
                         )),
                   ),
                   SliverList(

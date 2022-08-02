@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
+import 'package:hanouty/screens/recharge/reachrge_tab.dart';
 
 import '../screens/add_tostock/stock_screen_tab.dart';
 import '../screens/client/people_tab.dart';
@@ -11,7 +12,6 @@ import '../screens/income/income_tab.dart';
 import '../screens/sales/sales_tab.dart';
 import '../screens/splash/splash_login_signup.dart';
 import '../settings/settings.dart';
-import '../widgets/sidemenu/shared_menu_items.dart';
 
 class RouteGenerator {
   static const String root = "/";
@@ -20,6 +20,7 @@ class RouteGenerator {
   static const String stock = "/stock";
   static const String sales = "/sales";
   static const String debts = "/debts";
+  static const String recharges = "/recharges";
   static const String income = "/income";
   static const String expenses = "/expenses";
   static const String people = "/people";
@@ -60,6 +61,11 @@ class RouteGenerator {
           return const HomeForAll(
             title: 'sales',
             centreWidget: SalesTab(),
+          );
+        case recharges:
+          return const HomeForAll(
+            title: 'recharges',
+            centreWidget: RechargeTab(),
           );
         case debts:
           return const HomeForAll(

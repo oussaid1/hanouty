@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:hanouty/models/recharge/recharge.dart';
 
 import 'package:hanouty/models/user/user_model.dart';
 
@@ -207,6 +208,37 @@ class DatabaseOperations implements Database {
   Future<bool> updateProductQuantity(
           {required String productId, required int quantity}) =>
       _database.updateProductQuantity(productId: productId, quantity: quantity);
+
+  @override
+  Future<bool> addRecharge(RechargeModel recharge) =>
+      _database.addRecharge(recharge);
+
+  @override
+  Future<bool> addRechargeSale(RechargeSaleModel rechargeSale) =>
+      _database.addRechargeSale(rechargeSale);
+
+  @override
+  Future<bool> deleteRecharge(RechargeModel recharge) =>
+      _database.deleteRecharge(recharge);
+
+  @override
+  Future<bool> deleteRechargeSale(RechargeSaleModel rechargeSale) =>
+      _database.deleteRechargeSale(rechargeSale);
+
+  @override
+  Stream<List<RechargeSaleModel>> rechargeSaleStream() =>
+      _database.rechargeSaleStream();
+
+  @override
+  Stream<List<RechargeModel>> rechargeStream() => _database.rechargeStream();
+
+  @override
+  Future<bool> updateRecharge(RechargeModel recharge) =>
+      _database.updateRecharge(recharge);
+
+  @override
+  Future<bool> updateRechargeSale(RechargeSaleModel rechargeSale) =>
+      _database.updateRechargeSale(rechargeSale);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

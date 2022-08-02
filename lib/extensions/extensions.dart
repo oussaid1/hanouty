@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../models/models.dart';
+import '../models/recharge/recharge.dart';
 
 extension Neumorphism on Widget {
   addNeumorphism({
@@ -189,5 +190,27 @@ extension SaleListExtension on List<SaleModel> {
       }
     }
     return sales;
+  }
+}
+
+extension RechargeSaleListExtension on List<RechargeSaleModel> {
+  List<RechargeSaleModel> buildRechargeSalesList(
+      List<RechargeModel> rechargeModelList) {
+    List<RechargeSaleModel> combinedList = [];
+    for (RechargeSaleModel rechargeSale in this) {
+      for (RechargeModel recharge in rechargeModelList) {
+        if (rechargeSale.soldRchrgId == recharge.id) {
+          combinedList.add(RechargeSaleModel(
+            clntID: rechargeSale.clntID,
+            rSId: rechargeSale.rSId,
+            qnttSld: rechargeSale.qnttSld,
+            dateSld: rechargeSale.dateSld,
+            soldRchrgId: rechargeSale.soldRchrgId,
+            rechargeModel: recharge,
+          ));
+        }
+      }
+    }
+    return combinedList;
   }
 }

@@ -12,8 +12,9 @@ part 'sellactions_state.dart';
 
 class SellActionsBloc extends Bloc<SellingactionsEvent, SellActionsState> {
   late final DatabaseOperations _databaseOperations;
-  SellActionsBloc(DatabaseOperations dbOp) : super(SellactionsInitial()) {
-    _databaseOperations = dbOp;
+  SellActionsBloc({required DatabaseOperations databaseOperations})
+      : super(SellactionsInitial()) {
+    _databaseOperations = databaseOperations;
     on<SellingRequestedEvent>(_onSellRequested);
     on<UnsellingRequested>(_onUnsellRequested);
     on<SellServiceRequestedEvent>(_onSellServiceRequested);

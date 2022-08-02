@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
 import '../../blocs/clientsbloc/clients_bloc.dart';
+import '../../blocs/rechargebloc/fullrechargesales_bloc.dart';
 import '../../database/database_operations.dart';
 import '../client/add_client.dart';
 import '../debt/add_debt.dart';
@@ -8,6 +9,7 @@ import '../debt/add_payment.dart';
 import '../expenses/add_expense.dart';
 import '../income/add_income.dart';
 import '../product/add_product.dart';
+import '../recharge/add_recharge.dart';
 import '../techservice/add_service.dart';
 import '../../../blocs/clientsbloc/clients_bloc.dart';
 import '../../../blocs/datefilterbloc/date_filter_bloc.dart';
@@ -36,7 +38,8 @@ class AddFabWidget extends StatelessWidget {
               ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
         ),
         BlocProvider(
-          create: (context) => SellActionsBloc(GetIt.I<DatabaseOperations>()),
+          create: (context) => SellActionsBloc(
+              databaseOperations: GetIt.I<DatabaseOperations>()),
         ),
         BlocProvider(
           create: (context) =>
@@ -46,6 +49,11 @@ class AddFabWidget extends StatelessWidget {
         //   create: (context) =>
         //       FullSalesBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
         // ),
+        BlocProvider(
+          create: (context) =>
+              RechargeBloc(databaseOperations: GetIt.I<DatabaseOperations>())
+                ..add(GetFullRechargeSalesEvent()),
+        ),
         BlocProvider(
           create: (context) =>
               DebtBloc(databaseOperations: GetIt.I<DatabaseOperations>()),
@@ -97,6 +105,12 @@ class AddStuffWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         buildExpandedFab(context, title: "Client", child: const AddClient()),
+        const SizedBox(height: 10),
+        buildExpandedFab(context,
+            title: "Recharge",
+            child: const AddRechargeWidget(
+                // recharge: RechargeModel.fakeData[1],
+                )),
         const SizedBox(height: 10),
 
         /// commented this beacasue it's not yet implemented in the app , but it's here for future use
