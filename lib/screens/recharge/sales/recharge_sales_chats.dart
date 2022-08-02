@@ -105,7 +105,7 @@ class RechargeSalePieChart extends StatelessWidget {
           dataSource: data,
           pointColorMapper: (RechargeSaleChartData data, _) => data.color,
           xValueMapper: (RechargeSaleChartData data, _) => data.label as String,
-          yValueMapper: (RechargeSaleChartData data, _) => data.quantitySold,
+          yValueMapper: (RechargeSaleChartData data, _) => data.netProfit,
           dataLabelMapper: (RechargeSaleChartData data, _) => data.label,
           enableTooltip: true,
           dataLabelSettings: const DataLabelSettings(

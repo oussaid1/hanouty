@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hanouty/blocs/bloc/sellactionsrecharge_bloc.dart';
 import '../../../blocs/clientsbloc/clients_bloc.dart';
 import '../../../blocs/datefilterbloc/date_filter_bloc.dart';
 import '../../../blocs/debtbloc /debt_bloc.dart';
@@ -44,15 +45,15 @@ class HomeForAll extends StatelessWidget {
       //  / color: Colors.transparent),
       child: MultiBlocProvider(
         providers: [
+          /////////////////////////////////////////////////////////////////////////////////
+          /////                          Product Blocs                                                ////
           BlocProvider(
             create: (context) =>
                 ProductBloc(databaseOperations: GetIt.I<DatabaseOperations>())
                   ..add(GetProductsEvent()),
           ),
-          BlocProvider(
-            create: (context) => SellActionsBloc(
-                databaseOperations: GetIt.I<DatabaseOperations>()),
-          ),
+          /////////////////////////////////////////////////////////////////////////////////
+
           BlocProvider(
             create: (context) =>
                 SalesBloc(databaseOperations: GetIt.I<DatabaseOperations>())
@@ -103,10 +104,24 @@ class HomeForAll extends StatelessWidget {
                 PaymentsBloc(databaseOperations: GetIt.I<DatabaseOperations>())
                   ..add(GetPaymentsEvent()),
           ),
+          /////////////////////////////////////////////////////////////////////////////////
+          //////////////   Variables Blocs //////////////////////////////////////////////////
           BlocProvider(
             create: (context) => DateFilterBloc()
               ..add(const UpdateFilterEvent(filterType: DateFilter.all)),
           ),
+          ////////////////////////////////////////////////////////////////////////////////
+          ///////////////////Selling Blocs ////////////////////////////////////////////////
+          BlocProvider(
+            create: (context) => SellActionsBloc(
+                databaseOperations: GetIt.I<DatabaseOperations>()),
+          ),
+          BlocProvider(
+            create: (context) => SellActionsRechargeBloc(
+                databaseOperations: GetIt.I<DatabaseOperations>()),
+          ),
+          ////////////////////////////////////////////////////////////////////////////////
+          ////////////////////////////////////////////////////////////////////////////////
         ],
         child: Scaffold(
           backgroundColor: Colors.transparent,

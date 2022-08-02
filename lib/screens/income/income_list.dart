@@ -60,8 +60,7 @@ class IncomeListWidget extends StatelessWidget {
                         height: 120,
                         child: SearchByWidget(
                           listOfCategories: filteredIncomes.distinctCategories,
-                          onSearchTextChanged: (txt) {},
-                          onBothChanged: (catg, txt) {
+                          onChanged: (catg, txt) {
                             // filteredIncomes.filterByCategory(catg);
                           },
                         )),

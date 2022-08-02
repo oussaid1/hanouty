@@ -43,7 +43,7 @@ class StockInventory extends StatelessWidget {
         );
         return BluredContainer(
           width: 420,
-          height: 200,
+          height: 300,
           child: Column(
             children: [
               Padding(

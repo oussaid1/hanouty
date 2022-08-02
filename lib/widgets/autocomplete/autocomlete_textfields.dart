@@ -165,7 +165,7 @@ class ClientsAutocompleteWidget extends StatelessWidget {
             ..add(
               GetShopClientsEvent(),
             ),
-      child: ClientAutocompleteInputField(
+      child: _ClientAutocompleteInputField(
         onChanged: onChanged,
         initialValue: initialValue,
       ),
@@ -174,11 +174,11 @@ class ClientsAutocompleteWidget extends StatelessWidget {
   }
 }
 
-class ClientAutocompleteInputField extends StatefulWidget {
+class _ClientAutocompleteInputField extends StatefulWidget {
   final Function(ShopClientModel) onChanged;
   //final String? Function(String?)? validator;
   final ShopClientModel? initialValue;
-  const ClientAutocompleteInputField({
+  const _ClientAutocompleteInputField({
     Key? key,
     required this.onChanged,
     this.initialValue,
@@ -188,12 +188,12 @@ class ClientAutocompleteInputField extends StatefulWidget {
 //  static String _displayStringForOption(User option) => option.name;
 
   @override
-  State<ClientAutocompleteInputField> createState() =>
+  State<_ClientAutocompleteInputField> createState() =>
       _ClientAutocompleteInputFieldState();
 }
 
 class _ClientAutocompleteInputFieldState
-    extends State<ClientAutocompleteInputField> {
+    extends State<_ClientAutocompleteInputField> {
   ShopClientModel? client;
   @override
   void initState() {

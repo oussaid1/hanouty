@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hanouty/local_components.dart';
 
 enum RechargeOperator {
   orange,
@@ -48,7 +49,7 @@ class RechargeModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
+      if (id != null) 'id': id,
       'oprtr': oprtr.toString(),
       'percntg': percntg,
       'amount': amount,
@@ -58,26 +59,28 @@ class RechargeModel {
   }
 
   factory RechargeModel.fromMap(Map<String, dynamic> map) {
-    return RechargeModel(
+    var ob = RechargeModel(
       id: map['id'],
-      oprtr: map['oprtr'],
-      percntg: map['percntg'] as double,
-      amount: map['amount'] as double,
-      qntt: map['qnt'] as num,
-      date: map['date'] as DateTime,
+      oprtr: map['oprtr'].toString().toRechargeOperator(),
+      percntg: map['percntg'] ?? 0.0,
+      amount: map['amount'] ?? 0.0,
+      qntt: map['qnt'] ?? 0,
+      date: map['date'].toDate(),
     );
+    return ob;
   }
 
   /// from documentsnapshot
   factory RechargeModel.fromDocumentSnapshot(DocumentSnapshot doc) {
-    return RechargeModel(
+    var r = RechargeModel(
       id: doc.id,
-      oprtr: doc['oprtr'],
-      percntg: doc['percntg'] as double,
-      amount: doc['amount'] as double,
-      qntt: doc['qnt'] as num,
-      date: doc['date'] as DateTime,
+      oprtr: doc['oprtr'].toString().toRechargeOperator(),
+      percntg: doc['percntg'] ?? 0,
+      amount: doc['amount'] ?? 0,
+      qntt: doc['qnt'] ?? 0,
+      date: doc['date'].toDate(),
     );
+    return r;
   }
   String toJson() => json.encode(toMap());
 
@@ -92,6 +95,12 @@ class RechargeModel {
 //////////////////////////////////////////////////// get the recharge amount for a given amount
   num get netProfit {
     return (amount * percntg) / 100;
+  }
+
+  /// get total amount of the sale of the recharge
+  /// @return num [amount * quantitySold]total amount of the sale of the recharge
+  num get totalAmount {
+    return amount * qntt;
   }
 
   /// get color acording to the operator
@@ -198,22 +207,22 @@ class RechargeSaleModel extends RechargeModel {
 
   factory RechargeSaleModel.fromDocument(DocumentSnapshot map) {
     return RechargeSaleModel(
-      clntID: map['clntID'],
-      soldRchrgId: map['soldRchrgId'],
-      rSId: map['rchgSlId'],
-      qnttSld: map['qnttSld'] as num,
-      dateSld: map['dateSld'] as DateTime,
+      rSId: map.id,
+      soldRchrgId: map['soldRchrgId'] ?? '',
+      clntID: map['clntID'] ?? '',
+      qnttSld: map['qnttSld'] ?? 0,
+      dateSld: map['dateSld'].toDate(),
     );
   }
 
   /// fromMap()
   factory RechargeSaleModel.fromMap(Map<String, dynamic> map) {
     return RechargeSaleModel(
-      clntID: map['clntID'],
-      soldRchrgId: map['soldRchrgId'],
-      rSId: map['rchgSlId'],
-      qnttSld: map['qnttSld'] as num,
-      dateSld: map['dateSld'] as DateTime,
+      rSId: map['rchgSlId'] ?? '',
+      clntID: map['clntID'] ?? '',
+      soldRchrgId: map['soldRchrgId'] ?? '',
+      qnttSld: map['qnttSld'] ?? 0,
+      dateSld: map['dateSld']?.toDate(),
     );
   }
 
@@ -229,7 +238,5 @@ class RechargeSaleModel extends RechargeModel {
 ///////////////////////////////////////////////////////////
   /// get total amount of the sale of the recharge
   /// @return num [amount * quantitySold]total amount of the sale of the recharge
-  num get totalAmount {
-    return amount * qnttSld;
-  }
+
 }

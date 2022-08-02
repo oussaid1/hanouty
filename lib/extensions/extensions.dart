@@ -169,6 +169,21 @@ extension Ex on double {
       double.parse(toStringAsFixed(digitsAfter));
 }
 
+extension EnumExtension on String {
+  RechargeOperator toRechargeOperator() {
+    switch (this) {
+      case 'RechargeOperator.orange':
+        return RechargeOperator.orange;
+      case 'RechargeOperator.inwi':
+        return RechargeOperator.inwi;
+      case 'RechargeOperator.iam':
+        return RechargeOperator.iam;
+      default:
+        return RechargeOperator.inwi;
+    }
+  }
+}
+
 extension SaleListExtension on List<SaleModel> {
   List<SaleModel> buildSalesList(List<ProductModel> productModels) {
     List<SaleModel> sales = [];
@@ -200,6 +215,7 @@ extension RechargeSaleListExtension on List<RechargeSaleModel> {
     for (RechargeSaleModel rechargeSale in this) {
       for (RechargeModel recharge in rechargeModelList) {
         if (rechargeSale.soldRchrgId == recharge.id) {
+          log('recharge found');
           combinedList.add(RechargeSaleModel(
             clntID: rechargeSale.clntID,
             rSId: rechargeSale.rSId,

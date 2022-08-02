@@ -1,56 +1,37 @@
 part of 'sellactions_bloc.dart';
 
-abstract class SellActionsState extends Equatable {
-  const SellActionsState();
-
-  @override
-  List<Object> get props => [];
+enum SellActionsStatus {
+  initial,
+  sellig,
+  sold,
+  unselling,
+  unsold,
+  error,
 }
 
-/// intial state
-class SellactionsInitial extends SellActionsState {}
+class SellActionsState extends Equatable {
+  const SellActionsState({
+    this.status = SellActionsStatus.initial,
+    this.soldProduct,
+    this.errorMessage,
+  });
+  final ProductModel? soldProduct;
+  final String? errorMessage;
+  final SellActionsStatus status;
 
-/// selling state
-class SellingState extends SellActionsState {}
-
-/// selling successful state
-class SellingSuccessfulState extends SellActionsState {
-  final ProductModel soldProduct;
-
-  const SellingSuccessfulState(this.soldProduct);
-
-  @override
-  List<Object> get props => [soldProduct];
-}
-
-/// selling failed state
-class SellingFailedState extends SellActionsState {
-  final String errorMessage;
-  final ProductModel unsoldProduct;
-
-  const SellingFailedState(this.errorMessage, this.unsoldProduct);
-
-  @override
-  List<Object> get props => [errorMessage];
-}
-
-/// unselling successfull state
-class UnsellingSuccessfulState extends SellActionsState {
-  final SaleModel saleModel;
-
-  const UnsellingSuccessfulState(this.saleModel);
+  /// copywith
+  SellActionsState copyWith({
+    SellActionsStatus? status,
+    ProductModel? soldProduct,
+    String? errorMessage,
+  }) {
+    return SellActionsState(
+      status: status ?? this.status,
+      soldProduct: soldProduct ?? this.soldProduct,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
 
   @override
-  List<Object> get props => [saleModel];
-}
-
-/// unselling failed state
-class UnsellingFailedState extends SellActionsState {
-  final String errorMessage;
-  final SaleModel saleModel;
-
-  const UnsellingFailedState(this.errorMessage, this.saleModel);
-
-  @override
-  List<Object> get props => [errorMessage];
+  List<Object> get props => [status];
 }

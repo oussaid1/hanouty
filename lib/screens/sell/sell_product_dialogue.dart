@@ -146,7 +146,7 @@ class AddProductState extends State<SellProductDialoge> {
 
                     if (_isProduct) {
                       sellActionsBloc.add(
-                        SellingRequestedEvent(
+                        SellProductRequestedEvent(
                           productModel: widget.product,
                           saleModel: sale,
                         ),

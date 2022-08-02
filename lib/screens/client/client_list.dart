@@ -54,10 +54,9 @@ class _ShopClientsListState extends State<ShopClientsList> {
                         "Phone",
                         "Email",
                       ],
-                      onBothChanged: (cat, txt) {},
-                      onSearchTextChanged: (text) {
+                      onChanged: (cat, txt) {
                         setState(() {
-                          filter = text;
+                          filter = txt;
                         });
                       }),
                   const SizedBox(height: 20),

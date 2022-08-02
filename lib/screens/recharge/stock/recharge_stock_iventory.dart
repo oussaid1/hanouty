@@ -18,7 +18,7 @@ class RechargeOverAllWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BluredContainer(
       width: 420,
-      height: 270,
+      height: 300,
       child: Column(
         children: [
           Padding(
@@ -47,7 +47,7 @@ class RechargeOverAllWidget extends StatelessWidget {
                 horizontalMargin: 10,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color.fromARGB(129, 255, 255, 255),
+                  color: const Color.fromARGB(129, 255, 255, 255),
                 ),
                 columns: [
                   const DataColumn(
@@ -67,7 +67,7 @@ class RechargeOverAllWidget extends StatelessWidget {
                   ),
                   DataColumn(
                     label: Text(
-                      data[2].label!.toUpperCase(),
+                      data[1].label!.toUpperCase(),
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                             fontWeight: FontWeight.bold,
                             color: RechargeModel.orange,
@@ -104,6 +104,7 @@ class RechargeOverAllWidget extends StatelessWidget {
                     value1: data[0].quantity,
                     value2: data[1].quantity,
                     value3: data[2].quantity,
+                    withDollarSign: false,
                     cellStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
                           fontWeight: FontWeight.bold,
                           // color: AppConstants.whiteOpacity,
@@ -115,6 +116,7 @@ class RechargeOverAllWidget extends StatelessWidget {
                     value1: data[0].total,
                     value2: data[1].total,
                     value3: data[2].total,
+                    withDollarSign: true,
                     cellStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
                           fontWeight: FontWeight.bold,
                           //color: AppConstants.whiteOpacity,
@@ -126,6 +128,7 @@ class RechargeOverAllWidget extends StatelessWidget {
                     value1: data[0].netProfit,
                     value2: data[1].netProfit,
                     value3: data[2].netProfit,
+                    withDollarSign: true,
                     cellStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
                           fontWeight: FontWeight.bold,
                           //color: AppConstants.whiteOpacity,

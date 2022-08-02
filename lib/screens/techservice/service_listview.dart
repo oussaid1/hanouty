@@ -31,12 +31,11 @@ class TechServiceListViewState extends State<TechServiceListView> {
           child: SearchByWidget(
             listOfCategories: Category.categoriesStrings,
             withCategory: true,
-            onSearchTextChanged: (value) {
+            onChanged: (value, category) {
               setState(() {
                 fltr = value;
               });
             },
-            onBothChanged: (value, category) {},
           ),
         ),
         SliverList(

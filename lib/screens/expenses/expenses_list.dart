@@ -57,8 +57,7 @@ class ExpensesListWidget extends ConsumerWidget {
                       height: 120,
                       child: SearchByWidget(
                         listOfCategories: const [],
-                        onSearchTextChanged: (String search) {},
-                        onBothChanged: (String catg, String search) {},
+                        onChanged: (String catg, String search) {},
                       ),
                     ),
                   ),

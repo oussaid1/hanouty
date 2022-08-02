@@ -140,14 +140,11 @@ class _DebtListState extends State<_DebtList> {
                       child: SearchByWidget(
                         listOfCategories: ProductModel.fieldStrings,
                         withCategory: false,
-                        onSearchTextChanged: (String text) {
-                          log('search text: $text');
+                        onChanged: (String category, String text) {
+                          log('both: , ');
                           setState(() {
                             filter = text;
                           });
-                        },
-                        onBothChanged: (String category, String text) {
-                          log('both: , ');
                           //_data!.filterByCategory(category, text);
                         },
                       ),

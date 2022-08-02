@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:hanouty/blocs/bloc/sellactionsrecharge_bloc.dart';
 import 'package:hanouty/components.dart';
 import 'package:hanouty/widgets/autocomplete/autocomlete_textfields.dart';
-import '../../blocs/sellactionsbloc/sellactions_bloc.dart';
 import '../../database/database_operations.dart';
 import '../../local_components.dart';
 import '../../models/recharge/recharge.dart';
@@ -38,8 +38,6 @@ class SellRechargeStateWidget extends State<SellRechargeWidget> {
   String clientId = "";
   DateTime _date = DateTime.now();
   num quantity = 1;
-  RechargeModel? recharge;
-  String _rechargeId = "";
 
   ////////////////////////////////////////////////////////////////////////////////
   bool _canSave = false;
@@ -53,7 +51,6 @@ class SellRechargeStateWidget extends State<SellRechargeWidget> {
       quantity = widget.rechargeSale!.qnttSld;
       clientId = widget.rechargeSale!.clntID!;
       oprtr = widget.rechargeSale!.oprtr;
-      _rechargeId = widget.rechargeSale!.soldRchrgId!;
     } else {
       if (widget.recharge != null) {
         _date = widget.recharge!.date;
@@ -91,8 +88,8 @@ class SellRechargeStateWidget extends State<SellRechargeWidget> {
   }
 
   buildSaveButton(BuildContext context) {
-    var sellActionsBloc =
-        SellActionsBloc(databaseOperations: GetIt.I<DatabaseOperations>());
+    var sellActionsBloc = SellActionsRechargeBloc(
+        databaseOperations: GetIt.I<DatabaseOperations>());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -122,17 +119,18 @@ class SellRechargeStateWidget extends State<SellRechargeWidget> {
                       setState(() {
                         _canSave = false;
                       });
-                      final recharge = RechargeSaleModel(
+                      final rechargeSale = RechargeSaleModel(
                         dateSld: _date,
                         qnttSld: quantity,
-                        soldRchrgId: _rechargeId,
+                        soldRchrgId: widget.recharge!.id,
                         clntID: clientId,
                       );
-                      log('${recharge.toMap()}');
-                      // sellActionsBloc.add(_isUpdate
-                      //     ? UpdateDebtEvent(debt)
-                      //     : AddDebtEvent(debt));
-                      // // Navigator.pop(context);
+                      log('sell not update ${rechargeSale.toMap()}');
+                      sellActionsBloc.add(SellRechargeRequestedEvent(
+                        rechargeModel: widget.recharge!,
+                        rechargeSaleModel: rechargeSale,
+                      ));
+                      Navigator.pop(context);
                     }
                   },
             child: Text(_isUpdate ? "Update" : "Save").tr()),
@@ -150,7 +148,7 @@ class SellRechargeStateWidget extends State<SellRechargeWidget> {
   }
 
   _buildClientName() {
-    return ClientAutocompleteInputField(
+    return ClientsAutocompleteWidget(
       //initialValue: clientId,
       // validator: (client) {
       //   if (client == null) {

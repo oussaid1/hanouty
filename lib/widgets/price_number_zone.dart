@@ -29,6 +29,14 @@ class PriceNumberZone extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          Text(
+            withDollarSign ? price.toStringAsFixed(2) : price.toString(),
+            textAlign: textAlign,
+            style: priceStyle ??
+                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    // color: context.theme.onSecondaryContainer,
+                    ),
+          ),
           withDollarSign
               ? Consumer(builder: (context, ref, _) {
                   const currency = '\$';
@@ -45,14 +53,6 @@ class PriceNumberZone extends StatelessWidget {
                   );
                 })
               : const SizedBox.shrink(),
-          Text(
-            '$price',
-            textAlign: textAlign,
-            style: priceStyle ??
-                Theme.of(context).textTheme.bodyLarge!.copyWith(
-                    // color: context.theme.onSecondaryContainer,
-                    ),
-          ),
         ],
       ),
     );

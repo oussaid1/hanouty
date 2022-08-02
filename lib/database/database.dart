@@ -324,6 +324,17 @@ class Database {
         .catchError((error) => false);
   }
 
+  Future<bool> updateRechargeQuantity(
+      {required String rechargeId, required num qntty}) {
+    return users
+        .doc(uid!)
+        .collection(DbTables.recharges)
+        .doc(rechargeId.trim())
+        .set({'qnt': qntty}, SetOptions(merge: true))
+        .then((value) => true)
+        .catchError((error) => false);
+  }
+
   Future<bool> updateSale(
     SaleModel sale,
   ) {

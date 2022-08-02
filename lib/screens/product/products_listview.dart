@@ -66,12 +66,12 @@ class ProductList extends ConsumerWidget {
             ),
             BlocListener<SellActionsBloc, SellActionsState>(
               listener: (context, state) {
-                if (state is SellingSuccessfulState) {
+                if (state.status == SellActionsStatus.sold) {
                   GlobalFunctions.showSuccessSnackBar(
                       context, 'Successfully Sold '.tr());
                 }
 
-                if (state is SellingFailedState) {
+                if (state.status == SellActionsStatus.error) {
                   GlobalFunctions.showErrorSnackBar(
                       context, 'Error selling product'.tr());
                 }

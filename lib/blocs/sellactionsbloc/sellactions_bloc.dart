@@ -13,17 +13,19 @@ part 'sellactions_state.dart';
 class SellActionsBloc extends Bloc<SellingactionsEvent, SellActionsState> {
   late final DatabaseOperations _databaseOperations;
   SellActionsBloc({required DatabaseOperations databaseOperations})
-      : super(SellactionsInitial()) {
+      : super(const SellActionsState(
+          status: SellActionsStatus.initial,
+        )) {
     _databaseOperations = databaseOperations;
-    on<SellingRequestedEvent>(_onSellRequested);
-    on<UnsellingRequested>(_onUnsellRequested);
+    on<SellProductRequestedEvent>(_onSellRequested);
+    on<UnsellProductRequestedEvent>(_onUnsellRequested);
     on<SellServiceRequestedEvent>(_onSellServiceRequested);
     on<UnsellServiceRequestedEvent>(_onUnsellServiceRequested);
   }
 
   /// on Sell Requested
   Future<void> _onSellRequested(
-      SellingRequestedEvent event, Emitter<SellActionsState> emit) async {
+      SellProductRequestedEvent event, Emitter<SellActionsState> emit) async {
     log('Selling Requested');
     try {
       var success = await _databaseOperations.addSale(event.saleModel);
@@ -33,30 +35,53 @@ class SellActionsBloc extends Bloc<SellingactionsEvent, SellActionsState> {
             productId: event.productModel.pId!,
             quantity: event.saleModel.reducedQuantity);
 
-        emit(SellingSuccessfulState(event.productModel));
+        emit(SellActionsState(
+          soldProduct: event.productModel,
+          status: SellActionsStatus.sold,
+        ));
       }
     } catch (e) {
       log('Selling Requested Error: $e');
-      emit(SellingFailedState(e.toString(), event.productModel));
+      emit(
+        SellActionsState(
+          status: SellActionsStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
     //log('Selling Requested Success');
   }
 
   /// on unsell requested
   Future<void> _onUnsellRequested(
-      UnsellingRequested event, Emitter<SellActionsState> emit) async {
+      UnsellProductRequestedEvent event, Emitter<SellActionsState> emit) async {
     try {
       bool success = await _databaseOperations.deleteSale(event.saleModel);
       if (success) {
         await _databaseOperations.updateProductQuantity(
             productId: event.saleModel.pId!,
             quantity: event.saleModel.totalQuantity);
-        emit(UnsellingSuccessfulState(event.saleModel));
+        emit(
+          SellActionsState(
+            status: SellActionsStatus.unsold,
+            soldProduct: event.saleModel,
+          ),
+        );
       } else {
-        emit(UnsellingFailedState('Unselling Failed', event.saleModel));
+        emit(
+          const SellActionsState(
+            status: SellActionsStatus.error,
+            errorMessage: 'Unsell Failed',
+          ),
+        );
       }
     } catch (e) {
-      emit(UnsellingFailedState(e.toString(), event.saleModel));
+      emit(
+        SellActionsState(
+          status: SellActionsStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -66,12 +91,27 @@ class SellActionsBloc extends Bloc<SellingactionsEvent, SellActionsState> {
     try {
       bool success = await _databaseOperations.addSale(event.saleModel);
       if (success) {
-        emit(SellingSuccessfulState(event.saleModel));
+        emit(
+          SellActionsState(
+            status: SellActionsStatus.sold,
+            soldProduct: event.saleModel,
+          ),
+        );
       } else {
-        emit(SellingFailedState('Selling Failed', event.saleModel));
+        emit(
+          const SellActionsState(
+            status: SellActionsStatus.error,
+            errorMessage: 'Sell Service Failed',
+          ),
+        );
       }
     } catch (e) {
-      emit(SellingFailedState(e.toString(), event.saleModel));
+      emit(
+        SellActionsState(
+          status: SellActionsStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -81,12 +121,27 @@ class SellActionsBloc extends Bloc<SellingactionsEvent, SellActionsState> {
     try {
       bool success = await _databaseOperations.deleteSale(event.saleModel);
       if (success) {
-        emit(UnsellingSuccessfulState(event.saleModel));
+        emit(
+          SellActionsState(
+            status: SellActionsStatus.unsold,
+            soldProduct: event.saleModel,
+          ),
+        );
       } else {
-        emit(UnsellingFailedState('Unselling Failed', event.saleModel));
+        emit(
+          const SellActionsState(
+            status: SellActionsStatus.error,
+            errorMessage: 'Unsell Service Failed',
+          ),
+        );
       }
     } catch (e) {
-      emit(UnsellingFailedState(e.toString(), event.saleModel));
+      emit(
+        SellActionsState(
+          status: SellActionsStatus.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

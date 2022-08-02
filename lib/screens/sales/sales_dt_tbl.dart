@@ -65,8 +65,7 @@ class _SalesDataTableState extends State<SalesDataTable> {
               SearchByWidget(
                 listOfCategories: ProductModel.fieldStrings,
                 withCategory: true,
-                onSearchTextChanged: (String text) {},
-                onBothChanged: (String category, String text) {
+                onChanged: (String category, String text) {
                   _data!.filterByCategory(category, text);
                 },
               ),
@@ -189,7 +188,7 @@ class _SalesDataTableState extends State<SalesDataTable> {
             ),
             onPressed: () {
               BlocProvider.of<SellActionsBloc>(context)
-                  .add(UnsellingRequested(saleModel: saleModel));
+                  .add(UnsellProductRequestedEvent(saleModel: saleModel));
               Navigator.pop(context);
             },
           ),

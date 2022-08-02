@@ -8,11 +8,11 @@ abstract class SellingactionsEvent extends Equatable {
 }
 
 /// selling requested event
-class SellingRequestedEvent extends SellingactionsEvent {
+class SellProductRequestedEvent extends SellingactionsEvent {
   final SaleModel saleModel;
   final ProductModel productModel;
   int get reducedQuantity => productModel.quantity - saleModel.quantitySold;
-  const SellingRequestedEvent(
+  const SellProductRequestedEvent(
       {required this.saleModel, required this.productModel});
 
   @override
@@ -57,10 +57,10 @@ class UnsellServiceRequestedEvent extends SellingactionsEvent {
 // }
 
 /// unselling requested event
-class UnsellingRequested extends SellingactionsEvent {
+class UnsellProductRequestedEvent extends SellingactionsEvent {
   final SaleModel saleModel;
 
-  const UnsellingRequested({required this.saleModel});
+  const UnsellProductRequestedEvent({required this.saleModel});
 
   @override
   List<Object> get props => [saleModel];

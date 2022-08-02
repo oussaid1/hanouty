@@ -7,19 +7,15 @@ import '../components.dart';
 class SearchByWidget extends StatefulWidget {
   final bool withCategory;
   final List<String> listOfCategories;
-  final void Function(String)? onChanged;
   final String? initialCategoryValue;
-  final void Function(String searchText) onSearchTextChanged;
-  final void Function(String catg, String searchText) onBothChanged;
+  final void Function(String catg, String searchText) onChanged;
 
   //final String searchText;
   const SearchByWidget({
     Key? key,
     this.withCategory = false,
     required this.listOfCategories,
-    this.onChanged,
-    required this.onSearchTextChanged,
-    required this.onBothChanged,
+    required this.onChanged,
 
     /// required this.searchText,
     this.initialCategoryValue,
@@ -34,13 +30,15 @@ class _SearchByWidgetState extends State<SearchByWidget> {
   String? selectedCategory;
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        (widget.withCategory)
-            ? SizedBox(
-                width: 200,
-                child: Expanded(
-                  flex: 1,
+    return BluredContainer(
+      height: 60,
+      width: context.width,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          (widget.withCategory)
+              ? SizedBox(
+                  width: 140,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
 
@@ -63,7 +61,7 @@ class _SearchByWidgetState extends State<SearchByWidget> {
                         setState(() {
                           selectedCategory = newValue!;
                         });
-                        widget.onBothChanged.call(newValue!, searchText);
+                        widget.onChanged.call(newValue!, searchText);
                       },
                       items: widget.listOfCategories
                           .map<DropdownMenuItem<String>>((String value) {
@@ -74,58 +72,58 @@ class _SearchByWidgetState extends State<SearchByWidget> {
                       }).toList(),
                     ),
                   ),
-                ))
-            : const SizedBox.shrink(),
-        Expanded(
-          flex: 2,
-          child: SizedBox(
-            width: 300,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                onChanged: (fillterText) {
-                  widget.onSearchTextChanged(fillterText);
-                  widget.onBothChanged(
-                    selectedCategory!,
-                    fillterText,
-                  );
-                },
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6!
-                    .copyWith(color: context.theme.primary),
-                decoration: InputDecoration(
-                  disabledBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(6),
-                      borderSide: const BorderSide(
-                        //  color: Colors.transparent,
+                )
+              : const SizedBox.shrink(),
+          Expanded(
+            flex: 1,
+            child: SizedBox(
+              width: 300,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  onChanged: (fillterText) {
+                    widget.onChanged(
+                      selectedCategory!,
+                      fillterText,
+                    );
+                  },
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6!
+                      .copyWith(color: context.theme.primary),
+                  decoration: InputDecoration(
+                    disabledBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
                         color: Colors.transparent,
-                      )),
-                  suffixIcon: const Icon(
-                    Icons.search_outlined,
-                    size: 18,
-                  ),
-                  hintText: 'Search'.tr(),
-                  contentPadding:
-                      const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  border: const OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
+                      ),
                     ),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6),
+                        borderSide: const BorderSide(
+                          //  color: Colors.transparent,
+                          color: Colors.transparent,
+                        )),
+                    suffixIcon: const Icon(
+                      Icons.search_outlined,
+                      size: 18,
+                    ),
+                    hintText: 'Search'.tr(),
+                    contentPadding:
+                        const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                    border: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.transparent,
+                      ),
+                    ),
+                    filled: true,
+                    fillColor: AppConstants.whiteOpacity,
                   ),
-                  filled: true,
-                  fillColor: AppConstants.whiteOpacity,
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

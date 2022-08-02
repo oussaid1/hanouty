@@ -71,8 +71,11 @@ class RechargeStockView extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              RchargeStockList(
-                rechargesList: rechargeState.rechargeList,
+              Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: RchargeStockList(
+                  rechargesList: rechargeState.rechargeList,
+                ),
               ),
             ],
           ),
@@ -97,7 +100,8 @@ class _RchargeStockListState extends State<RchargeStockList> {
   String filter = '';
   @override
   Widget build(BuildContext context) {
-    return BluredContainer(
+    return Container(
+      margin: const EdgeInsets.all(15),
       height: 570,
       width: context.width - 20,
       child: Column(
@@ -109,63 +113,74 @@ class _RchargeStockListState extends State<RchargeStockList> {
               listOfCategories: RechargeOperator.values
                   .map((e) => e.name.toUpperCase())
                   .toList(),
-              onBothChanged: (category, filter) {
+              onChanged: (category, filter) {
                 setState(() {
                   this.filter = filter;
-                });
-              },
-              onSearchTextChanged: (filterText) {
-                setState(() {
-                  filter = filterText;
                 });
               },
             ),
           ),
           Expanded(
-              child: Wrap(
-                  runSpacing: 15,
-                  spacing: 15,
-                  children: widget.rechargesList
-                      .where((element) => element.oprtr.name
-                          .toLowerCase()
-                          .contains(filter.toLowerCase()))
-                      .map((e) => SizedBox(
-                            width: 200,
-                            height: 100,
-                            child: RechargeListItem(
-                              onDelete: (rech) {},
-                              onEdit: (rech) {
-                                log('onEdit ${rech.toString()}');
-                                MDialogs.dialogSimple(
-                                  context,
-                                  title: Text(
-                                    'Edit Recharge',
-                                    style:
-                                        Theme.of(context).textTheme.headline3!,
-                                  ),
-                                  contentWidget: AddRechargeWidget(
-                                    recharge: rech,
-                                  ),
-                                );
-                              },
-                              onTap: (RechargeModel recharge) {
-                                MDialogs.dialogSimple(
-                                  context,
-                                  title: Text(
-                                    'Sell Recharge',
-                                    style:
-                                        Theme.of(context).textTheme.headline3!,
-                                  ),
-                                  contentWidget: SellRechargeWidget(
-                                    state: AddRechargeState.selling,
-                                    recharge: recharge,
-                                  ),
-                                );
-                              },
-                              recharge: e,
-                            ),
-                          ))
-                      .toList())),
+              child: BluredContainer(
+            margin: const EdgeInsets.all(15),
+            height: 570,
+            width: context.width - 20,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 15.0),
+                child: Wrap(
+                    runSpacing: 15,
+                    spacing: 15,
+                    children: widget.rechargesList
+                        .where((element) => element.oprtr.name
+                            .toLowerCase()
+                            .contains(filter.toLowerCase()))
+                        .map((e) => SizedBox(
+                              width: 200,
+                              height: 100,
+                              child: RechargeListItem(
+                                //  onDelete: (rech) {},
+                                onEdit: (rech) {
+                                  log('onEdit ${rech.toString()}');
+                                  MDialogs.dialogSimple(
+                                    context,
+                                    title: Text(
+                                      'Edit Recharge',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline3!,
+                                    ),
+                                    contentWidget: AddRechargeWidget(
+                                      recharge: rech,
+                                    ),
+                                  );
+                                },
+                                onTap: (RechargeModel recharge) {
+                                  MDialogs.dialogSimple(
+                                    context,
+                                    title: Text(
+                                      'Sell Recharge',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline3!,
+                                    ),
+                                    contentWidget: SizedBox(
+                                      width: 400,
+                                      child: SellRechargeWidget(
+                                        state: AddRechargeState.selling,
+                                        recharge: recharge,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                recharge: e,
+                              ),
+                            ))
+                        .toList()),
+              ),
+            ),
+          )),
         ],
       ),
     );
@@ -175,13 +190,13 @@ class _RchargeStockListState extends State<RchargeStockList> {
 class RechargeListItem extends StatelessWidget {
   final RechargeModel recharge;
   final void Function(RechargeModel) onTap;
-  final void Function(RechargeModel) onDelete;
+  // final void Function(RechargeModel) onDelete;
   final void Function(RechargeModel) onEdit;
   const RechargeListItem({
     Key? key,
     required this.recharge,
     required this.onTap,
-    required this.onDelete,
+    //  required this.onDelete,
     required this.onEdit,
   }) : super(key: key);
 
@@ -189,27 +204,24 @@ class RechargeListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Slidable(
       startActionPane: ActionPane(motion: const ScrollMotion(), children: [
-        // ActionButton(
-        //   icon: const Icon(Icons.edit),
-        //   onPressed: () => onEdit(recharge),
-        // ),
-        IconButton(
-          icon: const Icon(
-            Icons.edit,
-          ),
-          onPressed: () {
-            onEdit(recharge);
-          },
+        SlidableAction(
+          onPressed: (_) => onEdit(recharge),
+          backgroundColor: const Color.fromARGB(255, 73, 254, 163),
+          foregroundColor: const Color.fromARGB(134, 255, 255, 255),
+          borderRadius: BorderRadius.circular(10),
+          icon: Icons.edit,
+          label: 'Edit',
         ),
       ]),
       endActionPane: ActionPane(motion: const ScrollMotion(), children: [
-        IconButton(
-          icon: const Icon(Icons.delete_forever_outlined,
-              color: Color.fromARGB(206, 244, 67, 54)),
-          onPressed: () {
-            onDelete(recharge);
-          },
-        ),
+        // SlidableAction(
+        //   onPressed: (_) => onDelete(recharge),
+        //   backgroundColor: const Color.fromARGB(255, 255, 0, 0),
+        //   foregroundColor: const Color.fromARGB(134, 255, 255, 255),
+        //   borderRadius: BorderRadius.circular(10),
+        //   icon: Icons.delete,
+        //   label: 'Delete',
+        // ),
       ]),
       child: InkWell(
         onTap: () => onTap(recharge),
@@ -266,7 +278,7 @@ class RechargeListItem extends StatelessWidget {
                   Text(
                     '${recharge.percntg}%',
                     style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                          color: Color.fromARGB(123, 255, 255, 255),
+                          color: const Color.fromARGB(123, 255, 255, 255),
                         ),
                   ),
                   Text(

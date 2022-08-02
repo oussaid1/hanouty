@@ -23,6 +23,26 @@ class FilteredRechargesSales {
       .toList();
   List<RechargeSaleModel> get iamList =>
       fullRechargeList.where((e) => e.oprtr == RechargeOperator.iam).toList();
+  ///////////////////////////////////////////////////////////////////////////////
+  /// filter the list of recharge sales by date range and date filter
+  List<RechargeSaleModel> filteredRechargeSalesList(
+      List<RechargeSaleModel> rechargeSales) {
+    if (dateFilter == DateFilter.all) {
+      return rechargeSales;
+    } else if (dateFilter == DateFilter.month) {
+      return rechargeSales
+          .where((sale) => sale.dateSld.month == DateTime.now().month)
+          .toList();
+    } else if (dateFilter == DateFilter.custom) {
+      return rechargeSales
+          .where((sale) =>
+              sale.dateSld.isAfter(dateRange!.start) &&
+              sale.dateSld.isBefore(dateRange!.end))
+          .toList();
+    } else {
+      return rechargeSales;
+    }
+  }
 }
 
 class FilteredRecharges {

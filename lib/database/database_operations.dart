@@ -239,6 +239,11 @@ class DatabaseOperations implements Database {
   @override
   Future<bool> updateRechargeSale(RechargeSaleModel rechargeSale) =>
       _database.updateRechargeSale(rechargeSale);
+
+  @override
+  Future<bool> updateRechargeQuantity(
+          {required String rechargeId, required num qntty}) =>
+      _database.updateRechargeQuantity(rechargeId: rechargeId, qntty: qntty);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

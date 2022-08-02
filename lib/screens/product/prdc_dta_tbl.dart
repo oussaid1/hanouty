@@ -60,8 +60,7 @@ class _ProductsDataTableState extends State<ProductsDataTable> {
               SearchByWidget(
                 listOfCategories: ProductModel.fieldStrings,
                 withCategory: true,
-                onSearchTextChanged: (String text) {},
-                onBothChanged: (String category, String text) {
+                onChanged: (String category, String text) {
                   _data!.filterByCategory(category, text);
                 },
               ),

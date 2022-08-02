@@ -107,7 +107,7 @@ class RechargePieChart extends StatelessWidget {
           legendIconType: LegendIconType.horizontalLine,
           pointColorMapper: (RechargeChartData data, _) => data.color,
           xValueMapper: (RechargeChartData data, _) => data.label as String,
-          yValueMapper: (RechargeChartData data, _) => data.quantity,
+          yValueMapper: (RechargeChartData data, _) => data.total,
           dataLabelMapper: (RechargeChartData data, _) => data.label,
           enableTooltip: true,
           dataLabelSettings: const DataLabelSettings(
@@ -187,19 +187,19 @@ class RechargeBarChart extends StatelessWidget {
             series: <ChartSeries>[
               ColumnSeries<RechargeChartData, String>(
                   name: 'Quantity'.tr(),
-                  color: Color.fromARGB(255, 39, 87, 176),
+                  color: const Color.fromARGB(255, 39, 87, 176),
                   dataSource: data,
                   xValueMapper: (RechargeChartData data, _) => data.label,
                   yValueMapper: (RechargeChartData data, z) => data.quantity),
               ColumnSeries<RechargeChartData, String>(
                   name: 'Amount'.tr(),
-                  color: Color.fromARGB(253, 0, 177, 103),
+                  color: const Color.fromARGB(253, 0, 177, 103),
                   dataSource: data,
                   xValueMapper: (RechargeChartData data, _) => data.label,
                   yValueMapper: (RechargeChartData data, z) => data.amount),
               ColumnSeries<RechargeChartData, String>(
                   name: 'Profit'.tr(),
-                  color: Color.fromARGB(255, 243, 33, 79),
+                  color: const Color.fromARGB(255, 243, 33, 79),
                   dataSource: data,
                   xValueMapper: (RechargeChartData data, _) => data.label,
                   yValueMapper: (RechargeChartData data, z) => data.profit),

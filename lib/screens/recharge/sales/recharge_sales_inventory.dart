@@ -18,7 +18,7 @@ class RechargeSalesOverAllWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BluredContainer(
       width: 420,
-      height: 270,
+      height: 300,
       child: Column(
         children: [
           Padding(
@@ -67,7 +67,7 @@ class RechargeSalesOverAllWidget extends StatelessWidget {
                   ),
                   DataColumn(
                     label: Text(
-                      data[2].label!.toUpperCase(),
+                      data[1].label!.toUpperCase(),
                       style: Theme.of(context).textTheme.bodySmall!.copyWith(
                             fontWeight: FontWeight.bold,
                             color: RechargeModel.orange,
@@ -115,6 +115,7 @@ class RechargeSalesOverAllWidget extends StatelessWidget {
                     value1: data[0].total,
                     value2: data[1].total,
                     value3: data[2].total,
+                    withDollarSign: true,
                     cellStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
                           fontWeight: FontWeight.bold,
                           //color: AppConstants.whiteOpacity,
@@ -126,6 +127,7 @@ class RechargeSalesOverAllWidget extends StatelessWidget {
                     value1: data[0].netProfit,
                     value2: data[1].netProfit,
                     value3: data[2].netProfit,
+                    withDollarSign: true,
                     cellStyle: Theme.of(context).textTheme.bodySmall!.copyWith(
                           fontWeight: FontWeight.bold,
                           //color: AppConstants.whiteOpacity,
