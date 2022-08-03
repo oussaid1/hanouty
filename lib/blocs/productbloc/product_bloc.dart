@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../database/database_operations.dart';
+import '../../models/suplier/suplier.dart';
 part 'product_event.dart';
 part 'product_state.dart';
 
@@ -12,6 +13,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   /// stream subscription to get the products from the database
   late final DatabaseOperations _databaseOperations;
   StreamSubscription<List<ProductModel>>? _productsSubscription;
+  StreamSubscription<List<SuplierModel>>? _supliersSubscription;
   ProductBloc({required DatabaseOperations databaseOperations})
       : super(const ProductState(
           status: ProductStatus.initial,
@@ -45,9 +47,13 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     // if (_productsSubscription != null) {
     // _productsSubscription!.cancel();
     // }
-    _productsSubscription = _databaseOperations
-        .productsStream()
-        .listen((products) => add(LoadProductsEvent(products)));
+    _productsSubscription =
+        _databaseOperations.productsStream().listen((products) {
+      _supliersSubscription =
+          _databaseOperations.supliersStream().listen((supliers) {
+        add(LoadProductsEvent(products));
+      });
+    });
   }
 
   /// on add product event
@@ -107,6 +113,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   @override
   Future<void> close() {
     _productsSubscription!.cancel();
+    _supliersSubscription!.cancel();
     return super.close();
   }
 }

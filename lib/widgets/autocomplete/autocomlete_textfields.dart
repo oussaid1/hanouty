@@ -208,10 +208,16 @@ class _ClientAutocompleteInputFieldState
     // var list = <ShopClientModel>[];
     // list = [ShopClientModel.client, ...list];
     return BlocBuilder<ShopClientBloc, ShopClientState>(
-      builder: (mcontext, state) {
-        var list = [ShopClientModel.client, ...state.clients];
+      builder: (mcontext, clientState) {
+        var list = clientState.clients;
 
-        if (state.status != ShopClientsStatus.loaded) {
+        /// if there are cliernts take the first one as the initial value
+        if (list.isNotEmpty) {
+          client = list.first;
+          widget.onChanged(client!);
+        }
+
+        if (clientState.status != ShopClientsStatus.loaded) {
           return Center(
             child: Text('no clients'.tr()),
           );
@@ -235,7 +241,7 @@ class _ClientAutocompleteInputFieldState
             });
           },
           initialValue: TextEditingValue(
-            text: widget.initialValue?.clientName ?? '',
+            text: widget.initialValue?.clientName ?? client?.clientName ?? '',
           ),
           optionsViewBuilder: (BuildContext context,
               AutocompleteOnSelected<ShopClientModel> onSelected,
@@ -364,7 +370,7 @@ class _ClientAutocompleteInputFieldState
 
 class SuplierAutocompleteWidget extends StatelessWidget {
   final Function(SuplierModel) onChanged;
-  final SuplierModel? initialValue;
+  final String? initialValue;
   const SuplierAutocompleteWidget(
       {Key? key, required this.onChanged, this.initialValue})
       : super(key: key);
@@ -382,7 +388,7 @@ class SuplierAutocompleteWidget extends StatelessWidget {
 
 class SuplierAutocompleteField extends StatelessWidget {
   final Function(SuplierModel) onChanged;
-  final SuplierModel? initialSuplier;
+  final String? initialSuplier;
   const SuplierAutocompleteField({
     Key? key,
     required this.onChanged,
@@ -394,92 +400,107 @@ class SuplierAutocompleteField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var list = <SuplierModel>[];
-    return Autocomplete<SuplierModel>(
-      displayStringForOption: _displayStringForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text == '') {
-          return const Iterable<SuplierModel>.empty();
+    return BlocBuilder<SuplierBloc, SuplierState>(
+      builder: (context, state) {
+        SuplierModel? suplier;
+        if (state.supliers.isNotEmpty) {
+          list = state.supliers;
+          suplier = state.supliers.firstWhere(
+              (SuplierModel option) => option.name == initialSuplier?.trim(),
+              orElse: () => state.supliers.first);
         }
-        return list.where((SuplierModel option) {
-          return option.name!
-              .toLowerCase()
-              .toString()
-              .contains(textEditingValue.text.toLowerCase());
-        });
-      },
-      initialValue: TextEditingValue(
-        text: initialSuplier?.name ?? '',
-      ),
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<SuplierModel> onSelected,
-          Iterable<SuplierModel> options) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            elevation: 4.0,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 200, maxWidth: 200),
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: options.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final SuplierModel option = options.elementAt(index);
-                  return InkWell(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Builder(builder: (BuildContext context) {
-                      final bool highlight =
-                          AutocompleteHighlightedOption.of(context) == index;
-                      if (highlight) {
-                        SchedulerBinding.instance
-                            .addPostFrameCallback((Duration timeStamp) {
-                          Scrollable.ensureVisible(context, alignment: 0.5);
-                        });
-                      }
-                      return Container(
-                        color: highlight ? Theme.of(context).focusColor : null,
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          RawAutocomplete.defaultStringForOption(option.name),
-                        ),
-                      );
-                    }),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-      fieldViewBuilder: (BuildContext context,
-          TextEditingController textEditingController,
-          FocusNode focusNode,
-          VoidCallback onFieldSubmitted) {
-        return TextFormField(
-          controller: textEditingController,
-          maxLength: 20,
-          decoration: InputDecoration(
-            prefixIcon: const Icon(FontAwesomeIcons.peopleLine),
-            counterText: '',
-            labelText: 'Suplier'.tr(),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6.0),
-              borderSide: BorderSide(color: AppConstants.whiteOpacity),
-            ),
-            //border: InputBorder.none,
-            hintText: 'find suplier'.tr(),
-            hintStyle: Theme.of(context).textTheme.subtitle2!,
-            filled: true,
-          ),
-          focusNode: focusNode,
-          onFieldSubmitted: (String value) {
-            onFieldSubmitted();
+        return Autocomplete<SuplierModel>(
+          displayStringForOption: _displayStringForOption,
+          optionsBuilder: (TextEditingValue textEditingValue) {
+            if (textEditingValue.text == '') {
+              return const Iterable<SuplierModel>.empty();
+            }
+            return list.where((SuplierModel option) {
+              return option.name!
+                  .toLowerCase()
+                  .toString()
+                  .contains(textEditingValue.text.toLowerCase());
+            });
           },
+          initialValue: TextEditingValue(
+            text: initialSuplier ?? suplier?.name ?? '',
+          ),
+          optionsViewBuilder: (BuildContext context,
+              AutocompleteOnSelected<SuplierModel> onSelected,
+              Iterable<SuplierModel> options) {
+            return Align(
+              alignment: Alignment.topLeft,
+              child: Material(
+                elevation: 4.0,
+                child: ConstrainedBox(
+                  constraints:
+                      const BoxConstraints(maxHeight: 200, maxWidth: 200),
+                  child: ListView.builder(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: options.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final SuplierModel option = options.elementAt(index);
+                      return InkWell(
+                        onTap: () {
+                          onSelected(option);
+                        },
+                        child: Builder(builder: (BuildContext context) {
+                          final bool highlight =
+                              AutocompleteHighlightedOption.of(context) ==
+                                  index;
+                          if (highlight) {
+                            SchedulerBinding.instance
+                                .addPostFrameCallback((Duration timeStamp) {
+                              Scrollable.ensureVisible(context, alignment: 0.5);
+                            });
+                          }
+                          return Container(
+                            color:
+                                highlight ? Theme.of(context).focusColor : null,
+                            padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              RawAutocomplete.defaultStringForOption(
+                                  option.name),
+                            ),
+                          );
+                        }),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            );
+          },
+          fieldViewBuilder: (BuildContext context,
+              TextEditingController textEditingController,
+              FocusNode focusNode,
+              VoidCallback onFieldSubmitted) {
+            return TextFormField(
+              controller: textEditingController,
+              maxLength: 20,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(FontAwesomeIcons.peopleLine),
+                counterText: '',
+                labelText: 'Suplier'.tr(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6.0),
+                  borderSide: BorderSide(color: AppConstants.whiteOpacity),
+                ),
+                //border: InputBorder.none,
+                hintText: 'find suplier'.tr(),
+                hintStyle: Theme.of(context).textTheme.subtitle2!,
+                filled: true,
+              ),
+              focusNode: focusNode,
+              onFieldSubmitted: (String value) {
+                onFieldSubmitted();
+              },
+            );
+          },
+          onSelected: onChanged,
         );
       },
-      onSelected: onChanged,
     );
   }
 }

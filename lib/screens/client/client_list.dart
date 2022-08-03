@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:hanouty/components.dart';
 import 'package:hanouty/widgets/search_widget.dart';
 
@@ -67,113 +68,88 @@ class _ShopClientsListState extends State<ShopClientsList> {
                       minWidth: 420,
                     ),
                     child: BluredContainer(
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: clientsList.length,
-                        itemBuilder: (context, index) {
-                          final ShopClientModel shopClient = clientsList[index];
-                          return Slidable(
-                            startActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              dismissible: DismissiblePane(onDismissed: () {}),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (context) {
-                                    MDialogs.dialogSimple(
-                                      context,
-                                      title: Text(
-                                        "Edit techService".tr(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline3!,
-                                      ),
-                                      contentWidget: SizedBox(
-                                        height: 400,
-                                        width: 400,
-                                        child: AddClient(
-                                          client: shopClient,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: clientsList.length,
+                          itemBuilder: (context, index) {
+                            final ShopClientModel shopClient =
+                                clientsList[index];
+                            return Slidable(
+                              key: Key(shopClient.id!),
+                              startActionPane: ActionPane(
+                                motion: const ScrollMotion(),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (context) {
+                                      MDialogs.dialogSimple(
+                                        context,
+                                        title: Text(
+                                          "Edit techService".tr(),
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline3!,
                                         ),
-                                      ),
-                                    );
-                                  },
-                                  icon: Icons.delete,
-                                  label: 'Edit',
-                                ),
-                              ],
-                            ),
-                            endActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              dismissible: DismissiblePane(onDismissed: () {}),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (context) {
-                                    MDialogs.dialogSimple(
-                                      context,
-                                      title: Text(
-                                        " ${shopClient.clientName}",
+                                        contentWidget: SizedBox(
+                                          height: 400,
+                                          width: 400,
+                                          child: AddClient(
+                                            client: shopClient,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    icon: Icons.delete,
+                                    label: 'Edit',
+                                  ),
+                                ],
+                              ),
+                              endActionPane: ActionPane(
+                                motion: const ScrollMotion(),
+                                dismissible:
+                                    DismissiblePane(onDismissed: () {}),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (context) {
+                                      BlocProvider.of<ShopClientBloc>(context)
+                                          .add(DeleteShopClientEvent(
+                                              shopClient));
+                                    },
+                                    icon: Icons.delete,
+                                    label: 'Delete',
+                                  ),
+                                ],
+                              ),
+                              child: Card(
+                                child: ListTile(
+                                  leading: const Icon(
+                                    Icons.person_outline_outlined,
+                                    color: MThemeData.accentColor,
+                                  ),
+                                  title: Text(
+                                    '${shopClient.clientName}',
+                                    style:
+                                        Theme.of(context).textTheme.headline3!,
+                                  ),
+                                  trailing: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '${shopClient.email}',
                                         style: Theme.of(context)
                                             .textTheme
-                                            .headline3!,
+                                            .subtitle2!,
                                       ),
-                                      contentWidget: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          ElevatedButton(
-                                            style: MThemeData
-                                                .raisedButtonStyleSave,
-                                            child: Text(
-                                              'Delete'.tr(),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1!,
-                                            ),
-                                            onPressed: () {},
-                                          ),
-                                          ElevatedButton(
-                                            style: MThemeData
-                                                .raisedButtonStyleCancel,
-                                            child: Text(
-                                              'Cancel'.tr(),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1!,
-                                            ),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                  icon: Icons.delete,
-                                  label: 'Edit',
-                                ),
-                              ],
-                            ),
-                            child: Card(
-                              child: ListTile(
-                                leading: const Icon(
-                                  Icons.person_outline_outlined,
-                                  color: MThemeData.accentColor,
-                                ),
-                                title: Text(
-                                  '${shopClient.clientName}',
-                                  style: Theme.of(context).textTheme.headline3!,
-                                ),
-                                trailing: Text(
-                                  '${shopClient.email}',
-                                  style: Theme.of(context).textTheme.subtitle2!,
-                                ),
-                                subtitle: Text(
-                                  '${shopClient.phone}',
-                                  style: Theme.of(context).textTheme.subtitle2!,
+                                    ],
+                                  ),
+                                  subtitle: buildRating(context),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -186,6 +162,25 @@ class _ShopClientsListState extends State<ShopClientsList> {
           },
         ),
       ),
+    );
+  }
+
+  buildRating(BuildContext context, {double rating = 0}) {
+    return RatingBar.builder(
+      initialRating: 3,
+      ignoreGestures: true,
+      itemSize: 24,
+      minRating: rating,
+      maxRating: rating,
+      direction: Axis.horizontal,
+      allowHalfRating: true,
+      itemCount: 5,
+      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+      itemBuilder: (context, _) => const Icon(
+        Icons.star,
+        color: Colors.amber,
+      ),
+      onRatingUpdate: (rating) {},
     );
   }
 }

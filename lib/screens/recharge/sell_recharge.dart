@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:hanouty/blocs/bloc/sellactionsrecharge_bloc.dart';
+import 'package:hanouty/blocs/rechargebloc/fullrechargesales_bloc.dart';
 import 'package:hanouty/components.dart';
 import 'package:hanouty/widgets/autocomplete/autocomlete_textfields.dart';
 import '../../database/database_operations.dart';
@@ -48,9 +49,9 @@ class SellRechargeStateWidget extends State<SellRechargeWidget> {
     if (widget.state == AddRechargeState.editing) {
       _isUpdate = true;
       _date = widget.rechargeSale!.dateSld;
-      quantity = widget.rechargeSale!.qnttSld;
+      // quantity = widget.rechargeSale!.qnttSld;
       clientId = widget.rechargeSale!.clntID!;
-      oprtr = widget.rechargeSale!.oprtr;
+      // oprtr = widget.rechargeSale!.oprtr;
     } else {
       if (widget.recharge != null) {
         _date = widget.recharge!.date;
@@ -90,6 +91,8 @@ class SellRechargeStateWidget extends State<SellRechargeWidget> {
   buildSaveButton(BuildContext context) {
     var sellActionsBloc = SellActionsRechargeBloc(
         databaseOperations: GetIt.I<DatabaseOperations>());
+    var rechargeBloc =
+        RechargeBloc(databaseOperations: GetIt.I<DatabaseOperations>());
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -111,10 +114,8 @@ class SellRechargeStateWidget extends State<SellRechargeWidget> {
                         //rSId: soldRechargeId!.id,
                       );
                       log('${rechargeSale.toMap()}');
-                      // GetIt.I<DebtBloc>().add(_isUpdate
-                      //     ? UpdateDebtEvent(debt)
-                      //     : AddDebtEvent(debt));
-                      // // Navigator.pop(context);
+                      rechargeBloc.add(
+                          UpdateRechargeSaleEvent(rechargeSale: rechargeSale));
                     } else {
                       setState(() {
                         _canSave = false;

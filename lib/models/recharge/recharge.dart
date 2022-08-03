@@ -139,13 +139,20 @@ class RechargeSaleModel extends RechargeModel {
   DateTime dateSld;
   String? clntID;
   String? soldRchrgId;
+//////////////////////////////////////////////////////////////////////////////////////////////
+  RechargeModel? rechargeModel;
+  ShopClientModel? shopClientModel;
+  //////////////////////////////////////////////////////////////////////////////////////////////
+  /////// constructor for the recharge sale model //////////////////////////////////////////////
+
   RechargeSaleModel({
     this.clntID,
     this.rSId,
     required this.qnttSld,
     required this.soldRchrgId,
     required this.dateSld,
-    RechargeModel? rechargeModel,
+    this.rechargeModel,
+    this.shopClientModel,
   }) : super(
           id: rechargeModel?.id,
           oprtr: rechargeModel?.oprtr ?? RechargeOperator.orange,
@@ -161,7 +168,8 @@ class RechargeSaleModel extends RechargeModel {
     String? soldRchrgId,
     num? qnttSld,
     DateTime? dateSld,
-    RechargeModel? rchgMdl,
+    RechargeModel? rechargeModel,
+    ShopClientModel? shopClientModel,
   }) {
     return RechargeSaleModel(
       clntID: clntID ?? this.clntID,
@@ -169,9 +177,12 @@ class RechargeSaleModel extends RechargeModel {
       soldRchrgId: soldRchrgId ?? this.soldRchrgId,
       qnttSld: qnttSld ?? this.qnttSld,
       dateSld: dateSld ?? this.dateSld,
+      rechargeModel: rechargeModel ?? this.rechargeModel,
+      shopClientModel: shopClientModel ?? this.shopClientModel,
     );
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////////////
   @override
 
   /// toMap()

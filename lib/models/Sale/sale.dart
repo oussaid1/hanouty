@@ -92,7 +92,7 @@ class SaleTableDataSource extends DataTableSource {
         DataCell(Text(row.quantitySold.toString())),
         DataCell(Text(row.priceIn.toString())),
         DataCell(Text(row.priceOut.toString())),
-        DataCell(Text((row.suplier ?? ''))),
+        DataCell(Text((row.suplierId ?? ''))),
         DataCell(Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -208,7 +208,8 @@ class SaleTableDataSource extends DataTableSource {
         break;
       case "Suplier":
         saleRows = sales
-            .where((row) => row.suplier.toString().toLowerCase().contains(text))
+            .where(
+                (row) => row.suplierId.toString().toLowerCase().contains(text))
             .toList();
         notifyListeners();
         break;
@@ -230,6 +231,11 @@ class SaleTableDataSource extends DataTableSource {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////Sale Class/////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
 class SaleModel extends ProductModel {
   String? saleId;
   String productId;
@@ -241,7 +247,10 @@ class SaleModel extends ProductModel {
   String? saleDescription;
   ////////////////////////////////////////////////
   ///Constructors /////////
+  ProductModel? product;
+  ShopClientModel? shopClient;
 
+  ////////////////////////////////////////////////
   SaleModel({
     this.saleId,
     required this.productId,
@@ -251,7 +260,8 @@ class SaleModel extends ProductModel {
     required this.priceSoldFor,
     required this.type,
     this.saleDescription,
-    ProductModel? product,
+    this.shopClient,
+    this.product,
   }) : super(
           pId: product?.pId,
           barcode: product?.barcode ?? '',
@@ -262,7 +272,7 @@ class SaleModel extends ProductModel {
           quantity: product?.quantity ?? 0,
           priceIn: product?.priceIn ?? 0,
           priceOut: product?.priceOut ?? 0,
-          suplier: product?.suplier ?? '',
+          suplierId: product?.suplierId ?? '',
         );
   ////////////////////////////////////////////////
   ///Methods /////////
@@ -427,7 +437,7 @@ class SaleModel extends ProductModel {
         priceOut.hashCode ^
         type.hashCode ^
         barcode.hashCode ^
-        suplier.hashCode ^
+        suplierId.hashCode ^
         category.hashCode ^
         description.hashCode;
   }

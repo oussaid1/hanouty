@@ -37,7 +37,7 @@ class TechServiceModel extends ProductModel {
           quantity: quantity ?? 0,
           priceIn: priceIn ?? 0,
           priceOut: priceOut ?? 0,
-          suplier: suplier ?? '',
+          suplierId: suplier ?? '',
         );
 
   TechServiceModel copyServiceWith({
@@ -86,7 +86,7 @@ class TechServiceModel extends ProductModel {
 
   @override
   String toString() {
-    return 'Services(id: $pId, title: $title,priceIn: $priceIn, priceOut: $priceOut, count: $count, available: $available)';
+    return 'Services(id: $pId, title: $title,priceIn: $priceIn, priceOut: $priceOut, available: $available)';
   }
 
   @override
@@ -98,7 +98,6 @@ class TechServiceModel extends ProductModel {
         other.title == title &&
         other.priceIn == priceIn &&
         other.priceOut == priceOut &&
-        other.count == count &&
         other.available == available;
   }
 
@@ -108,7 +107,6 @@ class TechServiceModel extends ProductModel {
         title.hashCode ^
         priceIn.hashCode ^
         priceOut.hashCode ^
-        count.hashCode ^
         available.hashCode;
   }
 }

@@ -8,7 +8,8 @@ class SuplierModel {
   String? phone;
   String? email;
   GeoPoint? location;
-
+//////////////////////////////////////////
+/////         Constructor                        ////
   SuplierModel({
     this.id,
     this.name,
@@ -16,7 +17,6 @@ class SuplierModel {
     this.email,
     this.location,
   });
-  static const laayoune = GeoPoint(27.148650226484776, -13.197234277282037);
   SuplierModel copyWith({
     String? id,
     String? name,
@@ -33,6 +33,19 @@ class SuplierModel {
       location: location ?? this.location,
     );
   }
+
+  //////////////////////////////////////////
+  ///        static stuff                         ////
+  static const laayoune = GeoPoint(27.148650226484776, -13.197234277282037);
+  static final defaultSuplier = SuplierModel(
+    id: '1',
+    name: 'Laaoune',
+    phone: '0528987654',
+    email: '',
+    location: laayoune,
+  );
+
+//////////////////////////////////////////
 
   Map<String, dynamic> toMap() {
     return {

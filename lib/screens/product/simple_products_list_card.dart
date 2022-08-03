@@ -53,7 +53,7 @@ class SimpleProductListCard extends ConsumerWidget {
                           .copyWith(color: getColor(product.quantity)),
                     ),
                     Text(
-                      '${product.suplier} ${product.dateIn.ddmmyyyy()}',
+                      '${product.suplierId} ${product.dateIn.ddmmyyyy()}',
                       style: Theme.of(context).textTheme.subtitle2!,
                     ),
                   ],

@@ -64,7 +64,7 @@ class RechargeBloc extends Bloc<FullrechargesalesEvent, RechargeState> {
           rechargeList: recharges,
           rechargeSalesList: rechargeSales,
           fullRechargeSalesList:
-              rechargeSales.buildRechargeSalesList(recharges),
+              rechargeSales.combineWithRechargeModel(recharges),
         ));
       });
     });

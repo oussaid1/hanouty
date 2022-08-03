@@ -106,7 +106,7 @@ class FilteredProduct {
         break;
       case 'Suplier':
         productsfilteredByCat = products
-            .where((element) => element.suplier
+            .where((element) => element.suplierId
                 .toString()
                 .toLowerCase()
                 .contains(filterText.toLowerCase()))

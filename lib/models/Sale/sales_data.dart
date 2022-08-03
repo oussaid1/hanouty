@@ -83,9 +83,9 @@ class SalesData {
   List<TaggedSales> get salesBySupplier {
     Map<String, List<SaleModel>> map = {};
     for (var sale in sales) {
-      map.putIfAbsent(sale.suplier!, () => []);
-      map[sale.suplier]!.addAll(sortedSales
-          .where((element) => element.suplier! == sale.suplier!)
+      map.putIfAbsent(sale.suplierId!, () => []);
+      map[sale.suplierId]!.addAll(sortedSales
+          .where((element) => element.suplierId! == sale.suplierId!)
           .toList());
     }
     //loger.d('salesByCategory :${map}');

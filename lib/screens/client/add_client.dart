@@ -234,7 +234,7 @@ class AddClientState extends State<AddClient> {
 
   buildRating(BuildContext context) {
     return RatingBar.builder(
-      initialRating: 3,
+      initialRating: _rating,
       itemSize: 32,
       minRating: 0,
       maxRating: 5,

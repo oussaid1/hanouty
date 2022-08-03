@@ -36,7 +36,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
   final TextEditingController descrController =
       TextEditingController(text: 'This is a product description');
   String productCat = 'Other';
-  String suplier = 'Other';
+  String suplier = 'Unknown';
   DateTime _pickedDateTime = DateTime.now();
   num quantity = 1;
   bool _canSave = false;
@@ -61,7 +61,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
       descrController.text = widget.product!.description!;
       _pickedDateTime = widget.product!.dateIn;
       productCat = widget.product!.category!;
-      suplier = widget.product!.suplier!;
+      suplier = widget.product!.suplierId!;
       quantity = widget.product!.quantity;
     }
     if (widget.initialDateTime != null) {
@@ -155,7 +155,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
                     priceIn: double.tryParse(priceInController.text.trim())!,
                     priceOut: double.tryParse(priceOutController.text.trim())!,
                     quantity: quantity.toInt(),
-                    suplier: suplier,
+                    suplierId: suplier,
                   );
 
                   if (formKey.currentState!.validate()) {
@@ -166,6 +166,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
                         ? UpdateProductEvent(product)
                         : AddProductEvent(product));
                     clear();
+                    Navigator.pop(context);
                   }
                 },
           child: Text(
@@ -186,11 +187,13 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
   }
 
   _buildSuplier(BuildContext context) {
-    return SuplierAutocompleteWidget(onChanged: (suplier) {
-      setState(() {
-        suplier = suplier;
-      });
-    });
+    return SuplierAutocompleteWidget(
+        initialValue: suplier,
+        onChanged: (selectedSuplier) {
+          setState(() {
+            suplier = selectedSuplier.name!;
+          });
+        });
   }
 
   _buildDescription() {
@@ -218,6 +221,7 @@ class AddOrEditProductState extends State<AddOrEditProduct> {
 
   _buildCategory(BuildContext context, List<String> list) {
     return CategoryAutocompleteField(
+      initialCategory: productCat,
       onChanged: (category) {
         setState(() {
           productCat = category;

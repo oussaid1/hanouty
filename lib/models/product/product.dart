@@ -93,7 +93,7 @@ class ProductTableDataSource extends DataTableSource {
         DataCell(Text(row.quantity.toString())),
         DataCell(Text(row.priceIn.toString())),
         DataCell(Text(row.priceOut.toString())),
-        DataCell(Text(row.suplier.toString())),
+        DataCell(Text(row.suplierId.toString())),
         DataCell(Text(row.dateIn.ddmmyyyy())),
         DataCell(Text(row.category.toString())),
         DataCell(Text(
@@ -203,7 +203,8 @@ class ProductTableDataSource extends DataTableSource {
         break;
       case "Suplier":
         productRows = products
-            .where((row) => row.suplier.toString().toLowerCase().contains(text))
+            .where(
+                (row) => row.suplierId.toString().toLowerCase().contains(text))
             .toList();
         notifyListeners();
         break;
@@ -233,10 +234,33 @@ class ProductModel {
   String? category;
   DateTime dateIn;
   int quantity;
-  int count = 1;
   double priceIn;
   double priceOut;
-  String? suplier;
+  String? suplierId;
+////////////////////////////
+  SuplierModel? suplierModel;
+
+  ////////////////////////////////////////////////////////////////////////////////
+  /// Constructor ///////////////////////////////////////////////////////////////
+
+  ProductModel({
+    this.pId,
+    this.barcode,
+    required this.productName,
+    this.description,
+    this.category,
+    required this.dateIn,
+    required this.quantity,
+    required this.priceIn,
+    required this.priceOut,
+    this.suplierId,
+    this.suplierModel,
+  });
+
+  /// //////////////////////////////////////////////////////////////////////////
+  bool hasSales = true;
+
+  /// //////////////////////////////////////////////////////////////////////////
   get availability {
     switch (quantity) {
       case 1:
@@ -283,7 +307,7 @@ class ProductModel {
         quantity.isFinite &&
         priceIn == priceIn &&
         priceOut == priceOut &&
-        suplier == suplier) {}
+        suplierId == suplierId) {}
     return false;
   }
 
@@ -300,19 +324,6 @@ class ProductModel {
     "Suplier",
   ];
 
-  ProductModel({
-    this.pId,
-    this.barcode,
-    required this.productName,
-    this.description,
-    this.category,
-    required this.dateIn,
-    required this.quantity,
-    required this.priceIn,
-    required this.priceOut,
-    this.suplier,
-  });
-
   ProductModel copyWith({
     String? pId,
     String? barcode,
@@ -326,6 +337,7 @@ class ProductModel {
     double? priceOut,
     String? suplier,
     String? availability,
+    SuplierModel? suplierModel,
   }) {
     return ProductModel(
       pId: pId ?? this.pId,
@@ -337,7 +349,7 @@ class ProductModel {
       quantity: quantity ?? this.quantity,
       priceIn: priceIn ?? this.priceIn,
       priceOut: priceOut ?? this.priceOut,
-      suplier: suplier ?? this.suplier,
+      suplierId: suplier ?? this.suplierId,
     );
   }
 
@@ -354,7 +366,7 @@ class ProductModel {
       'quantity': quantity,
       'priceIn': priceIn,
       'priceOut': priceOut,
-      'suplier': suplier,
+      'suplier': suplierId,
     };
   }
 
@@ -370,7 +382,7 @@ class ProductModel {
       quantity: (map['quantity']),
       priceIn: (map['priceIn']),
       priceOut: (map['priceOut']),
-      suplier: map['suplier'],
+      suplierId: map['suplier'],
     );
   }
 
@@ -381,7 +393,7 @@ class ProductModel {
 
   @override
   String toString() {
-    return 'Product(id: $pId, barcode: $barcode, name: $productName, description: $description,category: $category, dateIn: $dateIn, quantity: $quantity, priceIn: $priceIn, priceOut: $priceOut, suplier: $suplier, availability: $availability)';
+    return 'Product(id: $pId, barcode: $barcode, name: $productName, description: $description,category: $category, dateIn: $dateIn, quantity: $quantity, priceIn: $priceIn, priceOut: $priceOut, suplier: $suplierId, availability: $availability)';
   }
 
   @override
@@ -398,7 +410,7 @@ class ProductModel {
         other.quantity == quantity &&
         other.priceIn == priceIn &&
         other.priceOut == priceOut &&
-        other.suplier == suplier;
+        other.suplierId == suplierId;
   }
 
   @override
@@ -412,7 +424,7 @@ class ProductModel {
         quantity.hashCode ^
         priceIn.hashCode ^
         priceOut.hashCode ^
-        suplier.hashCode ^
+        suplierId.hashCode ^
         availability.hashCode;
   }
 }

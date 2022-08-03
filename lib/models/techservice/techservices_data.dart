@@ -7,13 +7,7 @@ class TechServicesData {
   });
 
   /// get count of techserviceSales
-  int get salesCount {
-    int mcount = 0;
-    for (var element in techServices) {
-      mcount += (element.count);
-    }
-    return mcount;
-  }
+  int get salesCount => techServices.length;
 
 // total product priceIn of all items in stock
   double get totalPriceInInStock {
@@ -49,15 +43,9 @@ class TechServicesData {
     List<ChartData> mchartData = [];
 
     for (var element in distinctCategories) {
-      int mcount = 0;
-      for (var element2 in techServices) {
-        if (element2.category == element) {
-          mcount += (element2.count);
-        }
-      }
       mchartData.add(ChartData(
         label: element,
-        count: mcount,
+        count: techServices.where((e) => e.category == element).length,
       ));
     }
     return mchartData;

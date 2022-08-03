@@ -65,66 +65,6 @@ extension DtExtension on DateTime {
       return '';
     }
   }
-
-//   String ddmmyyyy() {
-//     try {
-//       return DateFormat("yyyy-MM-dd").format(this);
-//     } catch (e) {
-//       return '';
-//     }
-//   }
-
-//   String mmyyyy() {
-//     try {
-//       return DateFormat("yyyy-MM").format(this);
-//     } catch (e) {
-//       return '';
-//     }
-//   }
-
-//   String yyyy() {
-//     try {
-//       return DateFormat("yyyy").format(this);
-//     } catch (e) {
-//       return '';
-//     }
-//   }
-
-//   DateTime stripTime() {
-//     {
-//       return DateTime(year, month, day, 0, 0, 0);
-//     }
-//   }
-
-//   DateTime stripTimeDay() {
-//     {
-//       return DateTime(year, month, 00);
-//     }
-//   }
-
-//   DateTime stripTimeDayMonth() {
-//     {
-//       return DateTime(year, 00, 00);
-//     }
-//   }
-// }
-
-// extension EnumExtension on SaleType {
-//   String get value => describeEnum(this);
-// }
-
-// extension EnumExtension2 on ExpenseCategory {
-//   String get value => describeEnum(this);
-// }
-
-// extension EnumParser on String {
-//   ExpenseCategory toExpenseCategory() {
-//     return ExpenseCategory.values.firstWhere(
-//         (e) =>
-//             e.toString().toLowerCase() == 'ExpenseCategory.$this'.toLowerCase(),
-//         orElse: () => ExpenseCategory.other); //return null if not found
-//   }
-// }
 }
 
 extension EnumParser2 on String {
@@ -208,24 +148,40 @@ extension SaleListExtension on List<SaleModel> {
   }
 }
 
-extension RechargeSaleListExtension on List<RechargeSaleModel> {
-  List<RechargeSaleModel> buildRechargeSalesList(
+extension RechargeSaleListWithRechargeModel on List<RechargeSaleModel> {
+  List<RechargeSaleModel> combineWithRechargeModel(
       List<RechargeModel> rechargeModelList) {
     List<RechargeSaleModel> combinedList = [];
     for (RechargeSaleModel rechargeSale in this) {
-      for (RechargeModel recharge in rechargeModelList) {
-        if (rechargeSale.soldRchrgId == recharge.id) {
-          log('recharge found');
-          combinedList.add(RechargeSaleModel(
-            clntID: rechargeSale.clntID,
-            rSId: rechargeSale.rSId,
-            qnttSld: rechargeSale.qnttSld,
-            dateSld: rechargeSale.dateSld,
-            soldRchrgId: rechargeSale.soldRchrgId,
-            rechargeModel: recharge,
-          ));
-        }
-      }
+      combinedList.add(rechargeSale.copyRSWith(
+          rechargeModel: rechargeModelList.firstWhere(
+              (element) => element.id == rechargeSale.soldRchrgId)));
+    }
+    return combinedList;
+  }
+}
+
+extension RechargeSaleListWithShopClient on List<RechargeSaleModel> {
+  List<RechargeSaleModel> combineWithShopclients(
+      List<ShopClientModel> shopClients) {
+    List<RechargeSaleModel> combinedList = [];
+    for (RechargeSaleModel rechargeSale in this) {
+      combinedList.add(rechargeSale.copyRSWith(
+          shopClientModel: shopClients
+              .firstWhere((element) => element.id == rechargeSale.clntID)));
+    }
+    return combinedList;
+  }
+}
+
+extension ProductListExtension on List<ProductModel> {
+  List<ProductModel> buildFullProdcutList(List<SuplierModel> supliers) {
+    List<ProductModel> combinedList = [];
+    for (ProductModel product in this) {
+      combinedList.add(product.copyWith(
+        suplierModel: supliers.firstWhere((e) => e.id == product.suplierId,
+            orElse: () => SuplierModel.defaultSuplier),
+      ));
     }
     return combinedList;
   }

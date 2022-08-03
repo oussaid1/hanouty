@@ -88,13 +88,7 @@ class FilteredSales {
   }
 
 /////////////////////////////////////////////////////////////////////
-  int get salesCount {
-    int mcount = 0;
-    for (var element in sales) {
-      mcount += (element.count);
-    }
-    return mcount;
-  }
+  int get salesCount => sales.length;
 
   List<SaleModel> get salesThisMonth {
     return sales

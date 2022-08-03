@@ -450,7 +450,7 @@ class Database {
     return users
         .doc(uid)
         .collection(DbTables.rechargeSales)
-        .doc(rechargeSale.id)
+        .doc(rechargeSale.rSId)
         .update(rechargeSale.toMap())
         .then((value) => true)
         .catchError((error) => false);
@@ -576,7 +576,7 @@ class Database {
     return users
         .doc(uid)
         .collection(DbTables.rechargeSales)
-        .doc(rechargeSale.id)
+        .doc(rechargeSale.rSId)
         .delete()
         .then((value) => true)
         .catchError((error) => false);
