@@ -14,24 +14,24 @@ class SupliersList extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 80.0),
-        child: FloatingActionButton.extended(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            MDialogs.dialogSimple(
-              context,
-              title: Text(
-                "Add Suplier",
-                style: Theme.of(context).textTheme.headline3!,
-              ),
-              contentWidget: const AddSuplier(),
-            );
-          },
-          label: const Text("Add").tr(),
-        ),
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.only(bottom: 80.0),
+      //   child: FloatingActionButton.extended(
+      //     icon: const Icon(Icons.add),
+      //     onPressed: () {
+      //       MDialogs.dialogSimple(
+      //         context,
+      //         title: Text(
+      //           "Add Suplier",
+      //           style: Theme.of(context).textTheme.headline3!,
+      //         ),
+      //         contentWidget: const AddSuplier(),
+      //       );
+      //     },
+      //     label: const Text("Add").tr(),
+      //   ),
+      // ),
       body: BlocBuilder<SuplierBloc, SuplierState>(
         builder: (context, state) {
           return Column(

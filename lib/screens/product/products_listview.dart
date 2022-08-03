@@ -6,7 +6,6 @@ import '../../blocs/sellactionsbloc/sellactions_bloc.dart';
 import '../../components.dart';
 import '../../local_components.dart';
 import '../../utils/global_functions.dart';
-import 'add_product.dart';
 import 'prdc_dta_tbl.dart';
 import 'stock_categories_piechart.dart';
 import 'stock_inventory.dart';
@@ -22,24 +21,24 @@ class ProductList extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     return Scaffold(
         backgroundColor: Colors.transparent,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 80.0),
-          child: FloatingActionButton.extended(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              MDialogs.dialogSimple(
-                context,
-                title: Text(
-                  "Add Product",
-                  style: Theme.of(context).textTheme.headline3!,
-                ),
-                contentWidget: const AddOrEditProduct(),
-              );
-            },
-            label: const Text("Add Product").tr(),
-          ),
-        ),
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        // floatingActionButton: Padding(
+        //   padding: const EdgeInsets.only(bottom: 80.0),
+        //   child: FloatingActionButton.extended(
+        //     icon: const Icon(Icons.add),
+        //     onPressed: () {
+        //       MDialogs.dialogSimple(
+        //         context,
+        //         title: Text(
+        //           "Add Product",
+        //           style: Theme.of(context).textTheme.headline3!,
+        //         ),
+        //         contentWidget: const AddOrEditProduct(),
+        //       );
+        //     },
+        //     label: const Text("Add Product").tr(),
+        //   ),
+        // ),
         body: MultiBlocListener(
           listeners: [
             BlocListener<ProductBloc, ProductState>(

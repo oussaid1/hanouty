@@ -49,7 +49,7 @@ class RechargeModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      if (id != null) 'id': id,
+      //if (id != null) 'id': id,
       'oprtr': oprtr.toString(),
       'percntg': percntg,
       'amount': amount,
@@ -188,7 +188,7 @@ class RechargeSaleModel extends RechargeModel {
   /// toMap()
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      if (rSId != null) 'rSId': rSId,
+      // if (rSId != null) 'rSId': rSId,
       'qnttSld': qnttSld,
       'dateSld': dateSld,
       'clntID': clntID,

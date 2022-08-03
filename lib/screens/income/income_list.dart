@@ -16,24 +16,24 @@ class IncomeListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 80.0),
-        child: FloatingActionButton.extended(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            MDialogs.dialogSimple(
-              context,
-              title: Text(
-                "Add Income",
-                style: Theme.of(context).textTheme.headline3!,
-              ),
-              contentWidget: const AddIncome(),
-            );
-          },
-          label: const Text("Add").tr(),
-        ),
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.only(bottom: 80.0),
+      //   child: FloatingActionButton.extended(
+      //     icon: const Icon(Icons.add),
+      //     onPressed: () {
+      //       MDialogs.dialogSimple(
+      //         context,
+      //         title: Text(
+      //           "Add Income",
+      //           style: Theme.of(context).textTheme.headline3!,
+      //         ),
+      //         contentWidget: const AddIncome(),
+      //       );
+      //     },
+      //     label: const Text("Add").tr(),
+      //   ),
+      // ),
       body: BlocBuilder<IncomesBloc, IncomesState>(
         builder: (context, state) {
           if (state.incomes.isEmpty) {

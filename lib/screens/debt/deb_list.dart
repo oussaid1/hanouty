@@ -1,8 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hanouty/local_components.dart';
-import 'package:hanouty/screens/debt/add_debt.dart';
-
 import 'package:hanouty/utils/global_functions.dart';
 import '../../blocs/clientsbloc/clients_bloc.dart';
 import '../../blocs/debtbloc /debt_bloc.dart';
@@ -24,24 +22,24 @@ class DebtsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 80.0),
-        child: FloatingActionButton.extended(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            MDialogs.dialogSimple(
-              context,
-              title: Text(
-                "Add Debt",
-                style: Theme.of(context).textTheme.headline3!,
-              ),
-              contentWidget: const AddDebt(),
-            );
-          },
-          label: const Text("Add").tr(),
-        ),
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.only(bottom: 80.0),
+      //   child: FloatingActionButton.extended(
+      //     icon: const Icon(Icons.add),
+      //     onPressed: () {
+      //       MDialogs.dialogSimple(
+      //         context,
+      //         title: Text(
+      //           "Add Debt",
+      //           style: Theme.of(context).textTheme.headline3!,
+      //         ),
+      //         contentWidget: const AddDebt(),
+      //       );
+      //     },
+      //     label: const Text("Add").tr(),
+      //   ),
+      // ),
       body: BlocListener<DebtBloc, DebtState>(
         listener: (context, state) {
           switch (state.status) {

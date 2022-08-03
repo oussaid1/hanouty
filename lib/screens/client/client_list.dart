@@ -20,24 +20,24 @@ class _ShopClientsListState extends State<ShopClientsList> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 80.0),
-        child: FloatingActionButton.extended(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            MDialogs.dialogSimple(
-              context,
-              title: Text(
-                "Add Client",
-                style: Theme.of(context).textTheme.headline3!,
-              ),
-              contentWidget: const AddClient(),
-            );
-          },
-          label: const Text("Add").tr(),
-        ),
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: Padding(
+      //   padding: const EdgeInsets.only(bottom: 80.0),
+      //   child: FloatingActionButton.extended(
+      //     icon: const Icon(Icons.add),
+      //     onPressed: () {
+      //       MDialogs.dialogSimple(
+      //         context,
+      //         title: Text(
+      //           "Add Client",
+      //           style: Theme.of(context).textTheme.headline3!,
+      //         ),
+      //         contentWidget: const AddClient(),
+      //       );
+      //     },
+      //     label: const Text("Add").tr(),
+      //   ),
+      // ),
       body: SingleChildScrollView(
         child: BlocBuilder<ShopClientBloc, ShopClientState>(
           builder: (context, state) {

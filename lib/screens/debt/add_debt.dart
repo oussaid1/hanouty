@@ -243,6 +243,7 @@ class AddProductState extends State<AddDebt> {
       //   }
       //   return null;
       // },
+      initialValue: _isUpdate ? widget.debt!.clientId! : null,
       onChanged: (client) {
         setState(() {
           clientId = client.id!;

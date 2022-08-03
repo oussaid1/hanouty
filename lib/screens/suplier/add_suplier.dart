@@ -52,25 +52,28 @@ class AddSuplierState extends State<AddSuplier> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Form(
-        key: formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            const SizedBox(height: 50),
-            buildSuplierName(),
-            const SizedBox(height: 20),
-            buildSuplierPhone(),
-            const SizedBox(height: 20),
-            buildSuplierEmail(),
-            const SizedBox(height: 20),
-            buildLocation(context),
-            const SizedBox(height: 40),
-            buildSaveButton(context),
-            const SizedBox(height: 100) //but
-          ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 50),
+              buildSuplierName(),
+              const SizedBox(height: 20),
+              buildSuplierPhone(),
+              const SizedBox(height: 20),
+              buildSuplierEmail(),
+              // const SizedBox(height: 20),
+              // buildLocation(context),
+              const SizedBox(height: 40),
+              buildSaveButton(context),
+              const SizedBox(height: 100) //but
+            ],
+          ),
         ),
       ),
     );
@@ -233,7 +236,7 @@ class AddSuplierState extends State<AddSuplier> {
         Container(
           margin: const EdgeInsets.all(4),
           decoration: BoxDecoration(
-              border: Border.all(color: Theme.of(context).bottomAppBarColor),
+              // border: Border.all(color: Theme.of(context).bottomAppBarColor),
               borderRadius: BorderRadius.circular(6)),
           height: 50,
           width: 160,
@@ -241,7 +244,7 @@ class AddSuplierState extends State<AddSuplier> {
             children: [
               IconButton(
                   icon: const Icon(Icons.location_on_outlined),
-                  color: MThemeData.accentColor,
+                  // color: MThemeData.accentColor,
                   onPressed: () {
                     launchMapsUrl(SuplierModel.laayoune.latitude,
                         SuplierModel.laayoune.longitude);

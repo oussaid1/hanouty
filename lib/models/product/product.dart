@@ -335,7 +335,7 @@ class ProductModel {
     int? quantity,
     double? priceIn,
     double? priceOut,
-    String? suplier,
+    String? suplierId,
     String? availability,
     SuplierModel? suplierModel,
   }) {
@@ -349,7 +349,8 @@ class ProductModel {
       quantity: quantity ?? this.quantity,
       priceIn: priceIn ?? this.priceIn,
       priceOut: priceOut ?? this.priceOut,
-      suplierId: suplier ?? this.suplierId,
+      suplierId: suplierId ?? this.suplierId,
+      suplierModel: suplierModel ?? this.suplierModel,
     );
   }
 

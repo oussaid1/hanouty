@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
+import 'package:hanouty/screens/suplier/add_suplier.dart';
 import '../../blocs/clientsbloc/clients_bloc.dart';
 import '../../blocs/rechargebloc/fullrechargesales_bloc.dart';
 import '../../database/database_operations.dart';
@@ -105,6 +106,8 @@ class AddStuffWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         buildExpandedFab(context, title: "Client", child: const AddClient()),
+        const SizedBox(height: 10),
+        buildExpandedFab(context, title: "Suplier", child: const AddSuplier()),
         const SizedBox(height: 10),
         buildExpandedFab(context,
             title: "Recharge",

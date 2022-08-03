@@ -110,7 +110,7 @@ class AddPaymentState extends State<AddPayment> {
       //   }
       //   return null;
       // },
-      initialValue: client,
+      initialValue: client!.clientName!,
       onChanged: (selectedClient) {
         setState(() {
           client = selectedClient;

@@ -151,7 +151,7 @@ class ProductsAutocompleteField extends StatelessWidget {
 
 class ClientsAutocompleteWidget extends StatelessWidget {
   final Function(ShopClientModel) onChanged;
-  final ShopClientModel? initialValue;
+  final String? initialValue;
   const ClientsAutocompleteWidget({
     Key? key,
     required this.onChanged,
@@ -174,10 +174,10 @@ class ClientsAutocompleteWidget extends StatelessWidget {
   }
 }
 
-class _ClientAutocompleteInputField extends StatefulWidget {
+class _ClientAutocompleteInputField extends StatelessWidget {
   final Function(ShopClientModel) onChanged;
   //final String? Function(String?)? validator;
-  final ShopClientModel? initialValue;
+  final String? initialValue;
   const _ClientAutocompleteInputField({
     Key? key,
     required this.onChanged,
@@ -185,42 +185,23 @@ class _ClientAutocompleteInputField extends StatefulWidget {
     // required this.validator,
   }) : super(key: key);
 
-//  static String _displayStringForOption(User option) => option.name;
-
-  @override
-  State<_ClientAutocompleteInputField> createState() =>
-      _ClientAutocompleteInputFieldState();
-}
-
-class _ClientAutocompleteInputFieldState
-    extends State<_ClientAutocompleteInputField> {
-  ShopClientModel? client;
-  @override
-  void initState() {
-    if (widget.initialValue != null) {
-      client = widget.initialValue!;
-    }
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     // var list = <ShopClientModel>[];
     // list = [ShopClientModel.client, ...list];
     return BlocBuilder<ShopClientBloc, ShopClientState>(
+      buildWhen: (previous, current) => initialValue == null,
       builder: (mcontext, clientState) {
         var list = clientState.clients;
+        ShopClientModel? client;
 
         /// if there are cliernts take the first one as the initial value
-        if (list.isNotEmpty) {
-          client = list.first;
-          widget.onChanged(client!);
-        }
 
-        if (clientState.status != ShopClientsStatus.loaded) {
-          return Center(
-            child: Text('no clients'.tr()),
-          );
+        if (clientState.clients.isNotEmpty) {
+          list = clientState.clients;
+          client = clientState.clients.firstWhere(
+              (ShopClientModel option) => option.id == initialValue?.trim(),
+              orElse: () => clientState.clients.first);
         }
         return Autocomplete<ShopClientModel>(
           displayStringForOption: ((option) {
@@ -241,7 +222,7 @@ class _ClientAutocompleteInputFieldState
             });
           },
           initialValue: TextEditingValue(
-            text: widget.initialValue?.clientName ?? client?.clientName ?? '',
+            text: initialValue ?? client?.clientName ?? '',
           ),
           optionsViewBuilder: (BuildContext context,
               AutocompleteOnSelected<ShopClientModel> onSelected,
@@ -308,9 +289,8 @@ class _ClientAutocompleteInputFieldState
               VoidCallback onFieldSubmitted) {
             return TextFormField(
               onChanged: (value) {
-                setState(() {
-                  client = null;
-                });
+                client = null;
+
                 // print(value);
               },
               controller: textEditingController,
@@ -357,10 +337,8 @@ class _ClientAutocompleteInputFieldState
             );
           },
           onSelected: (option) {
-            setState(() {
-              client = option;
-            });
-            widget.onChanged(option);
+            client = option;
+            onChanged(option);
           },
         );
       },

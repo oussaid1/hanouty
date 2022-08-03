@@ -16,8 +16,10 @@ import '../../../blocs/techservicebloc/techservice_bloc.dart';
 import '../../../components.dart';
 import '../../../database/database_operations.dart';
 import '../../../local_components.dart';
+import '../../../widgets/fabs/expandaible_fab.dart';
 import '../../../widgets/sidemenu/shared_menu_items.dart';
 import '../../../widgets/swithces/top_bar_widget.dart';
+import '../../add_tostock/addstuff_fab.dart';
 
 class HomeForAll extends StatelessWidget {
   final Widget centreWidget;
@@ -125,6 +127,16 @@ class HomeForAll extends StatelessWidget {
         ],
         child: Scaffold(
           backgroundColor: Colors.transparent,
+          floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+          floatingActionButton: const Padding(
+            padding: EdgeInsets.only(bottom: 80.0),
+            child: ExpandableFab(
+              distance: 0,
+              children: [
+                AddStuffWidget(),
+              ],
+            ),
+          ),
           drawer: SizedBox(
               width: Responsive.isDesktop(context) ? 120 : 80,
               child: const Drawer(child: NavMenu())),
