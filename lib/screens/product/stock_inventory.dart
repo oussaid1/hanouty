@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hanouty/components.dart';
+import 'package:hanouty/models/product/product_calculations.dart';
 
 import '../../blocs/productbloc/product_bloc.dart';
 import '../../local_components.dart';
@@ -38,12 +39,12 @@ class StockInventory extends StatelessWidget {
         );
     return BlocBuilder<ProductBloc, ProductState>(
       builder: (context, state) {
-        ProductStockData productStockData = ProductStockData(
+        ProductCalculations productStockData = ProductCalculations(
           products: state.products,
         );
         return BluredContainer(
           width: 420,
-          height: 300,
+          height: 200,
           child: Column(
             children: [
               Padding(

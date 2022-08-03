@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:hanouty/utils/constents.dart';
 
-import '../../models/tagged.dart';
+import '../../models/Sale/tagged_sales.dart';
 import '../../widgets/price_number_zone.dart';
 
 class SalesByCategoryWidget extends StatefulWidget {
@@ -96,12 +96,12 @@ class _SalesByCategoryWidgetState extends State<SalesByCategoryWidget> {
               ),
         ),
         PriceNumberZone(
-          price: taggedSales1?.salesData.totalQuantitySold ?? 0434,
+          price: taggedSales1?.salesData.totalSalesQuantity ?? 0,
           priceStyle: Theme.of(context)
               .textTheme
               .headline6!
               .copyWith(color: Theme.of(context).colorScheme.onSecondary),
-          withDollarSign: true,
+          withDollarSign: false,
         ),
       ],
     );
@@ -118,14 +118,14 @@ class _SalesByCategoryWidgetState extends State<SalesByCategoryWidget> {
               ),
         ),
         PriceNumberZone(
-          price: taggedSales1?.salesData.totalQuantitySold ?? 0,
+          price: taggedSales1?.salesData.totalSalesCount ?? 0,
           // style: Theme.of(context)
           //     .textTheme
           //     .headline5!
           //     .copyWith(
           //         color:
           //             Theme.of(context).colorScheme.onPrimary),
-          withDollarSign: true,
+          withDollarSign: false,
         ),
       ],
     );
@@ -142,7 +142,7 @@ class _SalesByCategoryWidgetState extends State<SalesByCategoryWidget> {
               ),
         ),
         PriceNumberZone(
-          price: taggedSales1?.salesData.totalSoldAmount ?? 0,
+          price: taggedSales1?.salesData.totalSalesAmount ?? 0,
           // style: Theme.of(context)
           //     .textTheme
           //     .headline5!
@@ -157,7 +157,7 @@ class _SalesByCategoryWidgetState extends State<SalesByCategoryWidget> {
 
   buildTitleSearch(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -244,8 +244,8 @@ class _SalesByCategoryWidgetState extends State<SalesByCategoryWidget> {
                 FocusNode focusNode,
                 VoidCallback onFieldSubmitted) {
               return SizedBox(
-                width: 140,
-                height: 40,
+                width: 160,
+                height: 50,
                 child: TextFormField(
                   controller: textEditingController,
                   textAlign: TextAlign.center,

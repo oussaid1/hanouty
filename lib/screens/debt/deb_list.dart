@@ -235,7 +235,7 @@ class TopWidgetDebtsView extends StatelessWidget {
                       DebtPieChart(data: debtsStatsViewModel),
                       BluredContainer(
                         width: 420,
-                        height: 270,
+                        height: 300,
                         child: DueDebtsCard(
                           debtsStatsViewModel: debtsStatsViewModel,
                         ),

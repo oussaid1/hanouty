@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hanouty/local_components.dart';
+import 'package:hanouty/models/Sale/sales_calculations.dart';
 import '../../blocs/debtbloc /debt_bloc.dart';
 import '../../blocs/expensesbloc/expenses_bloc.dart';
 import '../../blocs/fullsalesbloc/fullsales_bloc.dart';
@@ -25,14 +26,15 @@ class RevenuWidget extends StatelessWidget {
         var filteredDebts = FilteredDebts(debts: debtBloc.debts);
         var filteredIncome = FilteredIncomes(incomes: incomeBloc.incomes);
         var filteredExpense = FilteredExpenses(expenses: expenseBloc.expenses);
-        var salesData = SalesData(sales: fullSalesBloc.fullSales);
+        //var salesData = SalesData(sales: fullSalesBloc.fullSales);
+        var salesCalculs = SaleCalculations(sales: fullSalesBloc.fullSales);
         var incomeData = IncomeData(filteredIncome: filteredIncome.incomes);
         var expenseData = ExpenseData(expenses: filteredExpense.expenses);
         var debtData = DebtData(
             pymtsFrmDb: paymentsBloc.payments, dbtsFrmDb: filteredDebts.debts);
         Revenu revenu = Revenu(
           debtData: debtData,
-          salesData: salesData,
+          salesData: salesCalculs,
           incomeData: incomeData,
           expensesData: expenseData,
         );

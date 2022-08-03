@@ -10,7 +10,7 @@ export 'product/product.dart';
 export 'return_value.dart';
 export 'revenu/revenu.dart';
 export 'suplier/suplier.dart';
-export 'tagged.dart';
+export 'Sale/tagged_sales.dart';
 export 'techservice/techservice.dart';
 export 'user/user_model.dart';
 export 'enums/enums.dart';

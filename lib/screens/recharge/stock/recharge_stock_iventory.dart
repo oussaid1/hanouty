@@ -22,7 +22,7 @@ class RechargeOverAllWidget extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 15.0, bottom: 5, top: 15),
+            padding: const EdgeInsets.only(left: 10.0, bottom: 5, top: 10),
             child: Row(
               children: [
                 const Icon(
@@ -36,6 +36,7 @@ class RechargeOverAllWidget extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(height: 20),
           Column(
             children: [
               DataTable(
@@ -44,7 +45,7 @@ class RechargeOverAllWidget extends StatelessWidget {
                 showBottomBorder: false,
                 dividerThickness: 1,
                 headingRowHeight: 30,
-                horizontalMargin: 10,
+                horizontalMargin: 8,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: const Color.fromARGB(129, 255, 255, 255),

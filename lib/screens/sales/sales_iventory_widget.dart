@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hanouty/extensions/extensions.dart';
+import 'package:hanouty/models/Sale/sales_calculations.dart';
 
 import 'package:hanouty/models/models.dart';
 
@@ -19,15 +20,22 @@ class SalesOverAllWidget extends StatelessWidget {
       builder: (context, state) {
         return BlocBuilder<DateFilterBloc, DateFilterState>(
           builder: (context, filterState) {
+            /// Get the filtered sales
             FilteredSales filteredSales = FilteredSales(
                 sales: state.fullSales,
                 selectedDateRange: filterState.dateRange,
                 filterType: filterState.filterType);
-            SalesData salesData =
-                SalesData(sales: filteredSales.slzByFltrTp(state.fullSales));
-            SalesData productSalesData = SalesData(
+
+            /// all sales data
+            SaleCalculations salesData = SaleCalculations(
+                sales: filteredSales.slzByFltrTp(state.fullSales));
+
+            /// product sales data
+            SaleCalculations productSalesData = SaleCalculations(
                 sales: filteredSales.slzByFltrTp(filteredSales.productSales));
-            SalesData serviceSalesData = SalesData(
+
+            /// service sales data
+            SaleCalculations serviceSalesData = SaleCalculations(
                 sales:
                     filteredSales.slzByFltrTp(filteredSales.techServiceSales));
 
@@ -109,9 +117,9 @@ class SalesOverAllWidget extends StatelessWidget {
                             context,
                             AppConstants.whiteOpacity,
                             cellTitle: 'Products',
-                            value1: productSalesData.totalSoldAmount,
-                            value2: productSalesData.productSalesCount,
-                            value3: productSalesData.totalQuantitySold,
+                            value1: productSalesData.totalSalesAmount,
+                            value2: productSalesData.totalSalesCount,
+                            value3: productSalesData.totalSalesQuantity,
                             withDollarSign: [true, false, false],
                             cellStyle:
                                 Theme.of(context).textTheme.bodyLarge!.copyWith(
@@ -123,9 +131,9 @@ class SalesOverAllWidget extends StatelessWidget {
                             context,
                             AppConstants.whiteOpacity,
                             cellTitle: 'Services',
-                            value1: serviceSalesData.totalSoldAmount,
-                            value2: serviceSalesData.productSalesCount,
-                            value3: serviceSalesData.totalQuantitySold,
+                            value1: serviceSalesData.totalSalesAmount,
+                            value2: serviceSalesData.totalSalesCount,
+                            value3: serviceSalesData.totalSalesQuantity,
                             withDollarSign: [true, false, false],
                             cellStyle:
                                 Theme.of(context).textTheme.bodyLarge!.copyWith(

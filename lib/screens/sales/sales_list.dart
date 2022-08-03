@@ -4,6 +4,7 @@ import '../../blocs/sellactionsbloc/sellactions_bloc.dart';
 import '../../components.dart';
 import '../../local_components.dart';
 import '../../utils/global_functions.dart';
+import 'charts/sales_by_date_barchart.dart';
 import 'sales_by_category_widget.dart';
 import 'sales_dt_tbl.dart';
 import 'sales_iventory_widget.dart';
@@ -60,14 +61,22 @@ class SalesList extends StatelessWidget {
                             alignment: WrapAlignment.start,
                             children: [
                               const SizedBox(
-                                  width: 420,
-                                  height: 200,
-                                  child: SalesOverAllWidget()),
+                                width: 420,
+                                height: 200,
+                                child: SalesOverAllWidget(),
+                              ),
                               BluredContainer(
                                 width: 420,
                                 height: 200,
                                 child: SalesByCategoryWidget(
                                     taggedSales: salesData.salesByCategory),
+                              ),
+                              BluredContainer(
+                                width: 420,
+                                height: 200,
+                                child: BySuplierBarChart(
+                                    title: 'Sales by Supplier',
+                                    data: salesData.salesBySupplier),
                               ),
                             ],
                           ),

@@ -17,7 +17,7 @@ class DebtPieChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return BluredContainer(
         width: 420,
-        height: 270,
+        height: 300,
         child: Column(
           children: [
             SizedBox(

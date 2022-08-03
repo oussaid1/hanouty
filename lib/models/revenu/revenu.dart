@@ -1,10 +1,11 @@
-import '../Sale/sale.dart';
+import 'package:hanouty/models/Sale/sales_calculations.dart';
+
 import '../debt/debt.dart';
 import '../expenses/expenses.dart';
 import '../income/income.dart';
 
 class Revenu {
-  SalesData? salesData;
+  SaleCalculations? salesData;
   ExpenseData? expensesData;
   DebtData? debtData;
   IncomeData? incomeData;

@@ -4,6 +4,7 @@ import 'package:hanouty/local_components.dart';
 import 'package:flutter/material.dart';
 
 import '../../components.dart';
+import 'tagged_products.dart';
 
 part 'product_stock.dart';
 part 'filtered_products.dart';

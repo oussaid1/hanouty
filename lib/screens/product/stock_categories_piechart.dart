@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hanouty/local_components.dart';
+import 'package:hanouty/models/product/tagged_products.dart';
 
 import '../../components.dart';
 
 class StockCategoriesPieChart extends StatelessWidget {
-  final List<ChartData> data;
+  final List<TaggedProducts> data;
   const StockCategoriesPieChart({
     Key? key,
     required this.data,
@@ -14,7 +15,7 @@ class StockCategoriesPieChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return BluredContainer(
         width: 420,
-        height: 270,
+        height: 300,
         child: Column(
           children: [
             SizedBox(
@@ -39,15 +40,16 @@ class StockCategoriesPieChart extends StatelessWidget {
               legend: Legend(
                   isVisible: true, overflowMode: LegendItemOverflowMode.wrap),
               tooltipBehavior: TooltipBehavior(enable: true),
-              series: <DoughnutSeries<ChartData, String>>[
-                DoughnutSeries<ChartData, String>(
+              series: <DoughnutSeries<TaggedProducts, String>>[
+                DoughnutSeries<TaggedProducts, String>(
                     radius: '80%',
                     explode: true,
                     explodeOffset: '20%',
                     dataSource: data,
-                    xValueMapper: (ChartData data, _) => data.label as String,
-                    yValueMapper: (ChartData data, _) => data.value,
-                    dataLabelMapper: (ChartData data, _) => data.label,
+                    xValueMapper: (TaggedProducts data, _) => data.tag,
+                    yValueMapper: (TaggedProducts data, _) =>
+                        data.productsData.productCountInStock,
+                    dataLabelMapper: (TaggedProducts data, _) => data.tag,
                     dataLabelSettings: const DataLabelSettings(
                       isVisible: false,
                       alignment: ChartAlignment.far,

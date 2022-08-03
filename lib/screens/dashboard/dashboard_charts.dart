@@ -4,8 +4,8 @@ import '../../blocs/datefilterbloc/date_filter_bloc.dart';
 import '../../blocs/fullsalesbloc/fullsales_bloc.dart';
 import '../../components.dart';
 import '../../local_components.dart';
-import '../sales/sales_line_chart.dart';
-import '../sales/sales_barchart.dart';
+import '../sales/charts/sales_by_date_line_chart.dart';
+import '../sales/charts/sales_by_date_barchart.dart';
 
 class DashboardCharts extends StatelessWidget {
   const DashboardCharts({Key? key}) : super(key: key);

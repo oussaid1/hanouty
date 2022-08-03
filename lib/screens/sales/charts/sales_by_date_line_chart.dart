@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
 
-import '../../components.dart';
-import '../../models/chart_data.dart';
-import '../../settings/themes.dart';
+import '../../../components.dart';
+import '../../../models/chart_data.dart';
+import '../../../settings/themes.dart';
 
-class DashboardBarChart extends StatelessWidget {
+class DashboardLineChart extends StatelessWidget {
   final List<ChartData> pdta;
   final List<ChartData> sdta;
   final List<ChartData> dta;
   final String? title;
-  const DashboardBarChart({
+  const DashboardLineChart({
     Key? key,
     required this.dta,
     required this.sdta,
     required this.pdta,
     this.title,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Expanded(
           child: SfCartesianChart(
+            backgroundColor: Colors.transparent,
             borderWidth: 0,
             legend: Legend(
               isVisible: true,
@@ -80,22 +82,22 @@ class DashboardBarChart extends StatelessWidget {
             ),
             series: <ChartSeries>[
               // Renders spline chart
-              ColumnSeries<ChartData, DateTime>(
-                  name: 'Services'.tr(),
-                  color: MThemeData.serviceColor,
-                  dataSource: sdta,
-                  xValueMapper: (ChartData sales, _) => (sales.date),
-                  yValueMapper: (ChartData sales, z) => sales.value),
-              ColumnSeries<ChartData, DateTime>(
-                  name: 'Products',
+              SplineSeries<ChartData, DateTime>(
+                  name: 'Sales'.tr(),
+                  color: MThemeData.salesColor,
+                  dataSource: dta,
+                  xValueMapper: (ChartData sales, _) => sales.date,
+                  yValueMapper: (ChartData sales, _) => sales.value),
+              SplineSeries<ChartData, DateTime>(
+                  name: 'Products'.tr(),
                   color: MThemeData.productColor,
                   dataSource: pdta,
                   xValueMapper: (ChartData sales, _) => sales.date,
                   yValueMapper: (ChartData sales, _) => sales.value),
-              ColumnSeries<ChartData, DateTime>(
-                  name: 'Sales',
-                  color: MThemeData.expensesColor,
-                  dataSource: dta,
+              SplineSeries<ChartData, DateTime>(
+                  name: 'Services'.tr(),
+                  color: MThemeData.serviceColor,
+                  dataSource: sdta,
                   xValueMapper: (ChartData sales, _) => sales.date,
                   yValueMapper: (ChartData sales, _) => sales.value),
             ],

@@ -42,8 +42,8 @@ class RechargeSalesView extends StatelessWidget {
             );
 //////////////////////////////////////////////////////
 //////////////filtered [List<RechargeSaleModel>] which is filtered by [DateFilter]////////////////////////////
-            List<RechargeSaleModel> filteredRechargeSalesList =
-                filteredRecharges.allRechargeSales;
+            // List<RechargeSaleModel> filteredRechargeSalesList =
+            //     filteredRecharges.allRechargeSales;
 //////////////////////////////////////////////////////
             RechargeSalesData data = RechargeSalesData(
               rechargeSalesList: rechargeState.fullRechargeSalesList,
@@ -292,7 +292,7 @@ class RechargeSalesInventoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BluredContainer(
-      height: 270,
+      height: 300,
       width: 420,
       child: Column(
         children: [

@@ -213,16 +213,16 @@ class RechargeListItem extends StatelessWidget {
           label: 'Edit',
         ),
       ]),
-      endActionPane: ActionPane(motion: const ScrollMotion(), children: [
-        // SlidableAction(
-        //   onPressed: (_) => onDelete(recharge),
-        //   backgroundColor: const Color.fromARGB(255, 255, 0, 0),
-        //   foregroundColor: const Color.fromARGB(134, 255, 255, 255),
-        //   borderRadius: BorderRadius.circular(10),
-        //   icon: Icons.delete,
-        //   label: 'Delete',
-        // ),
-      ]),
+      // endActionPane: ActionPane(motion: const ScrollMotion(), children: [
+      //   // SlidableAction(
+      //   //   onPressed: (_) => onDelete(recharge),
+      //   //   backgroundColor: const Color.fromARGB(255, 255, 0, 0),
+      //   //   foregroundColor: const Color.fromARGB(134, 255, 255, 255),
+      //   //   borderRadius: BorderRadius.circular(10),
+      //   //   icon: Icons.delete,
+      //   //   label: 'Delete',
+      //   // ),
+      // ]),
       child: InkWell(
         onTap: () => onTap(recharge),
         child: Container(

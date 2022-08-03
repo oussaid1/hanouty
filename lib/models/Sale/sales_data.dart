@@ -79,67 +79,21 @@ class SalesData {
     return lst;
   }
 
-  /// total quantity sold
-  int get totalQuantitySold {
-    int count = 0;
-    for (var element in sortedSales) {
-      count += (element.quantitySold);
+  /// a map of sles by Supplier
+  List<TaggedSales> get salesBySupplier {
+    Map<String, List<SaleModel>> map = {};
+    for (var sale in sales) {
+      map.putIfAbsent(sale.suplier!, () => []);
+      map[sale.suplier]!.addAll(sortedSales
+          .where((element) => element.suplier! == sale.suplier!)
+          .toList());
     }
-    return count;
-  }
-
-  /// total sales value for the provided list of sales
-  double get totalSoldAmount {
-    double total = 0;
-    for (var element in sortedSales) {
-      total += (element.priceSoldFor);
-    }
-    return total;
-  }
-
-  double get totalSoldPriceOut {
-    double count = 0;
-    for (var element in sortedSales) {
-      count += (element.totalPriceOut);
-    }
-    return count;
-  }
-
-// total pricein in all sales provided
-  double get totalSoldPriceIn {
-    double count = 0;
-    for (var element in sortedSales) {
-      count += (element.totalPriceIn);
-    }
-    return count;
-  }
-
-// get estimateed net profit by the provided list of sales
-  double get estimatedNetProfit {
-    return totalSoldPriceOut - totalSoldPriceIn;
-  }
-
-// netProfits that is the difference between the total sold price and the total sold price out
-  double get totalNetProfit {
-    var count = 0.0;
-    for (var element in sortedSales) {
-      count += (element.profitMargin);
-    }
-    return count;
-  }
-
-  // get a unit interval of total net profit for the progress indicator
-  double get unitNetProfit {
-    var unit = 0.0;
-
-    if (estimatedNetProfit > 0) {
-      unit = estimatedNetProfit / estimatedNetProfit;
-
-      if (unit > 1 || unit < 0) {
-        return unit = 1;
-      }
-    }
-    return unit;
+    //loger.d('salesByCategory :${map}');
+    var lst = map.entries
+        .map((entry) => TaggedSales(tag: entry.key, sales: entry.value))
+        .toList();
+    //lst.sort((a, b) => b.length.compareTo(a.length));
+    return lst;
   }
 
   /// get a list of sales sorted by date in
