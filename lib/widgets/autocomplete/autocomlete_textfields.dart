@@ -190,7 +190,7 @@ class _ClientAutocompleteInputField extends StatelessWidget {
     // var list = <ShopClientModel>[];
     // list = [ShopClientModel.client, ...list];
     return BlocBuilder<ShopClientBloc, ShopClientState>(
-      buildWhen: (previous, current) => initialValue == null,
+      buildWhen: (previous, current) => previous.clients != current.clients,
       builder: (mcontext, clientState) {
         var list = clientState.clients;
         ShopClientModel? client;

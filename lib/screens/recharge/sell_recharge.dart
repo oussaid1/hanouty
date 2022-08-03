@@ -41,7 +41,7 @@ class SellRechargeStateWidget extends State<SellRechargeWidget> {
   num quantity = 1;
 
   ////////////////////////////////////////////////////////////////////////////////
-  bool _canSave = false;
+  bool _canSell = false;
   bool _isUpdate = false;
   ////////////////////////////////////////////////////////////////////////////////
   @override
@@ -98,12 +98,12 @@ class SellRechargeStateWidget extends State<SellRechargeWidget> {
       children: [
         ElevatedButton(
             style: MThemeData.raisedButtonStyleSave,
-            onPressed: !_canSave
+            onPressed: !_canSell
                 ? null
                 : () {
                     if (_isUpdate) {
                       setState(() {
-                        _canSave = false;
+                        _canSell = false;
                       });
                       final rechargeSale = RechargeSaleModel(
                         rSId: widget.rechargeSale!.rSId,
@@ -118,7 +118,7 @@ class SellRechargeStateWidget extends State<SellRechargeWidget> {
                           UpdateRechargeSaleEvent(rechargeSale: rechargeSale));
                     } else {
                       setState(() {
-                        _canSave = false;
+                        _canSell = false;
                       });
                       final rechargeSale = RechargeSaleModel(
                         dateSld: _date,
@@ -159,7 +159,7 @@ class SellRechargeStateWidget extends State<SellRechargeWidget> {
       // },
       onChanged: (client) {
         setState(() {
-          _canSave = true;
+          _canSell = quantity > 0;
           clientId = client.id!;
         });
       },
@@ -183,7 +183,7 @@ class SellRechargeStateWidget extends State<SellRechargeWidget> {
       initialDate: _date,
       onDateSelected: (value) {
         setState(() {
-          _canSave = true;
+          _canSell = quantity > 0;
           _date = value;
         });
       },

@@ -30,7 +30,7 @@ class _RechargeOperatorRadioWidgetState
     if (widget.initialValue != null) {
       _groupValue = widget.initialValue!;
     }
-    widget.onRechargeSelected?.call(_groupValue);
+    // widget.onRechargeSelected?.call(_groupValue);
     super.initState();
   }
 

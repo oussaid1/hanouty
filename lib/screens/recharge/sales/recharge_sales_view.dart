@@ -197,64 +197,18 @@ class _SalesListViewWidgetState extends State<SalesListViewWidget> {
                     final RechargeSaleModel rechargeSaleModel =
                         _salesList[index];
                     return RechargeSaleListItem(
-                      onUnSell: (rechargeModel) {
-                        MDialogs.botomPopUpDialog(
-                          context,
-                          SizedBox(
-                            height: 200,
-                            width: 400,
-                            child: Material(
-                              child: Column(
-                                children: [
-                                  const Text(
-                                    'Are you sure you want to unsell this recharge?',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          context
-                                              .read<SellActionsRechargeBloc>()
-                                              .add(
-                                                UnsellRechargeRequestedEvent(
-                                                    rechargeSaleModel:
-                                                        rechargeSaleModel,
-                                                    rechargeModel:
-                                                        rechargeModel),
-                                              );
-                                          Navigator.canPop(context)
-                                              ? Navigator.pop(context)
-                                              : null;
-                                        },
-                                        child: const Text('Unsell'),
-                                      ),
-                                      const SizedBox(width: 10),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.canPop(context)
-                                              ? Navigator.pop(context)
-                                              : null;
-                                        },
-                                        child: const Text('Cancel'),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                      onUnSell: (RechargeSaleModel rechS) {
+                        context.read<SellActionsRechargeBloc>().add(
+                              UnsellRechargeRequestedEvent(
+                                rechargeSaleModel: rechS,
                               ),
-                            ),
-                          ),
-                        );
+                            );
                       },
                       // onDelete: (rech) {
                       //   BlocProvider.of<RechargeBloc>(context)
                       //       .add(DeleteRechargeEvent(rechargeModel: rech));
                       // },
-                      onEdit: (rech) {
+                      onEdit: (RechargeSaleModel rech) {
                         MDialogs.dialogSimple(
                           context,
                           title: Text(
@@ -264,14 +218,13 @@ class _SalesListViewWidgetState extends State<SalesListViewWidget> {
                           contentWidget: SizedBox(
                             width: 400,
                             child: SellRechargeWidget(
-                              rechargeSale: rechargeSaleModel,
+                              rechargeSale: rech,
                               state: AddRechargeState.editing,
-                              recharge: rech,
                             ),
                           ),
                         );
                       },
-                      rechargeSale: _salesList[index],
+                      rechargeSale: rechargeSaleModel,
                     );
                   },
                 ),
@@ -325,8 +278,8 @@ class RechargeSaleListItem extends StatelessWidget {
   final RechargeSaleModel rechargeSale;
   final void Function(RechargeModel rechargeModel)? onTap;
   //final void Function(RechargeModel) onDelete;
-  final void Function(RechargeModel) onEdit;
-  final void Function(RechargeModel) onUnSell;
+  final void Function(RechargeSaleModel rechargeSaleModel) onEdit;
+  final void Function(RechargeSaleModel rechargeSaleModel) onUnSell;
 
   const RechargeSaleListItem({
     Key? key,

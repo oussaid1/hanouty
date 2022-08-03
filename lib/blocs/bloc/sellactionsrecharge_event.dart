@@ -21,10 +21,8 @@ class SellRechargeRequestedEvent extends SellActionsrechargeEvent {
 
 /// unselling recharge requested event
 class UnsellRechargeRequestedEvent extends SellActionsrechargeEvent {
-  final RechargeModel rechargeModel;
   final RechargeSaleModel rechargeSaleModel;
-  const UnsellRechargeRequestedEvent(
-      {required this.rechargeModel, required this.rechargeSaleModel});
+  const UnsellRechargeRequestedEvent({required this.rechargeSaleModel});
   @override
-  List<Object> get props => [rechargeModel, rechargeSaleModel];
+  List<Object> get props => [rechargeSaleModel];
 }

@@ -155,7 +155,8 @@ extension RechargeSaleListWithRechargeModel on List<RechargeSaleModel> {
     for (RechargeSaleModel rechargeSale in this) {
       combinedList.add(rechargeSale.copyRSWith(
           rechargeModel: rechargeModelList.firstWhere(
-              (element) => element.id == rechargeSale.soldRchrgId)));
+              (element) => element.id == rechargeSale.soldRchrgId,
+              orElse: (() => rechargeSale))));
     }
     return combinedList;
   }

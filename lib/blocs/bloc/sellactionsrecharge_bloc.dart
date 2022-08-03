@@ -54,21 +54,29 @@ class SellActionsRechargeBloc
       Emitter<SellactionsRechargeState> emit) async {
     try {
       bool success =
-          await _databaseOperations.deleteRecharge(event.rechargeModel);
+          await _databaseOperations.deleteRechargeSale(event.rechargeSaleModel);
       if (success) {
         if (success) {
-          await _databaseOperations.updateRechargeQuantity(
-              rechargeId: event.rechargeModel.id!,
-              qntty:
-                  event.rechargeModel.qntt + event.rechargeSaleModel.qnttSld);
-          emit(SellactionsRechargeState(
-            soldRecharge: event.rechargeModel,
-            status: SellactionsrechargeStatus.sold,
-          ));
+          var sold = await _databaseOperations.updateRechargeQuantity(
+              rechargeId: event.rechargeSaleModel.id!,
+              qntty: event.rechargeSaleModel.qntt +
+                  event.rechargeSaleModel.qnttSld);
+          log('Unselling Requested Success: $sold');
+          if (sold) {
+            emit(SellactionsRechargeState(
+              soldRecharge: event.rechargeSaleModel,
+              status: SellactionsrechargeStatus.sold,
+            ));
+          } else {
+            emit(const SellactionsRechargeState(
+              status: SellactionsrechargeStatus.error,
+              errorMessage: 'Unselling Requested Error',
+            ));
+          }
         }
       }
     } catch (e) {
-      log('Selling Requested Error: $e');
+      log('Unselling Error: $e');
       emit(
         SellactionsRechargeState(
           status: SellactionsrechargeStatus.error,

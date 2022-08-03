@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:hanouty/local_components.dart';
@@ -56,9 +57,10 @@ class RechargeBloc extends Bloc<FullrechargesalesEvent, RechargeState> {
     // }
     _rechargesSubscription =
         _databaseOperations.rechargeStream().listen((recharges) {
-      // log('products stream : $products');
+      log('recharges stream : ${recharges.length}');
       _rechargeSalesSubscription =
           _databaseOperations.rechargeSaleStream().listen((rechargeSales) {
+        log('rechargeSales stream : ${rechargeSales.length}');
         add(LoadFullRechargeSalesEvent(
           status: FullrechargesalesStatus.loaded,
           rechargeList: recharges,

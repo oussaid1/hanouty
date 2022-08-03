@@ -151,8 +151,11 @@ class _RchargeStockListState extends State<RchargeStockList> {
                                           .textTheme
                                           .headline3!,
                                     ),
-                                    contentWidget: AddRechargeWidget(
-                                      recharge: rech,
+                                    contentWidget: SizedBox(
+                                      width: 400,
+                                      child: AddRechargeWidget(
+                                        recharge: rech,
+                                      ),
                                     ),
                                   );
                                 },

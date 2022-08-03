@@ -58,17 +58,17 @@ class RechargeModel {
     };
   }
 
-  factory RechargeModel.fromMap(Map<String, dynamic> map) {
-    var ob = RechargeModel(
-      id: map['id'],
-      oprtr: map['oprtr'].toString().toRechargeOperator(),
-      percntg: map['percntg'] ?? 0.0,
-      amount: map['amount'] ?? 0.0,
-      qntt: map['qnt'] ?? 0,
-      date: map['date'].toDate(),
-    );
-    return ob;
-  }
+  // factory RechargeModel.fromMap(Map<String, dynamic> map) {
+  //   var ob = RechargeModel(
+  //     id: map['id'],
+  //     oprtr: map['oprtr'].toString().toRechargeOperator(),
+  //     percntg: map['percntg'] ?? 0.0,
+  //     amount: map['amount'] ?? 0.0,
+  //     qntt: map['qnt'] ?? 0,
+  //     date: map['date'].toDate(),
+  //   );
+  //   return ob;
+  // }
 
   /// from documentsnapshot
   factory RechargeModel.fromDocumentSnapshot(DocumentSnapshot doc) {
@@ -84,8 +84,8 @@ class RechargeModel {
   }
   String toJson() => json.encode(toMap());
 
-  factory RechargeModel.fromJson(String source) =>
-      RechargeModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  // factory RechargeModel.fromJson(String source) =>
+  //     RechargeModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {

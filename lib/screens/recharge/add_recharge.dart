@@ -36,6 +36,7 @@ class _AddRechargeStateWidget extends State<AddRechargeWidget> {
   RechargeOperator? oprtr;
   bool _canSave = false;
   bool _isUpdate = false;
+
   @override
   void initState() {
     if (widget.recharge != null) {
@@ -171,10 +172,10 @@ class _AddRechargeStateWidget extends State<AddRechargeWidget> {
           _canSave = true;
         });
       },
-      // style: Theme.of(context).textTheme.headline1!.copyWith(
-      //       // color: Colors.black,
-      //       fontWeight: FontWeight.bold,
-      //     ),
+      style: Theme.of(context).textTheme.headline3!.copyWith(
+            // color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
       textAlign: TextAlign.center,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       maxLength: 5,
@@ -186,7 +187,7 @@ class _AddRechargeStateWidget extends State<AddRechargeWidget> {
           borderRadius: BorderRadius.circular(6.0),
           borderSide: const BorderSide(),
         ),
-        hintText: '6.5 %',
+        hintText: '%',
         // hintStyle: Theme.of(context).textTheme.subtitle2!,
         contentPadding: const EdgeInsets.only(top: 4),
         prefixIcon: const Icon(Icons.percent),
