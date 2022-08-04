@@ -1,6 +1,7 @@
 import '../../screens/recharge/sales/recharge_sales_chats.dart';
 import '../../screens/recharge/stock/recharge_charts.dart';
 import 'recharge.dart';
+import 'recharge_sales_calculations.dart';
 
 class RechargeSalesData {
   List<RechargeSaleModel> rechargeSalesList = [];
@@ -24,6 +25,7 @@ class RechargeSalesData {
   /////////////////////////////////////////////////////////////////////////////////
 
   ///distincts ///////////////////////////////
+  /// distinct days with months and years ///////////////////////////////
   Map<DateTime, List<RechargeSaleModel>> get dailySales {
     Map<DateTime, List<RechargeSaleModel>> map = {};
     for (RechargeSaleModel r in allRechargeSales) {
@@ -42,6 +44,7 @@ class RechargeSalesData {
     return map;
   }
 
+  /// distinct months with year ///////////////////////////////
   Map<DateTime, List<RechargeSaleModel>> get monthlySales {
     Map<DateTime, List<RechargeSaleModel>> map = {};
     for (RechargeSaleModel r in allRechargeSales) {
@@ -58,6 +61,7 @@ class RechargeSalesData {
     return map;
   }
 
+  /// distinct years ///////////////////////////////
   Map<DateTime, List<RechargeSaleModel>> get yearlySales {
     Map<DateTime, List<RechargeSaleModel>> map = {};
     for (RechargeSaleModel r in allRechargeSales) {
@@ -194,13 +198,9 @@ class RechargeSalesData {
     );
   }
 
-/////// chartData////////////////////////////////////////////////////
-  ///////// sums  ////////////////////////////////////////////////////
-  /// sum of all recharge amount without percentage calculation in sales
-  num get sumOfRecharges =>
-      rechargeSalesList.fold(0, (sum, recharge) => sum + recharge.amount);
+/////// RechargeSalesCalculations ////////////////////////////////////////////////////
+  RechargeSalesCalculations get rechargeSalesCalculations =>
+      RechargeSalesCalculations(allRechargeSales: allRechargeSales);
 
-  /// sum of all recharge amount with percentage calculation in sales
-  num get sumOfRechargeSales =>
-      rechargeSalesList.fold(0, (sum, recharge) => sum + recharge.netProfit);
+  ///
 }

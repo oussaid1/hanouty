@@ -28,6 +28,12 @@ class _SalesByCategoryWidgetState extends State<SalesByCategoryWidget> {
   }
 
   @override
+  void dispose() {
+    taggedSales1 = null;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -68,7 +74,7 @@ class _SalesByCategoryWidgetState extends State<SalesByCategoryWidget> {
         children: [
           Text(
             'Profit',
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            style: Theme.of(context).textTheme.headline2!.copyWith(
                   color: Theme.of(context).colorScheme.primary,
                 ),
           ),

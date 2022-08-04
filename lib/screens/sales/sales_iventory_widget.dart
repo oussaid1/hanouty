@@ -27,17 +27,22 @@ class SalesOverAllWidget extends StatelessWidget {
                 filterType: filterState.filterType);
 
             /// all sales data
-            SaleCalculations salesData = SaleCalculations(
-                sales: filteredSales.slzByFltrTp(state.fullSales));
+            SaleCalculations allSalesData =
+                SaleCalculations(sales: filteredSales.slzByFltrTp);
+
+            /// list of product sales
+            List<SaleModel> productSales = filteredSales.productSales;
 
             /// product sales data
-            SaleCalculations productSalesData = SaleCalculations(
-                sales: filteredSales.slzByFltrTp(filteredSales.productSales));
+            SaleCalculations productSalesData =
+                SaleCalculations(sales: productSales);
+
+            /// list of service sales
+            List<SaleModel> serviceSales = filteredSales.techServiceSales;
 
             /// service sales data
-            SaleCalculations serviceSalesData = SaleCalculations(
-                sales:
-                    filteredSales.slzByFltrTp(filteredSales.techServiceSales));
+            SaleCalculations serviceSalesData =
+                SaleCalculations(sales: serviceSales);
 
             return BluredContainer(
               width: 420,
@@ -166,7 +171,7 @@ class SalesOverAllWidget extends StatelessWidget {
                             PriceNumberZone(
                               right: const SizedBox.shrink(),
                               withDollarSign: true,
-                              price: salesData.totalNetProfit,
+                              price: allSalesData.totalNetProfit,
                               priceStyle:
                                   context.textTheme.headline1!.copyWith(),
                             ),

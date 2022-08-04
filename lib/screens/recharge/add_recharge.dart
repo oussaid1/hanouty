@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hanouty/extensions/extensions.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../blocs/rechargebloc/fullrechargesales_bloc.dart';
 import '../../components.dart';
@@ -33,6 +34,7 @@ class _AddRechargeStateWidget extends State<AddRechargeWidget> {
   final TextEditingController percentageController = TextEditingController();
   DateTime _date = DateTime.now();
   num quantity = 1;
+  double amount = 5;
   RechargeOperator? oprtr;
   bool _canSave = false;
   bool _isUpdate = false;
@@ -53,34 +55,32 @@ class _AddRechargeStateWidget extends State<AddRechargeWidget> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Form(
-              key: dformKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  _buildOperator(),
-                  const SizedBox(height: 20),
-                  buildPercentage(),
-                  const SizedBox(height: 20),
-                  _buildQuantity(context),
-                  const SizedBox(height: 20),
-                  buildAmount(),
-                  const SizedBox(height: 20),
-                  buildDate(),
-                  const SizedBox(height: 40),
-                  buildSaveButton(context),
-                  const SizedBox(height: 40) //but
-                ],
-              ),
+      child: SizedBox(
+        width: 400,
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Form(
+            key: dformKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildOperator(), const SizedBox(height: 20),
+                buildRechargePrice(context),
+                const SizedBox(height: 20),
+                buildPercentage(),
+                const SizedBox(height: 20),
+                _buildQuantity(context),
+                const SizedBox(height: 20),
+                buildDate(),
+                const SizedBox(height: 40),
+                buildSaveButton(context),
+                const SizedBox(height: 40) //but
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -102,7 +102,7 @@ class _AddRechargeStateWidget extends State<AddRechargeWidget> {
                       });
                       final rchrge = RechargeModel(
                         id: _isUpdate ? widget.recharge!.id : null,
-                        amount: double.tryParse(amountController.text)!,
+                        amount: amount,
                         date: _date,
                         percntg: double.tryParse(percentageController.text)!,
                         qntt: quantity,
@@ -133,6 +133,7 @@ class _AddRechargeStateWidget extends State<AddRechargeWidget> {
     return SizedBox(
       width: context.width,
       child: NumberIncrementerWidget(
+        labelText: 'Quantity'.tr(),
         initialValue: quantity,
         onChanged: (num number) {
           setState(() {
@@ -212,39 +213,33 @@ class _AddRechargeStateWidget extends State<AddRechargeWidget> {
     );
   }
 
-  TextFormField buildAmount() {
-    return TextFormField(
-      controller: amountController,
-      validator: (text) {
-        if (text!.trim().isEmpty) {
-          return "error".tr();
-        }
-        return null;
-      },
-      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp('[0-9.]+')),
-      ],
-      onChanged: (value) {
-        setState(() {
-          _canSave = true;
-        });
-      },
-      textAlign: TextAlign.center,
-      maxLength: 10,
-      decoration: InputDecoration(
-        counterText: '',
-        labelText: 'Amount'.tr(),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(6.0),
-          borderSide: const BorderSide(),
+  buildRechargePrice(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          child: SfSlider(
+            activeColor:
+                RechargeModel.getOprtrColor(oprtr ?? RechargeOperator.orange),
+            stepSize: 5,
+            min: 5.0,
+            max: 30.0,
+            value: amount,
+            interval: 5,
+            showTicks: true,
+            showLabels: true,
+            enableTooltip: true,
+            minorTicksPerInterval: 0,
+            onChanged: (dynamic value) {
+              setState(() {
+                // toast('${value.toString()}');
+                amount = value;
+              });
+            },
+          ),
         ),
-        hintText: '\$',
-        hintStyle: Theme.of(context).textTheme.subtitle2!,
-        contentPadding: const EdgeInsets.only(top: 4),
-        prefixIcon: const Icon(Icons.monetization_on_outlined),
-        filled: true,
-      ),
+      ],
     );
   }
 
@@ -253,7 +248,7 @@ class _AddRechargeStateWidget extends State<AddRechargeWidget> {
       initialValue: oprtr,
       onRechargeSelected: (value) {
         setState(() {
-          _canSave = true;
+          _canSave = quantity > 0;
           oprtr = value;
         });
       },

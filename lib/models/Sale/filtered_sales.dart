@@ -14,10 +14,11 @@ class FilteredSales {
   /// get filtered sales
   /// @returns List<SaleModel>
 
-  List<SaleModel> slzByFltrTp(List<SaleModel> sales) {
+  List<SaleModel> get slzByFltrTp {
     if (filterType == DateFilter.all) {
       return sales;
-    } else if (filterType == DateFilter.month) {
+    }
+    if (filterType == DateFilter.month) {
       return sales
           .where((sale) => sale.dateSold.month == DateTime.now().month)
           .toList();
@@ -27,23 +28,51 @@ class FilteredSales {
               sale.dateSold.isAfter(selectedDateRange!.start) &&
               sale.dateSold.isBefore(selectedDateRange!.end))
           .toList();
-    } else {
-      return sales;
     }
+    return sales;
   }
+
+  // /// filtered  sales by dateFilter  and  selectedDateRange if filterType is custom
+  // /// @param List<SaleModel> sales
+  // /// different than slzByFltrTp because i need to filter sales other than the ones in slzByFltrTp (i.e. product sales and service sales)
+  // /// takes a list of sales and returns a list of sales filtered by dateFilter and selectedDateRange if filterType is custom
+  // List<SaleModel> salzByFltrType(List<SaleModel> sales,){
+  //    // [DateFilter? filterType, MDateRange? selectedDateRange]) {
+  //   if (filterType == DateFilter.all) {
+  //     return sales;
+  //   }
+  //   if (filterType == DateFilter.month) {
+  //     return sales
+  //         .where((sale) => sale.dateSold.month == DateTime.now().month)
+  //         .toList();
+  //   }
+  //   if (filterType == DateFilter.custom) {
+  //     return sales
+  //         .where((sale) =>
+  //             sale.dateSold.isAfter(selectedDateRange!.start) &&
+  //             sale.dateSold.isBefore(selectedDateRange!.end))
+  //         .toList();
+  //   }
+
+  //   return sales;
+  // }
 
   /// get product sales only
   /// @returns List<SaleModel>
 
   List<SaleModel> get productSales {
     List<SaleModel> mlist = [];
-    mlist = sales.where((element) => element.type == SaleType.product).toList();
+    mlist = slzByFltrTp
+        .where((element) => element.type == SaleType.product)
+        .toList();
     return mlist;
   }
 
   List<SaleModel> get techServiceSales {
     List<SaleModel> mlist = [];
-    mlist = sales.where((element) => element.type == SaleType.service).toList();
+    mlist = slzByFltrTp
+        .where((element) => element.type == SaleType.service)
+        .toList();
     return mlist;
   }
 

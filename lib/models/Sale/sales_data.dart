@@ -28,10 +28,6 @@ class SalesData {
     return sales.toList()..sort((a, b) => b.dateSold.compareTo(a.dateSold));
   }
 
-  ProductSalesData get productSalesData =>
-      ProductSalesData(sales: productSalesList);
-  TechServiceSalesData get serviceSalesData =>
-      TechServiceSalesData(sales: serviceSalesList);
   //var loger = Logger();
 // get top 10 sales by quantity
   List<SaleModel> get topSales {
@@ -43,7 +39,8 @@ class SalesData {
 //////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////
-  List<String> get distinctCilentNames {
+  /// get distinct client ids
+  List<String> get distinctCilentIds {
     List<String> mlist = [];
     for (var element in sales) {
       mlist.add(element.shopClientId);
@@ -56,6 +53,15 @@ class SalesData {
     List<String> mlist = [];
     for (var element in sales) {
       mlist.add(element.category!);
+    }
+    return mlist.toSet().toList();
+  }
+
+  /// get distinct suplier ids
+  List<String> get distinctSuplierIds {
+    List<String> mlist = [];
+    for (var element in sales) {
+      mlist.add(element.suplierId!);
     }
     return mlist.toSet().toList();
   }
@@ -81,17 +87,15 @@ class SalesData {
 
   /// a map of sles by Supplier
   List<TaggedSales> get salesBySupplier {
-    Map<String, List<SaleModel>> map = {};
-    for (var sale in sales) {
-      map.putIfAbsent(sale.suplierId!, () => []);
-      map[sale.suplierId]!.addAll(sortedSales
-          .where((element) => element.suplierId! == sale.suplierId!)
-          .toList());
+    List<TaggedSales> lst = [];
+    for (var suplierId in distinctSuplierIds) {
+      lst.add(TaggedSales(
+          tag: suplierId,
+          sales: sortedSales
+              .where((element) => element.suplierId == suplierId)
+              .toList()));
     }
-    //loger.d('salesByCategory :${map}');
-    var lst = map.entries
-        .map((entry) => TaggedSales(tag: entry.key, sales: entry.value))
-        .toList();
+
     //lst.sort((a, b) => b.length.compareTo(a.length));
     return lst;
   }

@@ -16,3 +16,4 @@ export 'package:riverpod/riverpod.dart';
 export 'package:syncfusion_flutter_charts/charts.dart';
 export 'package:syncfusion_flutter_datepicker/datepicker.dart';
 export 'package:url_launcher/url_launcher.dart';
+//export 'package:syncfusion_flutter_sliders/sliders.dart';

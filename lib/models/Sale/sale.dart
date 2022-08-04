@@ -5,12 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:hanouty/local_components.dart';
 
 import '../../components.dart';
-import 'product_sales_data.dart';
-import 'service_sales_data.dart';
 
-part 'filtered_product_sales.dart';
 part 'filtered_sales.dart';
-part 'filtered_service_sales.dart';
 part 'sales_data.dart';
 
 enum SaleType { product, service, all }

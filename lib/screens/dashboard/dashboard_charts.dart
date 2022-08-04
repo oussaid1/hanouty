@@ -15,16 +15,24 @@ class DashboardCharts extends StatelessWidget {
       builder: (context, filterState) {
         return BlocBuilder<FullSalesBloc, FullSalesState>(
           builder: (context, state) {
-            FilteredSales fltrdSlz = FilteredSales(
+            ///////////////////////////////////////////
+            /// all sales /////////////
+            FilteredSales allSalesFiltered = FilteredSales(
                 sales: state.fullSales,
                 filterType: filterState.filterType,
                 selectedDateRange: filterState.dateRange);
-            SalesData pSlzDta =
-                SalesData(sales: fltrdSlz.slzByFltrTp(fltrdSlz.productSales));
-            SalesData sSlzDta = SalesData(
-                sales: fltrdSlz.slzByFltrTp(fltrdSlz.techServiceSales));
-            SalesData allslzDta =
-                SalesData(sales: fltrdSlz.slzByFltrTp(state.fullSales));
+            SalesData allSalesData =
+                SalesData(sales: allSalesFiltered.slzByFltrTp);
+
+            ////////////////////////////////////
+            /// filtered product sales ///////////////
+            List<SaleModel> productSales = allSalesFiltered.productSales;
+            SalesData pSlzDta = SalesData(sales: productSales);
+
+            /////////////////////////////////////////////
+            /// filtered service sales ///////////////
+            List<SaleModel> serviceSales = allSalesFiltered.techServiceSales;
+            SalesData sSlzDta = SalesData(sales: serviceSales);
             return Wrap(
               spacing: 20,
               direction: Axis.horizontal,
@@ -40,7 +48,7 @@ class DashboardCharts extends StatelessWidget {
                       width: 600,
                       height: 400,
                       child: DashboardLineChart(
-                        dta: allslzDta.chartDataDDMMYY,
+                        dta: allSalesData.chartDataDDMMYY,
                         sdta: sSlzDta.chartDataDDMMYY,
                         pdta: pSlzDta.chartDataDDMMYY,
                         title: 'Inventory',
@@ -55,7 +63,7 @@ class DashboardCharts extends StatelessWidget {
                     width: 600,
                     height: 400,
                     child: DashboardBarChart(
-                      dta: allslzDta.chartDataDDMMYY,
+                      dta: allSalesData.chartDataDDMMYY,
                       sdta: sSlzDta.chartDataDDMMYY,
                       pdta: pSlzDta.chartDataDDMMYY,
                       title: 'Sales',

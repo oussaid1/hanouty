@@ -119,10 +119,12 @@ class BySuplierBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Flexible(
-          fit: FlexFit.tight,
-          flex: 1,
+        Expanded(
           child: SfCartesianChart(
+            title: ChartTitle(
+              text: title,
+              textStyle: Theme.of(context).textTheme.subtitle2!,
+            ),
             borderWidth: 0,
             legend: Legend(
               isVisible: true,
@@ -188,26 +190,20 @@ class BySuplierBarChart extends StatelessWidget {
               minorTickLines: const MinorTickLines(width: 0),
             ),
             series: <ChartSeries>[
-              // Renders spline chart
               ColumnSeries<TaggedSales, String>(
-                  name: 'Services'.tr(),
-                  // color: MThemeData.productColor,
+                  dataLabelMapper: (TaggedSales sales, _) =>
+                      '${sales.salesData.totalSalesCount}',
+                  dataLabelSettings: const DataLabelSettings(
+                    isVisible: true,
+                    labelAlignment: ChartDataLabelAlignment.top,
+
+                    //textStyle: Theme.of(context).textTheme.subtitle2!,
+                  ),
+                  pointColorMapper: (TaggedSales sales, _) => sales.randomColor,
                   dataSource: data,
                   xValueMapper: (TaggedSales sales, _) => (sales.tag),
                   yValueMapper: (TaggedSales sales, z) =>
                       sales.salesData.totalSalesAmount),
-              // ColumnSeries<TaggedSales, DateTime>(
-              //     name: 'Products',
-              //     color: MThemeData.serviceColor,
-              //     dataSource: [],
-              //     xValueMapper: (TaggedSales sales, _) => sales.date,
-              //     yValueMapper: (TaggedSales sales, _) => sales.value),
-              // ColumnSeries<TaggedSales, DateTime>(
-              //     name: 'Sales',
-              //     color: MThemeData.expensesColor,
-              //     dataSource: [],
-              //     xValueMapper: (TaggedSales sales, _) => sales.date,
-              //     yValueMapper: (TaggedSales sales, _) => sales.value),
             ],
           ),
         ),

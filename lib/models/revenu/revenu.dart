@@ -1,19 +1,23 @@
 import 'package:hanouty/models/Sale/sales_calculations.dart';
+import 'package:hanouty/models/recharge/recharge_sales_calculations.dart';
 
 import '../debt/debt.dart';
 import '../expenses/expenses.dart';
 import '../income/income.dart';
+import '../recharge/recharge_sales_data.dart';
 
 class Revenu {
   SaleCalculations? salesData;
   ExpenseData? expensesData;
   DebtData? debtData;
   IncomeData? incomeData;
+  RechargeSalesData? rechargeSalesData;
   Revenu({
     this.salesData,
     this.expensesData,
     this.debtData,
     this.incomeData,
+    this.rechargeSalesData,
   });
 
   // double get total revenue with expenses and debt and income
@@ -31,6 +35,10 @@ class Revenu {
     }
     if (incomeData != null) {
       total += incomeData!.totalIncomeAmount;
+    }
+    if (rechargeSalesData != null) {
+      total +=
+          rechargeSalesData!.rechargeSalesCalculations.totalRechargeNetProfit;
     }
     return total;
   }

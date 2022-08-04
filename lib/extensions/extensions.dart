@@ -153,10 +153,13 @@ extension RechargeSaleListWithRechargeModel on List<RechargeSaleModel> {
       List<RechargeModel> rechargeModelList) {
     List<RechargeSaleModel> combinedList = [];
     for (RechargeSaleModel rechargeSale in this) {
-      combinedList.add(rechargeSale.copyRSWith(
-          rechargeModel: rechargeModelList.firstWhere(
-              (element) => element.id == rechargeSale.soldRchrgId,
-              orElse: (() => rechargeSale))));
+      for (RechargeModel recharge in rechargeModelList) {
+        if (rechargeSale.soldRchrgId == recharge.id) {
+          combinedList.add(rechargeSale.copyRSWith(
+            rechargeModel: recharge,
+          ));
+        }
+      }
     }
     return combinedList;
   }
@@ -167,9 +170,13 @@ extension RechargeSaleListWithShopClient on List<RechargeSaleModel> {
       List<ShopClientModel> shopClients) {
     List<RechargeSaleModel> combinedList = [];
     for (RechargeSaleModel rechargeSale in this) {
-      combinedList.add(rechargeSale.copyRSWith(
-          shopClientModel: shopClients
-              .firstWhere((element) => element.id == rechargeSale.clntID)));
+      for (ShopClientModel shopClient in shopClients) {
+        if (rechargeSale.clntID == shopClient.id) {
+          combinedList.add(rechargeSale.copyRSWith(
+            shopClientModel: shopClient,
+          ));
+        }
+      }
     }
     return combinedList;
   }
@@ -179,11 +186,27 @@ extension ProductListExtension on List<ProductModel> {
   List<ProductModel> buildFullProdcutList(List<SuplierModel> supliers) {
     List<ProductModel> combinedList = [];
     for (ProductModel product in this) {
-      combinedList.add(product.copyWith(
-        suplierModel: supliers.firstWhere((e) => e.id == product.suplierId,
-            orElse: () => SuplierModel.defaultSuplier),
-      ));
+      for (SuplierModel suplier in supliers) {
+        if (product.suplierId == suplier.id) {
+          combinedList.add(product.copyWith(
+            suplierModel: suplier,
+          ));
+        }
+      }
     }
     return combinedList;
+  }
+}
+
+extension Group<T> on Iterable<T> {
+  Map<K, Iterable<T>> groupBy<K>(K Function(T) key) {
+    final map = <K, List<T>>{};
+    for (final element in this) {
+      final keyValue = key(element);
+      !map.containsKey(keyValue)
+          ? map[keyValue] = [element]
+          : map[keyValue]!.add(element);
+    }
+    return map;
   }
 }

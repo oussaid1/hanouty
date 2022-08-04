@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hanouty/local_components.dart';
-
 import '../components.dart';
 
 class PriceNumberZone extends StatelessWidget {
@@ -33,7 +31,7 @@ class PriceNumberZone extends StatelessWidget {
             withDollarSign ? price.toStringAsFixed(2) : price.toString(),
             textAlign: textAlign,
             style: priceStyle ??
-                Theme.of(context).textTheme.bodyLarge!.copyWith(
+                Theme.of(context).textTheme.headline6!.copyWith(
                     // color: context.theme.onSecondaryContainer,
                     ),
           ),
@@ -47,7 +45,7 @@ class PriceNumberZone extends StatelessWidget {
                       style: Theme.of(context).textTheme.subtitle2!.copyWith(
                             fontSize: signSize ?? 12,
                             color: priceStyle?.color ??
-                                context.theme.onSecondaryContainer,
+                                Theme.of(context).hintColor,
                           ),
                     ),
                   );
